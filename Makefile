@@ -1,5 +1,5 @@
 # COMPILER
-CC := gcc # compiler
+CC := mpicc # compiler
 CPPFLAGS := -Iinclude -MMD -MP # preprocessor flags
 CFLAGS := -g -Wall # compiler flags
 LDFLAGS := -Llib # linker flags
@@ -13,7 +13,7 @@ BIN_DIR := bin
 INC_DIR := include
 
 # TARGET
-TARGET := $(BIN_DIR)/hpc_test
+TARGET := $(BIN_DIR)/hpc
 
 # FILES
 SRC := $(wildcard $(SRC_DIR)/**/*c)
@@ -43,9 +43,9 @@ build: $(TARGET)
 
 # building target, dealing with the linking phase, the compiling is over
 $(TARGET): $(OBJ) | $(BIN_DIR)
-	$(ECHO) "$(GREEN)Program compiled successfully$(NONE)";
+	@$(ECHO) "$(GREEN)Program compiled successfully$(NONE)";
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
-	$(ECHO) "$(GREEN)Program linked successfully$(NONE)";
+	@$(ECHO) "$(GREEN)Program linked successfully$(NONE)";
 
 # building objects
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(DEPS) | $(OBJ_DIR)
@@ -53,8 +53,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(DEPS) | $(OBJ_DIR)
 
 # create object folder if not present yet
 $(BIN_DIR) $(OBJ_DIR):
-	$(MKDIR) $@
-	$(foreach dir,$(DIRS),$(MKDIR) $@/$(dir);)
+	@$(MKDIR) $@
+	@$(foreach dir,$(DIRS),$(MKDIR) $@/$(dir);)
 
 clean:
 	@$(RM) -rf $(BIN_DIR) $(OBJ_DIR)
