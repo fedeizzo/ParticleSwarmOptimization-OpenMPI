@@ -6,22 +6,29 @@
   outputs = { self, nixpkgs }:
     let
       pname = "HPC_program";
-      supportedSystems = [ "x86_64-linux" ];
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-      nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; overlays = [ self.overlay ]; });
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
     in
     {
-      defaultPackage = stdenv.mkDerivation {
+      packages."${system}".default = pkgs.stdenv.mkDerivation {
         name = pname;
+        src = ./.;
 
-        buildInputs = with pkgs; [ mpi gnumake ];
+        buildInputs = with pkgs;
+          [ mpi gnumake ];
 
         buildPhase = ''
+          make CC=mpicc build
         '';
 
         installPhase = ''
           mkdir -p $out
+          cp -r bin $out
         '';
+      };
+      devShell."${system}" = pkgs.mkShell {
+        name = "${pname}_shell";
+        packages = with pkgs; [ mpi gnumake ];
       };
     };
 }
