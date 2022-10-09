@@ -1,10 +1,9 @@
 #!/bin/sh
 
-# Query
+# Directives to PBS
+
 #PBS -l select=1:ncpus=1:mem=1mb
-# Max execution time
 #PBS -l walltime=0:05:00
-# Execution Queue
 #PBS -q short_cpuQ
 
 # SCRIPT: run.sh
@@ -12,17 +11,17 @@
 # AUTHOR: Federico Izzo <federico.izzo@studenti.unitn.it>
 # DATE:   2022-10-09
 #
-# PURPOSE: Run MPI program on the cluster
-# Input: file name
+# PURPOSE: Runs the MPI program on the cluster
+# PROCESS_NUMBER: number of provessed to employ, default 2
 
-# Number of processes
-if [ -z PROCESS_NUMBER ]; then
+# If number of processes is not specified, then declare it
+if [ -z $PROCESS_NUMBER ]; then
   PROCESS_NUMBER=2
 fi
 
 usage() {
   test $# = 0 || echo "$@"
-  echo "Usage: $0 PROCESS_NUMBER [DEFAULT = ${PROCESS_NUMER}]"
+  echo "Usage: $0 PROCESS_NUMBER [DEFAULT=$PROCESS_NUMBER]"
   echo
   echo Runs the MPI program on the cluster
   echo Options:
@@ -33,19 +32,22 @@ usage() {
 
 args=
 while [ $# != 0 ]; do
-    case $1 in
+  case $1 in
     -h|--help) usage ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;
-    esac
-    shift
+  esac
+  shift
 done
 
+# Get args
 eval "set -- $args"
 
-if [ $# -eq 1 ]; then
+# If the command line variable is specified and it is an integer, then override the environment variable
+if [ $# -eq 1 ] && [[ $1 =~ ^[[:digit:]]+$ ]]; then
   PROCESS_NUMBER=$1
 fi
 
+# Run the MPI program
 module load mpich-3.2
 mpirun.actual -n $PROCESS_NUMBER ~/hpc-2022/bin/hpc
