@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Query
-#PBS -l select=1:ncpus=4:mem=2gb
+#PBS -l select=1:ncpus=1:mem=1mb
 # Max execution time
 #PBS -l walltime=0:05:00
 # Execution Queue
@@ -15,9 +15,14 @@
 # PURPOSE: Run MPI program on the cluster
 # Input: file name
 
+# Number of processes
+if [ -z PROCESS_NUMBER ]; then
+  PROCESS_NUMBER=2
+fi
+
 usage() {
   test $# = 0 || echo "$@"
-  echo "Usage: $0 PROCESS_NUMBER"
+  echo "Usage: $0 PROCESS_NUMBER [DEFAULT = ${PROCESS_NUMER}]"
   echo
   echo Runs the MPI program on the cluster
   echo Options:
@@ -38,8 +43,9 @@ done
 
 eval "set -- $args"
 
-test $# -eq 1 || usage
+if [ $# -eq 1 ]; then
+  PROCESS_NUMBER=$1
+fi
 
-echo "Running the program.."
 module load mpich-3.2
-mpirun.actual -n ${PROCESS_NUMBER} ./bin/hpc
+mpirun.actual -n $PROCESS_NUMBER ~/hpc-2022/bin/hpc

@@ -134,3 +134,6 @@ dkms.conf
 
 # Bin folder
 bin
+
+# Runs
+run.sh.*
