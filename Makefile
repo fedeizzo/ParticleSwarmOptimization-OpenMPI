@@ -1,22 +1,35 @@
+# NOTE, for the pkg-config you might require to add yours in the path variable 
+# export PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH"
+
+# LIBRARIES
+LIBRARIES := glib-2.0
+
 # COMPILER
 CC := mpicc # compiler
-CPPFLAGS := -Iinclude -MMD -MP # preprocessor flags
+CPPFLAGS := -Iinclude -MMD -MP $(shell pkg-config --cflags ${LIBRARIES}) # preprocessor flags
 CFLAGS := -g -Wall # compiler flags
 LDFLAGS := -Llib # linker flags
-LDLIBS :=
+LDLIBS := $(shell pkg-config --libs ${LIBRARIES})
+
+# DOXYGEN
+DOXYGEN := doxygen
+DOXYGEN_CONF := -w html
+DOXYFILE := Doxyfile
+DOXYGEN_INDEX := html/index.html
 
 # STANDARD DIRECTORIES
 SRC_DIR := src
-DIRS    := $(notdir $(filter-out src/main.c, $(wildcard $(SRC_DIR)/*)))
+DIRS    := $(notdir $(wildcard $(SRC_DIR)/*))
 OBJ_DIR := obj
 BIN_DIR := bin
 INC_DIR := include
+DOC_DIR := doc
 
 # TARGET
 TARGET := $(BIN_DIR)/hpc
 
 # FILES
-SRC := $(wildcard $(SRC_DIR)/**/*c)
+SRC := $(shell find $(SRC_DIR) -name '*.c')
 OBJ := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 DEPS := $(wildcard $(INC_DIR)/*.h)
 
@@ -24,6 +37,7 @@ DEPS := $(wildcard $(INC_DIR)/*.h)
 MKDIR := mkdir -p
 RM := rm
 ECHO := echo -e
+OPEN := xdg-open
 
 # COLORS
 RED := \033[31m
@@ -60,10 +74,23 @@ clean:
 	@$(RM) -rf $(BIN_DIR) $(OBJ_DIR)
 	@$(ECHO) "$(YELLOW)Artifacts cleaned successfully$(NONE)";
 
+doc:
+	@$(MKDIR) $(DOC_DIR)
+	@$(DOXYGEN) $(DOXYFILE) $(DOXYGEN_CONF)
+	echo ${SRC}
+	echo ${OBJ}
+	echo ${DEPS}
+
+
+open-doc:
+	@$(OPEN) $(DOC_DIR)/$(DOXYGEN_INDEX)
+
 help: 
 	@$(ECHO) "$(BLUE)Makefile help\n \
 	* build    : compiles the program and creates the object files and the executable files\n \
 	* clean    : removes all the object and binary files\n \
+	* doc      : generates the code documentation in HTML\n \
+	* open-doc : compiles and then opens the HTML documentation\n \
 	* all      : clean and then compiles$(NONE)";
 
 -include $(OBJ:.o=.d) # The dash is used to silence errors if the files don't exist yet

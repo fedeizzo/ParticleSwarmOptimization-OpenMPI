@@ -137,3 +137,6 @@ bin
 
 # Runs
 run.sh.*
+
+# code documentation
+doc
