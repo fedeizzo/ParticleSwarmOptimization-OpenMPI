@@ -2,17 +2,24 @@
 #include "../../include/config.h"
 #include "../utils/utils.h"
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 /*
  * HEADERS
  */
 double randfrom(double min, double max);
-bool randomArrayInitialization(GArray *array, int n, double min, double max);
+bool randomArrayInitialization(ArrayList array, int n, double min, double max);
 
 /**
  * IMPLEMENTATIONS
  */
+
+void printParticle(void *data) {
+  Particle particle = (Particle)data;
+  printf("Particle: \n");
+  printArrayList(particle->pos, printDouble);
+}
 
 double randfrom(double min, double max) {
   double range = (max - min);
@@ -20,7 +27,7 @@ double randfrom(double min, double max) {
   return min + (rand() / div);
 }
 
-bool randomArrayInitialization(GArray *array, int n, double min, double max) {
+bool randomArrayInitialization(ArrayList array, int n, double min, double max) {
   int i;
   double *data;
   int rc;
@@ -31,30 +38,39 @@ bool randomArrayInitialization(GArray *array, int n, double min, double max) {
       return false;
     }
     *data = randfrom(min, max);
-    g_array_append_val(array, data);
+    push_back(array, data);
   }
   return true;
+}
+
+void destroyParticle(void *ptr) {
+  Particle particle = (Particle)ptr;
+  destroyArrayList(particle->pos, free);
+  destroyArrayList(particle->personalBest, free);
+  destroyArrayList(particle->socialBest, free);
+  destroyArrayList(particle->velocity, free);
+  free(particle);
 }
 
 /**
  *
  */
 Particle newParticle(int n, double max, double min, double v_max, double v_min,
-                     double (*fitnessFunction)(GArray *)) {
+                     double (*fitnessFunction)(ArrayList)) {
   Particle particle = NULL;
-  particle = (Particle)malloc(sizeof(struct Particle));
+  particle = (Particle)malloc(sizeof(struct particle_t));
   int rc = checkAllocationError(particle);
   if (rc == SUCCESS) {
-    particle->pos = g_array_new(false, false, sizeof(double));
+    particle->pos = newArrayList();
     randomArrayInitialization(particle->pos, n, min, max);
 
-    particle->personalBest = g_array_new(false, false, sizeof(double));
-    copyDoubleArray(particle->pos, particle->personalBest);
+    particle->personalBest = newArrayList();
+    copyDoubleArray(particle->pos, particle->personalBest, free);
 
-    particle->socialBest = g_array_new(false, false, sizeof(double));
-    copyDoubleArray(particle->pos, particle->socialBest);
+    particle->socialBest = newArrayList();
+    copyDoubleArray(particle->pos, particle->socialBest, free);
 
-    particle->velocity = g_array_new(false, false, sizeof(double));
+    particle->velocity = newArrayList();
     randomArrayInitialization(particle->velocity, n, v_min / 3, v_max / 3);
 
     updateFitness(particle, fitnessFunction);
@@ -69,50 +85,46 @@ Particle newParticle(int n, double max, double min, double v_max, double v_min,
  */
 void updateVelocity(Particle particle, double w, double phi_1, double phi_2) {
   int i;
-  for (i = 0; i < particle->velocity->len; i++) {
-    particle->velocity->data[i] =
-        particle->velocity->data[i] * w; // Times inertia
-    particle->velocity->data[i] += phi_1 * randfrom(0.0, 1.0) *
-                                   (particle->personalBest->data[i] -
-                                    particle->pos->data[i]); // Social rate
-    particle->velocity->data[i] +=
-        phi_2 * randfrom(0.0, 1.0) *
-        (particle->socialBest->data[i] - particle->pos->data[i]); // Global rate
+  double *data;
+  for (i = 0; i < getNumberElements(particle->velocity); i++) {
+    data = (double *)getDataAtIndex(particle->velocity, i);
+    *data = (*data) * w; // Times inertia
+    (*data) += phi_1 * randfrom(0.0, 1.0) *
+                   (*(double *)getDataAtIndex(particle->personalBest, i)) -
+               (*(double *)getDataAtIndex(particle->pos, i)); // Social rate
+    *(data) += phi_2 * randfrom(0.0, 1.0) *
+                   (*(double *)getDataAtIndex(particle->socialBest, i)) -
+               (*(double *)getDataAtIndex(particle->pos, i)); // Global rate
   }
 }
 
-void updatePosition(Particle particle, double (*fitnessFunction)(GArray *)) {
+void updatePosition(Particle particle, double (*fitnessFunction)(ArrayList)) {
   int i;
   double oldFitness;
-  for (i = 0; i < particle->pos->len; i++) {
-    particle->pos->data[i] += particle->velocity->data[i];
+  double *data;
+  for (i = 0; i < getNumberElements(particle->pos); i++) {
+    data = (double *)getDataAtIndex(particle->pos, i);
+    *(data) += (*(double *)getDataAtIndex(particle->velocity, i));
   }
   // Update personal best
   oldFitness = particle->fitness;
   updateFitness(particle, fitnessFunction);
   if (particle->fitness > oldFitness) {
     particle->currentBestPersonalFitness = particle->fitness;
-    copyDoubleArray(particle->pos, particle->personalBest);
+    copyDoubleArray(particle->pos, particle->personalBest, free);
   }
 }
 
 void updateFitness(Particle particle,
-                   double (*fitnessFunction)(GArray *value)) {
+                   double (*fitnessFunction)(ArrayList value)) {
   particle->fitness = fitnessFunction(particle->pos);
 }
 
-void destroyParticle(Particle particle) {
-  g_array_free(particle->pos, true);
-  g_array_free(particle->velocity, true);
-  g_array_free(particle->personalBest, true);
-  free(particle);
-}
-
 double getFitness(Particle particle) { return particle->fitness; }
-GArray *getPosition(Particle particle) { return particle->pos; }
-GArray *getPersonalBest(Particle particle) { return particle->personalBest; }
-GArray *getSocialBest(Particle particle) { return particle->socialBest; }
-GArray *getVelocity(Particle particle) { return particle->velocity; }
+ArrayList getPosition(Particle particle) { return particle->pos; }
+ArrayList getPersonalBest(Particle particle) { return particle->personalBest; }
+ArrayList getSocialBest(Particle particle) { return particle->socialBest; }
+ArrayList getVelocity(Particle particle) { return particle->velocity; }
 double getPersonalBestFitness(Particle particle) {
   return particle->currentBestPersonalFitness;
 }

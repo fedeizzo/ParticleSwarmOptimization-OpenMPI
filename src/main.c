@@ -1,8 +1,8 @@
+#include "arraylist/arraylist.h"
 #include "particle/particle.h"
 #include "pso/pso.h"
 #include <argp.h>
 #include <error.h>
-#include <glib.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,8 +29,8 @@ static struct argp_option options[] = {
 
 /* Used by main to communicate with parse_opt. */
 struct arguments {
-  GArray *array; /* required double array */
-  bool serial;   /* whether to run the serial computation --serial */
+  ArrayList *array; /* required double array */
+  bool serial;      /* whether to run the serial computation --serial */
 };
 
 /* Parse a single option. */
@@ -59,11 +59,12 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
 /* Our argp parser. */
 static struct argp argp = {options, parse_opt, args_doc, doc};
 
-double prova(GArray *array) {
+double prova(ArrayList array) {
   double squared_sum = 0;
   int i;
-  for (i = 0; i < array->len; i++)
-    squared_sum += (array->data[i] * array->data[i]);
+  for (i = 0; i < getNumberElements(array); i++)
+    squared_sum += ((*(double *)getDataAtIndex(array, i)) *
+                    (*(double *)getDataAtIndex(array, i)));
   return 1 / (squared_sum + 0.000001);
 }
 
@@ -79,9 +80,10 @@ int main(int argc, char **argv) {
   // argp_parse(&argp, argc, argv, 0, 0, &arguments);
   // Particle particle = newParticle(5, 10.0, 0.0, 3.0, 1.0, prova);
 
-  GArray *particles = g_array_new(false, false, sizeof(struct Particle));
+  ArrayList particles = newArrayList();
   initParticles(particles, 2, 10, 10.0, 0.0, 3.0, 1.0, prova);
   particleSwarmOptimization(particles, 100, 1.0, 0.5, 0.5, prova);
+  destroyArrayList(particles, destroyParticle);
 
   return 0;
 }

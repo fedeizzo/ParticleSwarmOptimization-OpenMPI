@@ -1,7 +1,7 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
-#include <glib.h>
+#include "../arraylist/arraylist.h"
 #include <stdbool.h>
 
 /**
@@ -14,6 +14,8 @@
  *    0 in case of success, otherwise -1
  */
 int checkAllocationError(void *ptr);
-bool copyDoubleArray(GArray *source, GArray *destination);
+bool copyDoubleArray(ArrayList source, ArrayList destination,
+                     void deleteData(void *));
+void printDouble(void *ptr);
 
 #endif

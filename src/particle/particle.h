@@ -1,50 +1,52 @@
 #ifndef __PARTICLE_H_
 #define __PARTICLE_H_
 
-#include <glib.h>
-
+#include "../arraylist/arraylist.h"
 /**
  *
  */
-typedef struct Particle {
-  GArray *pos;
-  GArray *velocity;
-  GArray *personalBest;
-  GArray *socialBest;
+typedef struct particle_t {
+  ArrayList pos;
+  ArrayList velocity;
+  ArrayList personalBest;
+  ArrayList socialBest;
   double fitness;
   double currentBestPersonalFitness;
   double currentBestSocialFitness;
-} * Particle;
+} particle_t;
+
+typedef particle_t *Particle;
 
 /**
  *
  */
 Particle newParticle(int n, double max, double min, double v_max, double v_min,
-                     double (*fitnessFunction)(GArray *));
+                     double (*fitnessFunction)(ArrayList));
 
 /**
  * Update velocity function
  */
 void updateVelocity(Particle particle, double w, double phi_1, double phi_2);
 
-void updatePosition(Particle particle, double (*fitnessFunction)(GArray *));
+void updatePosition(Particle particle, double (*fitnessFunction)(ArrayList));
 
-void updateFitness(Particle particle, double (*fitnessFunction)(GArray *));
+void updateFitness(Particle particle, double (*fitnessFunction)(ArrayList));
 
 double getFitness(Particle particle);
 
-void destroyParticle(Particle particle);
+void destroyParticle(void *ptr);
 
-GArray *getPosition(Particle particle);
+ArrayList getPosition(Particle particle);
 
-GArray *getPersonalBest(Particle particle);
+ArrayList getPersonalBest(Particle particle);
 
-GArray *getSocialBest(Particle particle);
+ArrayList getSocialBest(Particle particle);
 
-GArray *getVelocity(Particle particle);
+ArrayList getVelocity(Particle particle);
 
 double getPersonalBestFitness(Particle particle);
 
 double getSocialBestFitness(Particle particle);
 
+void printParticle(void *data);
 #endif

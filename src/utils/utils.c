@@ -1,7 +1,7 @@
 #include "utils.h"
 #include "../../include/config.h"
-#include <glib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int checkAllocationError(void *ptr) {
   int rc_t = SUCCESS;
@@ -13,22 +13,27 @@ int checkAllocationError(void *ptr) {
   return rc_t;
 }
 
-bool copyDoubleArray(GArray *source, GArray *destination) {
+bool copyDoubleArray(ArrayList source, ArrayList destination,
+                     void deleteData(void *)) {
   int i;
   double *data;
   int rc;
   // Reset array
-  g_array_free(destination, true);
-  destination = g_array_new(false, false, sizeof(double));
+  emptyArray(destination, deleteData);
   // Loop over source array
-  for (i = 0; i < source->len; i++) {
+  for (i = 0; i < getNumberElements(source); i++) {
     data = (double *)malloc(sizeof(double));
     rc = checkAllocationError(data);
     if (rc == FAILURE) {
       return false;
     }
-    *data = source->data[i];
-    g_array_append_val(destination, data);
+    *data = (*(double *)getDataAtIndex(source, i));
+    push_back(destination, data);
   }
   return true;
+}
+
+void printDouble(void *ptr) {
+  double *data = (double *)ptr;
+  printf("%f\n", *data);
 }

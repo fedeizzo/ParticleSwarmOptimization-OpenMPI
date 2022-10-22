@@ -2,7 +2,7 @@
 # export PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH"
 
 # LIBRARIES
-LIBRARIES := glib-2.0
+LIBRARIES :=
 
 # COMPILER
 CC := mpicc # compiler
