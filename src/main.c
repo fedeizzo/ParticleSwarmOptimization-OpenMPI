@@ -1,3 +1,5 @@
+#include "particle/particle.h"
+#include "pso/pso.h"
 #include <argp.h>
 #include <error.h>
 #include <glib.h>
@@ -47,9 +49,6 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
     /* Here we know that state->arg_num == 0, since we
        force argument parsing to end before any more arguments can
        get here. */
-    // Append the double data to the array
-    // g_array_append_val(arguments->array, atof(arg));
-    printf("\n%s\n", arg);
     break;
   default:
     return ARGP_ERR_UNKNOWN;
@@ -60,17 +59,29 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
 /* Our argp parser. */
 static struct argp argp = {options, parse_opt, args_doc, doc};
 
+double prova(GArray *array) {
+  double squared_sum = 0;
+  int i;
+  for (i = 0; i < array->len; i++)
+    squared_sum += (array->data[i] * array->data[i]);
+  return 1 / (squared_sum + 0.000001);
+}
+
 int main(int argc, char **argv) {
   struct arguments arguments;
   /* Default values. */
   arguments.serial = false;
-  arguments.array = g_array_new(0, 0, sizeof(double));
 
-  printf("Hello, World!\n");
-
+  // Set seed
+  srand(85);
   /* Parse our arguments; every option seen by parse_opt will be
      reflected in arguments. */
-  argp_parse(&argp, argc, argv, 0, 0, &arguments);
-  g_array_free(arguments.array, true);
+  // argp_parse(&argp, argc, argv, 0, 0, &arguments);
+  // Particle particle = newParticle(5, 10.0, 0.0, 3.0, 1.0, prova);
+
+  GArray *particles = g_array_new(false, false, sizeof(struct Particle));
+  initParticles(particles, 2, 10, 10.0, 0.0, 3.0, 1.0, prova);
+  particleSwarmOptimization(particles, 100, 1.0, 0.5, 0.5, prova);
+
   return 0;
 }
