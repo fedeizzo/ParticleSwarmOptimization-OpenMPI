@@ -8,15 +8,20 @@
       pname = "HPC_program";
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
-    in
-    {
-      packages."${system}".default = pkgs.stdenv.mkDerivation {
+      runtimeDeps = with pkgs; [
+        mpi
+      ];
+      buildDeps = with pkgs; [
+        gnumake
+        pkg-config
+        glib
+      ];
+      CPackage = pkgs.stdenv.mkDerivation {
         name = pname;
         src = ./.;
 
-        buildInputs = with pkgs;
-          [ mpi gnumake ];
-
+        buildInputs = runtimeDeps;
+        depsBuildBuild = buildDeps;
         buildPhase = ''
           make CC=mpicc build
         '';
@@ -26,9 +31,25 @@
           cp -r bin $out
         '';
       };
+
+      dockerImage = pkgs.dockerTools.buildImage {
+        name = pname;
+        contents = CPackage;
+        fromImageName = "scratch";
+        config = {
+          # Entrypoint = [ "/bin/mpirun" ];
+        };
+      };
+    in
+    {
+      packages."${system}" = {
+        CPackages = CPackage;
+        docker = dockerImage;
+        default = CPackage;
+      };
       devShell."${system}" = pkgs.mkShell {
         name = "${pname}_shell";
-        packages = with pkgs; [ mpi gnumake ];
+        packages = buildDeps ++ runtimeDeps;
       };
     };
 }
