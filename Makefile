@@ -77,10 +77,6 @@ clean:
 doc:
 	@$(MKDIR) $(DOC_DIR)
 	@$(DOXYGEN) $(DOXYFILE) $(DOXYGEN_CONF)
-	echo ${SRC}
-	echo ${OBJ}
-	echo ${DEPS}
-
 
 open-doc:
 	@$(OPEN) $(DOC_DIR)/$(DOXYGEN_INDEX)
