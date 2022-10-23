@@ -1,36 +1,33 @@
 #include "pso.h"
 #include "../../include/config.h"
+#include "../database/database.h"
+#include "../log/log.h"
 #include "../utils/utils.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 void updateGlobal(ArrayList particles, Solution globalBest);
-void printSolution(Solution sol);
-
-void printSolution(Solution sol) { printArrayList(sol->pos, printDouble); }
 
 void updateGlobal(ArrayList particles, Solution globalBest) {
   int i;
   for (i = 0; i < getNumberElements(particles); i++) { // n particle
     // Update the solution
-    if (((Particle)getDataAtIndex(particles, i))->fitness >
-        globalBest->fitness) {
-      copyDoubleArray(((Particle)getDataAtIndex(particles, i))->pos,
-                      globalBest->pos, free);
-      globalBest->fitness = ((Particle)getDataAtIndex(particles, i))->fitness;
+    Particle particle = (Particle)getDataAtIndex(particles, i);
+    if (particle->current->fitness > globalBest->fitness) {
+      log_debug("New best global solution found with fitness value %f",
+                particle->current);
+      destroySolution(globalBest);
+      globalBest = cloneSolution(particle->current);
     }
   }
 
   for (i = 0; i < getNumberElements(particles); i++) { // n particle
-    copyDoubleArray(globalBest->pos,
-                    ((Particle)getDataAtIndex(particles, i))->socialBest, free);
-    ((Particle)getDataAtIndex(particles, i))->currentBestSocialFitness =
-        globalBest->fitness;
+    log_debug("Update social best solution of particle %d", i);
+    Particle particle = (Particle)getDataAtIndex(particles, i);
+    destroySolution(particle->socialBest);
+    particle->socialBest = cloneSolution(globalBest);
   }
-  printf("\nCurrent Global best: [fitness: %f] \n", globalBest->fitness);
-  printSolution(globalBest);
-  printf("\n");
 }
 
 bool initParticles(ArrayList particles, int dim, int n, double max, double min,
@@ -40,39 +37,48 @@ bool initParticles(ArrayList particles, int dim, int n, double max, double min,
   int rc;
   Particle particle;
   for (i = 0; i < n; i++) {
-    particle = newParticle(dim, max, min, v_max, v_min, fitnessFunction);
+    log_debug("Initializing particle %d/%d", i + 1, n);
+    particle = newParticle(i, dim, max, min, v_max, v_min, fitnessFunction);
     rc = checkAllocationError(particle);
-    if (rc == FAILURE) {
+    if (rc == FAILURE)
       return false;
-    }
     push_back(particles, particle);
   }
   return true;
 }
 
-void particleSwarmOptimization(ArrayList particles, int n_iterations, double w,
-                               double phi_1, double phi_2,
+void dumpParticles(ArrayList particles, Database db, const int iteration_step) {
+  for (int i = 0; i < getNumberElements(particles); i++) { // n particles
+    Particle particle = (Particle)getDataAtIndex(particles, i);
+    insertSolution(db, particle->current, particle->id, iteration_step);
+  }
+}
+
+void particleSwarmOptimization(ArrayList particles, int dimension,
+                               int n_iterations, double w, double phi_1,
+                               double phi_2,
                                double (*fitnessFunction)(ArrayList)) {
-  printf("Initial population\n");
-  printArrayList(particles, printParticle);
   int _;
   int i;
+  Database db = newDatabase("./database.db", dimension);
   Solution globalBestSolution;
-  globalBestSolution = (Solution)malloc(sizeof(struct solution_t));
-  globalBestSolution->fitness =
-      ((Particle)getDataAtIndex(particles, 0))->fitness;
-  globalBestSolution->pos = newArrayList();
-  copyDoubleArray(((Particle)getDataAtIndex(particles, 0))->pos,
-                  globalBestSolution->pos, free);
+  globalBestSolution =
+      cloneSolution(((Particle)getDataAtIndex(particles, 0))->current);
+
   for (_ = 0; _ < n_iterations; _++) { // n iterations
-    printf("\nIteration [%d]:\n", _);
     updateGlobal(particles, globalBestSolution);
     for (i = 0; i < getNumberElements(particles); i++) { // n particles
-      updateVelocity(((Particle)getDataAtIndex(particles, i)), w, phi_1, phi_2);
-      updatePosition(((Particle)getDataAtIndex(particles, i)), fitnessFunction);
+      Particle particle = (Particle)getDataAtIndex(particles, i);
+      updateVelocity(particle, w, phi_1, phi_2);
+      log_debug("Iteration %d/%d particle %d/%d velocity updated", _ + 1,
+                n_iterations, i + 1, getNumberElements(particles));
+      log_debug("Iteration %d/%d particle %d/%d position updated", _ + 1,
+                n_iterations, i + 1, getNumberElements(particles));
+      updatePosition(particle, fitnessFunction);
     }
-    printf("Current Population\n");
-    printArrayList(particles, printParticle);
-    printf("Best fitness: %f\n", globalBestSolution->fitness);
+    log_info("Swarm optimization iteration %d/%d with best fitness %f", _ + 1,
+             n_iterations, globalBestSolution->fitness);
+    dumpParticles(particles, db, _);
   }
+  destroyDatabase(db);
 }

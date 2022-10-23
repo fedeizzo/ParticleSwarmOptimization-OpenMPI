@@ -10,11 +10,21 @@
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       runtimeDeps = with pkgs; [
         mpi
+        sqlite
       ];
       buildDeps = with pkgs; [
         gnumake
         pkg-config
         glib
+      ];
+      shellDeps = with pkgs; [
+        python310
+        python310Packages.numpy
+        python310Packages.jupyterlab
+        python310Packages.pandas
+        python310Packages.matplotlib
+        python310Packages.scipy
+        sqlite-web
       ];
       CPackage = pkgs.stdenv.mkDerivation {
         name = pname;
@@ -49,7 +59,7 @@
       };
       devShell."${system}" = pkgs.mkShell {
         name = "${pname}_shell";
-        packages = buildDeps ++ runtimeDeps;
+        packages = buildDeps ++ runtimeDeps ++ shellDeps;
       };
     };
 }

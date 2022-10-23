@@ -2,17 +2,17 @@
 #define __PARTICLE_H_
 
 #include "../arraylist/arraylist.h"
+#include "../solution/solution.h"
+#include <stdio.h>
 /**
  *
  */
 typedef struct particle_t {
-  ArrayList pos;
+  int id;
+  Solution current;
+  Solution personalBest;
+  Solution socialBest;
   ArrayList velocity;
-  ArrayList personalBest;
-  ArrayList socialBest;
-  double fitness;
-  double currentBestPersonalFitness;
-  double currentBestSocialFitness;
 } particle_t;
 
 typedef particle_t *Particle;
@@ -20,7 +20,7 @@ typedef particle_t *Particle;
 /**
  *
  */
-Particle newParticle(int n, double max, double min, double v_max, double v_min,
+Particle newParticle(int id, int n, double max, double min, double v_max, double v_min,
                      double (*fitnessFunction)(ArrayList));
 
 /**
@@ -49,4 +49,6 @@ double getPersonalBestFitness(Particle particle);
 double getSocialBestFitness(Particle particle);
 
 void printParticle(void *data);
+
+void jsonParticle(Particle particle, FILE *fp);
 #endif

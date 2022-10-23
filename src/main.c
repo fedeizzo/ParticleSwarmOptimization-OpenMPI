@@ -1,4 +1,5 @@
 #include "arraylist/arraylist.h"
+#include "log/log.h"
 #include "particle/particle.h"
 #include "pso/pso.h"
 #include <argp.h>
@@ -6,7 +7,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 /* Program name and version */
 const char *argp_program_version = "HPC4DS 0.1";
 /* Program documentation. */
@@ -78,11 +78,16 @@ int main(int argc, char **argv) {
   /* Parse our arguments; every option seen by parse_opt will be
      reflected in arguments. */
   // argp_parse(&argp, argc, argv, 0, 0, &arguments);
-  // Particle particle = newParticle(5, 10.0, 0.0, 3.0, 1.0, prova);
 
+  log_set_level(LOG_INFO);
+  /* log_set_level(LOG_DEBUG); */
+  int num_dim = 2;
+  int num_particles = 2;
+  log_info("Particles initialization");
   ArrayList particles = newArrayList();
-  initParticles(particles, 2, 10, 10.0, 0.0, 3.0, 1.0, prova);
-  particleSwarmOptimization(particles, 100, 1.0, 0.5, 0.5, prova);
+  initParticles(particles, num_dim, num_particles, 10.0, 0.0, 3.0, 1.0, prova);
+  log_info("Swarm optimization");
+  particleSwarmOptimization(particles, num_dim, 100, 1.0, 0.5, 0.5, prova);
   destroyArrayList(particles, destroyParticle);
 
   return 0;

@@ -143,3 +143,5 @@ doc
 
 # lsp
 .ccls-cache
+*.db
+/benchmark/.ipynb_checkpoints/

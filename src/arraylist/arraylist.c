@@ -197,174 +197,174 @@ int insertAtIndex(ArrayList arraylist, void *data, int index) {
 
 // ================== Test main =======================
 
-void floatToString(void *data) { printf("%f\n", (*(float *)data)); }
-void deleteFloat(void *data) {
-  float *f_data = (float *)data;
-  free(f_data);
-}
-bool isEqualFloat(void *first, void *second) {
-  float *f_first, *f_second;
-  f_first = (float *)first;
-  f_second = (float *)second;
-  return f_first == f_second;
-}
+/* void floatToString(void *data) { printf("%f\n", (*(float *)data)); } */
+/* void deleteFloat(void *data) { */
+/*   float *f_data = (float *)data; */
+/*   free(f_data); */
+/* } */
+/* bool isEqualFloat(void *first, void *second) { */
+/*   float *f_first, *f_second; */
+/*   f_first = (float *)first; */
+/*   f_second = (float *)second; */
+/*   return f_first == f_second; */
+/* } */
 
-/**
- * Method used in order to test the list data structure
- */
-// int main(int argc, char **argv) {
-int main_test_arraylist(int argc, char **argv) {
-  // Some data
-  int size;
-  int i;
-  int rc;
-  float element;
-  float *data;
-  int choice;
-  // New list
-  ArrayList array;
-  array = newArrayList();
-  if (array == NULL) {
-    printf("There were some problems in the list allocation");
-    exit(FAILURE);
-  }
-  // List initialization
-  printf(
-      "Enter the number of elements you want to insert into the array list: ");
-  scanf("%d", &size);
-  if (size <= 0) {
-    printf("Anything to do here\n");
-  }
-  for (i = 0; i < size; i++) {
-    printf("Insert the %d element: ", i + 1);
-    scanf("%f", &element);
-    data = (float *)malloc(sizeof(float));
-    if (data == NULL) {
-      printf("There were some problems in the memory allocation\n");
-      exit(FAILURE);
-    }
-    *data = element;
-    rc = push_back(array, (void *)data);
-    if (rc == FAILURE) {
-      printf("There were some problems in the data insertion\n");
-      exit(1);
-    }
-  }
-  // Operation which the main can carry out
-  do {
-    printf("Which operation would you like to do?\n");
-    printf("Insert 0 for printing the array\n");
-    printf("Insert 1 for checking if the array is empty\n");
-    printf("Insert 2 for inserting elements at the end of the array\n");
-    printf("Insert 3 for inserting elements at a given index of the array\n");
-    printf("Insert 4 for printing the element of the array in a given index\n");
-    printf("Insert 5 for changing the element of the array in a given index\n");
-    printf("Insert 6 for deleting the element of the array in a given index "
-           "[note that the the indexes of the array may change]\n");
-    printf("Insert 7 for emptying the array\n");
-    printf("Insert 8 for checking the present of an element in the array\n");
-    printf("Insert 9 for destroying the array\n");
-    printf("Your choice: ");
+/* /\** */
+/*  * Method used in order to test the list data structure */
+/*  *\/ */
+/* // int main(int argc, char **argv) { */
+/* int main_test_arraylist(int argc, char **argv) { */
+/*   // Some data */
+/*   int size; */
+/*   int i; */
+/*   int rc; */
+/*   float element; */
+/*   float *data; */
+/*   int choice; */
+/*   // New list */
+/*   ArrayList array; */
+/*   array = newArrayList(); */
+/*   if (array == NULL) { */
+/*     printf("There were some problems in the list allocation"); */
+/*     exit(FAILURE); */
+/*   } */
+/*   // List initialization */
+/*   printf( */
+/*       "Enter the number of elements you want to insert into the array list: "); */
+/*   scanf("%d", &size); */
+/*   if (size <= 0) { */
+/*     printf("Anything to do here\n"); */
+/*   } */
+/*   for (i = 0; i < size; i++) { */
+/*     printf("Insert the %d element: ", i + 1); */
+/*     scanf("%f", &element); */
+/*     data = (float *)malloc(sizeof(float)); */
+/*     if (data == NULL) { */
+/*       printf("There were some problems in the memory allocation\n"); */
+/*       exit(FAILURE); */
+/*     } */
+/*     *data = element; */
+/*     rc = push_back(array, (void *)data); */
+/*     if (rc == FAILURE) { */
+/*       printf("There were some problems in the data insertion\n"); */
+/*       exit(1); */
+/*     } */
+/*   } */
+/*   // Operation which the main can carry out */
+/*   do { */
+/*     printf("Which operation would you like to do?\n"); */
+/*     printf("Insert 0 for printing the array\n"); */
+/*     printf("Insert 1 for checking if the array is empty\n"); */
+/*     printf("Insert 2 for inserting elements at the end of the array\n"); */
+/*     printf("Insert 3 for inserting elements at a given index of the array\n"); */
+/*     printf("Insert 4 for printing the element of the array in a given index\n"); */
+/*     printf("Insert 5 for changing the element of the array in a given index\n"); */
+/*     printf("Insert 6 for deleting the element of the array in a given index " */
+/*            "[note that the the indexes of the array may change]\n"); */
+/*     printf("Insert 7 for emptying the array\n"); */
+/*     printf("Insert 8 for checking the present of an element in the array\n"); */
+/*     printf("Insert 9 for destroying the array\n"); */
+/*     printf("Your choice: "); */
 
-    scanf("%d", &choice);
-    switch (choice) {
-    case 0:
-      printArrayList(array, floatToString);
-      break;
-    case 1:
-      printf("Is the list empty? %d\nSize: %d\n", isEmptyArray(array),
-             getNumberElements(array));
-      break;
-    case 2:
-      printf("Insert the new element to append to the array: ");
-      scanf("%f", &element);
-      data = (float *)malloc(sizeof(float));
-      if (data == NULL) {
-        printf("There were some problems in the memory allocation\n");
-        exit(FAILURE);
-      }
-      *data = element;
-      rc = push_back(array, (void *)data);
-      if (rc == FAILURE) {
-        printf("There were some problems in the data insertion\n");
-        exit(1);
-      }
-      break;
-    case 3:
-      printf("Insert the new element to insert in the list: ");
-      scanf("%f", &element);
-      data = (float *)malloc(sizeof(float));
-      if (data == NULL) {
-        printf("There were some problems in the memory allocation\n");
-        exit(FAILURE);
-      }
-      *data = element;
-      printf("Insert the index where to insert the element: ");
-      scanf("%d", &i);
-      rc = insertAtIndex(array, (void *)data, i);
-      if (rc == FAILURE) {
-        printf("There were some problems in the data insertion\n");
-        exit(1);
-      }
-      break;
-    case 4:
-      printf("Insert the index of the element to retrieve: ");
-      scanf("%d", &i);
-      data = (float *)getDataAtIndex(array, i);
-      if (data == NULL) {
-        printf("The list is empty or the element is NULL: size = %d\n",
-               getNumberElements(array));
-      } else {
-        printf("The element at position %d of the array is %f\n", i, *data);
-      }
-      break;
-    case 5:
-      printf("Insert the new element to insert in the list: ");
-      scanf("%f", &element);
-      data = (float *)malloc(sizeof(float));
-      if (data == NULL) {
-        printf("There were some problems in the memory allocation\n");
-        exit(FAILURE);
-      }
-      *data = element;
-      printf("Insert the index of the element to change: ");
-      scanf("%d", &i);
-      rc = changeElementAtIndex(array, (void *)data, i, deleteFloat);
-      if (rc == SUCCESS) {
-        printf("Element changed successfully\n");
-      } else {
-        printf("There were some problems changing the element\n");
-      }
-      break;
-    case 6:
-      printf("Insert the index of the element to delete: ");
-      scanf("%d", &i);
-      rc = deleteElement(array, i, deleteFloat);
-      if (rc == SUCCESS) {
-        printf("Element removed successfully\n");
-      } else {
-        printf("There were some problems deleting the element\n");
-      }
-      break;
-    case 7:
-      array = emptyArray(array, deleteFloat);
-      if (array == NULL) {
-        printf("There were some problems emptying the list\n");
-        exit(FAILURE);
-      }
-      break;
-    case 8:
-      printf("Insert the element to find in the array: ");
-      scanf("%f", &element);
-      printf("Is the element in the list? %d \n",
-             isInArray(array, (void *)&element, isEqualFloat));
-      break;
-    default:
-      destroyArrayList(array, deleteFloat);
-      printf("ArrayList deallocated, the program will end\n");
-      break;
-    }
-  } while (choice >= 0 && choice < 9);
+/*     scanf("%d", &choice); */
+/*     switch (choice) { */
+/*     case 0: */
+/*       printArrayList(array, floatToString); */
+/*       break; */
+/*     case 1: */
+/*       printf("Is the list empty? %d\nSize: %d\n", isEmptyArray(array), */
+/*              getNumberElements(array)); */
+/*       break; */
+/*     case 2: */
+/*       printf("Insert the new element to append to the array: "); */
+/*       scanf("%f", &element); */
+/*       data = (float *)malloc(sizeof(float)); */
+/*       if (data == NULL) { */
+/*         printf("There were some problems in the memory allocation\n"); */
+/*         exit(FAILURE); */
+/*       } */
+/*       *data = element; */
+/*       rc = push_back(array, (void *)data); */
+/*       if (rc == FAILURE) { */
+/*         printf("There were some problems in the data insertion\n"); */
+/*         exit(1); */
+/*       } */
+/*       break; */
+/*     case 3: */
+/*       printf("Insert the new element to insert in the list: "); */
+/*       scanf("%f", &element); */
+/*       data = (float *)malloc(sizeof(float)); */
+/*       if (data == NULL) { */
+/*         printf("There were some problems in the memory allocation\n"); */
+/*         exit(FAILURE); */
+/*       } */
+/*       *data = element; */
+/*       printf("Insert the index where to insert the element: "); */
+/*       scanf("%d", &i); */
+/*       rc = insertAtIndex(array, (void *)data, i); */
+/*       if (rc == FAILURE) { */
+/*         printf("There were some problems in the data insertion\n"); */
+/*         exit(1); */
+/*       } */
+/*       break; */
+/*     case 4: */
+/*       printf("Insert the index of the element to retrieve: "); */
+/*       scanf("%d", &i); */
+/*       data = (float *)getDataAtIndex(array, i); */
+/*       if (data == NULL) { */
+/*         printf("The list is empty or the element is NULL: size = %d\n", */
+/*                getNumberElements(array)); */
+/*       } else { */
+/*         printf("The element at position %d of the array is %f\n", i, *data); */
+/*       } */
+/*       break; */
+/*     case 5: */
+/*       printf("Insert the new element to insert in the list: "); */
+/*       scanf("%f", &element); */
+/*       data = (float *)malloc(sizeof(float)); */
+/*       if (data == NULL) { */
+/*         printf("There were some problems in the memory allocation\n"); */
+/*         exit(FAILURE); */
+/*       } */
+/*       *data = element; */
+/*       printf("Insert the index of the element to change: "); */
+/*       scanf("%d", &i); */
+/*       rc = changeElementAtIndex(array, (void *)data, i, deleteFloat); */
+/*       if (rc == SUCCESS) { */
+/*         printf("Element changed successfully\n"); */
+/*       } else { */
+/*         printf("There were some problems changing the element\n"); */
+/*       } */
+/*       break; */
+/*     case 6: */
+/*       printf("Insert the index of the element to delete: "); */
+/*       scanf("%d", &i); */
+/*       rc = deleteElement(array, i, deleteFloat); */
+/*       if (rc == SUCCESS) { */
+/*         printf("Element removed successfully\n"); */
+/*       } else { */
+/*         printf("There were some problems deleting the element\n"); */
+/*       } */
+/*       break; */
+/*     case 7: */
+/*       array = emptyArray(array, deleteFloat); */
+/*       if (array == NULL) { */
+/*         printf("There were some problems emptying the list\n"); */
+/*         exit(FAILURE); */
+/*       } */
+/*       break; */
+/*     case 8: */
+/*       printf("Insert the element to find in the array: "); */
+/*       scanf("%f", &element); */
+/*       printf("Is the element in the list? %d \n", */
+/*              isInArray(array, (void *)&element, isEqualFloat)); */
+/*       break; */
+/*     default: */
+/*       destroyArrayList(array, deleteFloat); */
+/*       printf("ArrayList deallocated, the program will end\n"); */
+/*       break; */
+/*     } */
+/*   } while (choice >= 0 && choice < 9); */
 
-  return 0;
-}
+/*   return 0; */
+/* } */

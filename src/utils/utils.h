@@ -17,5 +17,6 @@ int checkAllocationError(void *ptr);
 bool copyDoubleArray(ArrayList source, ArrayList destination,
                      void deleteData(void *));
 void printDouble(void *ptr);
+void printDoubleInLine(void *ptr);
 
 #endif

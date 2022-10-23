@@ -37,3 +37,8 @@ void printDouble(void *ptr) {
   double *data = (double *)ptr;
   printf("%f\n", *data);
 }
+
+void printDoubleInLine(void *ptr) {
+  double *data = (double *)ptr;
+  printf("%f ", *data);
+}

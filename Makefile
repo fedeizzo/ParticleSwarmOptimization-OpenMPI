@@ -2,7 +2,7 @@
 # export PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH"
 
 # LIBRARIES
-LIBRARIES :=
+LIBRARIES := sqlite3
 
 # COMPILER
 CC := mpicc # compiler
