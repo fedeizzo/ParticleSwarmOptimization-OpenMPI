@@ -140,3 +140,6 @@ run.sh.*
 
 # code documentation
 doc
+
+# lsp
+.ccls-cache
