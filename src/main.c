@@ -221,6 +221,6 @@ int main(int argc, char **argv) {
    */
   /* destroyArrayList(particles, destroyParticle); */
 
-  openMP_tutorial();
+  /* openMP_tutorial(); */
   return 0;
 }

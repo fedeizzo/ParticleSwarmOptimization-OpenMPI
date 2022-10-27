@@ -1,7 +1,4 @@
 #include "utils.h"
-#include "../../include/config.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 int checkAllocationError(void *ptr) {
   int rc_t = SUCCESS;
@@ -33,6 +30,11 @@ bool copyDoubleArray(ArrayList source, ArrayList destination,
   return true;
 }
 
+void die(char *msg) {
+  log_error(msg);
+  exit(1);
+}
+
 void printDouble(void *ptr) {
   double *data = (double *)ptr;
   printf("%f\n", *data);
@@ -41,4 +43,10 @@ void printDouble(void *ptr) {
 void printDoubleInLine(void *ptr) {
   double *data = (double *)ptr;
   printf("%f ", *data);
+}
+
+double randfrom(double min, double max) {
+  double range = (max - min);
+  double div = RAND_MAX / range;
+  return min + (rand() / div);
 }

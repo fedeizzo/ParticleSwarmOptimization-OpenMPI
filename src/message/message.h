@@ -5,7 +5,7 @@
 #include <sys/time.h>
 
 typedef struct broadcastMessage_t {
-  timeval timestamp;
+  /* timeval timestamp; */
   int iteration;
   int particleId;
   // mpi_nodo

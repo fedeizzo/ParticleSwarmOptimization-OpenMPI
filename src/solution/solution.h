@@ -5,8 +5,9 @@
 #include <stdio.h>
 
 typedef struct solution_t {
+  int dimension;
   double fitness;
-  ArrayList pos;
+  double *pos;
 } solution_t;
 
 typedef solution_t *Solution;
@@ -15,6 +16,5 @@ Solution newSolution();
 void destroySolution();
 Solution cloneSolution(Solution solution);
 void printSolution(Solution solution);
-void jsonSolution(Solution solution, FILE *fp);
 
 #endif

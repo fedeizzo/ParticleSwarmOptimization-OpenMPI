@@ -2,6 +2,7 @@
 #define __DATABASE_H__
 
 #include "../solution/solution.h"
+#include "../utils/utils.h"
 #include <sqlite3.h>
 
 typedef struct database_t {
