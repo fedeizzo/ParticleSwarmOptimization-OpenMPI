@@ -16,4 +16,4 @@ A process can have the task of computing the algorithm for one or more particles
 
 Moreover there are two buffers: one for input and another for output.
 
-![Execution schema](./images/communication_schema.png)
+![Execution schema](./images/execution_schema.png)

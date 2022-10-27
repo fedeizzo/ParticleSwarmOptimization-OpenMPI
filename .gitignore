@@ -145,3 +145,4 @@ doc
 .ccls-cache
 *.db
 /benchmark/.ipynb_checkpoints/
+images/.$hpc-memory-design.drawio.bkp
