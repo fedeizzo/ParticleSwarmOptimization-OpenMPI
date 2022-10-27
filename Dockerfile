@@ -17,13 +17,15 @@ RUN apt-get install -y \
 	pkg-config \
 	openmpi-bin \
 	libopenmpi3 \
-	libopenmpi-dev
+	libopenmpi-dev \
+	libomp-dev \
+	libsqlite3-dev
 
 # add content
 ADD . /src
 
 # install
 WORKDIR /src
-RUN make
+# RUN make
 
-ENTRYPOINT [ "/src/bin/hpc" ]
+# ENTRYPOINT [ "/src/bin/hpc" ]
