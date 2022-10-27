@@ -3,40 +3,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Solution newSolution(int problemDimension) {
+Solution newSolution() {
   Solution solution = (Solution)malloc(sizeof(struct solution_t));
-  solution->pos = (double *)malloc(problemDimension * sizeof(double));
-  solution->dimension = problemDimension;
+  solution->pos = newArrayList();
   return solution;
 }
 
 void destroySolution(void *ptr) {
   Solution solution = (Solution)ptr;
-  free(solution->pos);
+  destroyArrayList(solution->pos, free);
   free(solution);
 }
 
 Solution cloneSolution(Solution solution) {
-  double *pos = solution->pos;
+  ArrayList pos = solution->pos;
   double fitness = solution->fitness;
 
   Solution new = (Solution)malloc(sizeof(struct solution_t));
-  new->pos = (double *)malloc(solution->dimension * sizeof(double));
-  for (int i = 0; i < solution->dimension; i++)
-    new->pos[i] = pos[i];
+  new->pos = newArrayList();
+  for (int i = 0; i < pos->used; i++) {
+    double *original = (double *)getDataAtIndex(pos, i);
+    double coord = *original;
+    double *data = (double *)malloc(sizeof(double));
+    *data = coord;
+    push_back(new->pos, data);
+  }
 
   new->fitness = fitness;
   return new;
 }
 
 void printSolution(Solution solution) {
-  printf("\tPos: [");
-  for (int i = 0; i < solution->dimension; i++) {
-    if (i == solution->dimension - 1) {
-      printf("%f]\n", solution->pos[i]);
-    } else {
-      printf("%f, ", solution->pos[i]);
-    }
-  }
+  printf("\tPos:");
+  printArrayList(solution->pos, printDoubleInLine);
   printf("\n\tFitness value: %f\n", solution->fitness);
+}
+
+void jsonSolution(Solution solution, FILE *fp) {
+  fprintf(fp, "{\n");
+  fprintf(fp, "\"pos\": [");
+  int numberElements = getNumberElements(solution->pos);
+  for (int i = 0; i < numberElements; i++)
+    if (i != numberElements - 1)
+      fprintf(fp, "%f, ", *((double *)getDataAtIndex(solution->pos, i)));
+    else
+      fprintf(fp, "%f", *((double *)getDataAtIndex(solution->pos, i)));
+  fprintf(fp, "],\n");
+  fprintf(fp, "\"fitness\": %f\n", solution->fitness);
+  fprintf(fp, "}");
 }
