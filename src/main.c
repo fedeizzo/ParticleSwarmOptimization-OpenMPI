@@ -147,14 +147,14 @@ void openMP_tutorial() {
 #pragma omp parallel for private(tmp)
   for (int i = 0; i < 100; i++)
     tmp += i;
-  // firstprivate initialize tmp with the original
-  // value inside the main thread
+    // firstprivate initialize tmp with the original
+    // value inside the main thread
 #pragma omp parallel for firstprivate(tmp)
   for (int i = 0; i < 100; i++)
     tmp += i;
-  // lastprivate copy the last iteration value of tmp
-  // also outside the omp block and can then be usede
-  // by the master thread
+    // lastprivate copy the last iteration value of tmp
+    // also outside the omp block and can then be usede
+    // by the master thread
 #pragma omp parallel for lastprivate(tmp)
   for (int i = 0; i < 100; i++)
     tmp += i;
@@ -162,26 +162,25 @@ void openMP_tutorial() {
   // threadprivate preserves global scope wihtin each thread
   // copyprivate can be used to propagate a private value to other threads
 
-
 #pragma omp prallel
   {
-    // inside sections each section pragma define a different task that will be
-    // executed on a different thread
-    #pragma omp sections
+// inside sections each section pragma define a different task that will be
+// executed on a different thread
+#pragma omp sections
     {
-      #pragma omp section
+#pragma omp section
       printf("task number 1");
-      #pragma omp section
+#pragma omp section
       printf("task number 2");
-      #pragma omp section
+#pragma omp section
       printf("task number 3");
     }
   }
 
   // flush function can be used to force the update in memory of a variable
   // in this way all threads are ensured to have the same value updated
-  // this is important because compilers move the order execution for effficiency
-  // purposes
+  // this is important because compilers move the order execution for
+  // effficiency purposes
 
   // ##################
   // TASK
@@ -191,7 +190,8 @@ void openMP_tutorial() {
   //  - a data environment
   //  - an assigned thread that exectues the code and uses the data
   // and it is mainly divided into packaging and execution
-  // In generale it is an advanced topic and I think it is not useful for our purposes.
+  // In generale it is an advanced topic and I think it is not useful for our
+  // purposes.
 }
 
 /* Our argp parser. */
@@ -222,5 +222,48 @@ int main(int argc, char **argv) {
   /* destroyArrayList(particles, destroyParticle); */
 
   /* openMP_tutorial(); */
+
+  MPI_Init(&argc, &argv);
+  MPI_Comm_size(MPI_COMM_WORLD, &n_processes);
+  MPI_Comm_rank(MPI_COMM_WORLD, &process_id);
+
+  /** EVERY PROCESS HAS A DIFFERENT RANDOM GENERATOR **/
+  srand(85 + process_id);
+
+  // ArrayList particles = newArrayList();
+  // initParticles(particles, num_dim, num_particles, 10.0, 0.0, 3.0, 1.0,
+  // *prova);
+
+  int data = 5;
+  if (process_id == 0) {
+    data = 10;
+  } else if (process_id == 2) {
+    data = 20;
+  }
+
+  if (process_id == 1) {
+    int completed_1 = 0, completed_2 = 0;
+    MPI_Request request[2];
+    MPI_Status status;
+    MPI_Ibcast(&data, 1, MPI_INT, 2, MPI_COMM_WORLD, &request[0]);
+    MPI_Ibcast(&data, 1, MPI_INT, 0, MPI_COMM_WORLD, &request[1]);
+    do {
+      MPI_Test(&request[0], &completed_1, &status);
+      printf("Completed req 0: %d\n", completed_1);
+      MPI_Test(&request[1], &completed_1, &status);
+      printf("Completed req 1%d\n", completed_1);
+    } while (completed_1 != 1 && completed_2 != 1);
+    printf("process_id %d data %d\n", process_id, data);
+  } else {
+    MPI_Request request;
+    sleep(2);
+    MPI_Ibcast(&data, 1, MPI_INT, 2, MPI_COMM_WORLD, &request);
+    printf("process_id %d data = %d\n", process_id, data);
+    MPI_Ibcast(&data, 1, MPI_INT, 0, MPI_COMM_WORLD, &request);
+    printf("process_id %d send data = %d\n", process_id, data);
+  }
+
+  // destroyArrayList(particles, destroyParticle);
+  MPI_Finalize();
   return 0;
 }
