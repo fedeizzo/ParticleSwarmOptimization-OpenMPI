@@ -12,7 +12,7 @@ MPI_Datatype define_double_array(int dimension) {
 }
 
 MPI_Datatype define_timeval_array() {
-  timestamp_t timeElement;
+  timestamp_t timeElement = {.tv_sec = 0, .tv_usec = 0};
   MPI_Datatype DT_TIMEVAL;
   int lengths[2] = {1, 1};
 
@@ -30,7 +30,7 @@ MPI_Datatype define_timeval_array() {
 }
 
 MPI_Datatype define_datatype_solution_message(int dimension) {
-  solution_msg_t solution;
+  solution_t solution;
 
   // Create the datatype
   MPI_Datatype DT_SOLUTION_MESSAGE;
@@ -40,7 +40,7 @@ MPI_Datatype define_datatype_solution_message(int dimension) {
   MPI_Aint displacements[3];
   MPI_Aint base_address;
   MPI_Get_address(&solution, &base_address);
-  MPI_Get_address(&solution.dim, &displacements[0]);
+  MPI_Get_address(&solution.dimension, &displacements[0]);
   MPI_Get_address(&solution.fitness, &displacements[1]);
   MPI_Get_address(solution.pos, &displacements[2]);
   displacements[0] = MPI_Aint_diff(displacements[0], base_address);
@@ -86,23 +86,21 @@ MPI_Datatype define_datatype_broadcast_message(int dimension) {
   return DT_BROADCAST_MESSAGE;
 }
 
-char *logSolutionMessage(solution_msg_t message) {
+char *logSolutionMessage(solution_t message) {
   char *str = (char *)malloc(sizeof(char) * 200);
-  snprintf(str, 200, "Dim is %d fitness %f pos:", message.dim, message.fitness);
-  for (int i = 0; i < message.dim; i++) {
+  snprintf(str, 200, "Dim is %d fitness %f pos:", message.dimension,
+           message.fitness);
+  for (int i = 0; i < message.dimension; i++) {
     sprintf(str, "%s %f", str, message.pos[i]);
   }
   return str;
 }
 
-void includeSolution(solution_msg_t *message, Solution solution) {
-  int dim = getNumberElements(solution->pos);
+void includeSolution(solution_t *message, Solution solution) {
   message->fitness = solution->fitness;
-  message->dim = dim;
-  // Copy of the position
-  for (int i = 0; i < dim; i++) {
-    message->pos[i] = (*(double *)getDataAtIndex(solution->pos, i));
-  }
+  message->dimension = solution->dimension;
+  for (int i = 0; i < solution->dimension; i++)
+    message->pos[i] = solution->pos[i];
 }
 
 BroadcastMessage newBroadcastMessage() {
@@ -134,8 +132,25 @@ void reduceMaxFitness(BroadcastMessage in, BroadcastMessage inout, int *len,
   }
 }
 
-MPI_Op maxFitnessFunction() {
-  MPI_Op operation;
-  MPI_Op_create(reduceMaxFitness, true, &operation);
-  return operation;
+BroadcastMessage cloneMessage(BroadcastMessage message) {
+  BroadcastMessage new = newBroadcastMessage();
+  new->timestamp = message->timestamp;
+  new->iteration = message->iteration;
+  new->mpi_process = message->mpi_process;
+  new->solution = message->solution;
+  return new;
+}
+
+BroadcastMessage cloneMessageStructToPointer(broadcastMessage_t msg) {
+  BroadcastMessage message = newBroadcastMessage();
+  message->iteration = 0;
+  message->particleId = msg.particleId;
+  message->mpi_process = msg.mpi_process;
+  gettimeofday(&message->timestamp, NULL);
+  message->solution.dimension = msg.solution.dimension;
+  message->solution.fitness = msg.solution.fitness;
+  for (int j = 0; j < message->solution.dimension; j++) {
+    message->solution.pos[j] = msg.solution.pos[j];
+  }
+  return message;
 }

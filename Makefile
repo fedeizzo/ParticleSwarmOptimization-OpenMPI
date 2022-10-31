@@ -6,10 +6,10 @@ LIBRARIES := sqlite3
 
 # COMPILER
 CC := mpicc # compiler
-CPPFLAGS := -Iinclude -MMD -MP $(shell pkg-config --cflags ${LIBRARIES}) # preprocessor flags
-CFLAGS := -fopenmp -g -Wall # compiler flags
-LDFLAGS := -fopenmp -Llib # linker flags
-LDLIBS := $(shell pkg-config --libs ${LIBRARIES})
+CPPFLAGS := -Iinclude -MMD -MP $(foreach pkg, ${LIBRARIES}, $(shell pkg-config --cflags ${pkg})) # preprocessor flags
+CFLAGS := -fopenmp -lm -g -Wall # compiler flags
+LDFLAGS := -fopenmp -lm -Llib # linker flags
+LDLIBS := $(foreach pkg, ${LIBRARIES}, $(shell pkg-config --libs ${pkg}))
 
 # DOXYGEN
 DOXYGEN := doxygen
@@ -58,12 +58,12 @@ build: $(TARGET)
 # building target, dealing with the linking phase, the compiling is over
 $(TARGET): $(OBJ) | $(BIN_DIR)
 	@$(ECHO) "$(GREEN)Program compiled successfully$(NONE)";
-	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+	@$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 	@$(ECHO) "$(GREEN)Program linked successfully$(NONE)";
 
 # building objects
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(DEPS) | $(OBJ_DIR)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 # create object folder if not present yet
 $(BIN_DIR) $(OBJ_DIR):

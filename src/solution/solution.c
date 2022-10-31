@@ -5,14 +5,12 @@
 
 Solution newSolution(int problemDimension) {
   Solution solution = (Solution)malloc(sizeof(struct solution_t));
-  solution->pos = (double *)malloc(problemDimension * sizeof(double));
   solution->dimension = problemDimension;
   return solution;
 }
 
 void destroySolution(void *ptr) {
   Solution solution = (Solution)ptr;
-  free(solution->pos);
   free(solution);
 }
 
@@ -21,7 +19,6 @@ Solution cloneSolution(Solution solution) {
   double fitness = solution->fitness;
 
   Solution new = (Solution)malloc(sizeof(struct solution_t));
-  new->pos = (double *)malloc(solution->dimension * sizeof(double));
   for (int i = 0; i < solution->dimension; i++)
     new->pos[i] = pos[i];
 

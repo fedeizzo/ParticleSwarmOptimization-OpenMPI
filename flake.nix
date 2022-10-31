@@ -16,6 +16,7 @@
         pkg-config
         glib
         llvmPackages_13.openmp
+        libyaml
       ];
       shellDeps = with pkgs; [
         python39

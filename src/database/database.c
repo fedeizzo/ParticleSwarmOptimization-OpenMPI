@@ -79,8 +79,8 @@ void insertSolution(Database db, const Solution solution,
   sqlite3_bind_int(stmt, 2, iteration_step);
   sqlite3_bind_double(stmt, 3, solution->fitness);
   int rc;
-  for (int i = 0; i < getNumberElements(solution->pos); i++) {
-    double value = *((double *)getDataAtIndex(solution->pos, i));
+  for (int i = 0; i < solution->dimension; i++) {
+    double value = solution->pos[i];
     sqlite3_bind_double(stmt, i + ELEMENT_TO_SKIP, value);
   }
   rc = sqlite3_step(stmt);
