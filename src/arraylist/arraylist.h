@@ -15,15 +15,18 @@
 #define LOAD_FACTOR_LIMIT 0.25
 
 /**
- * ArrayList data type
+ * @struct array_list_t
+ * @brief ArrayList data type
  *
- * [int] size: size of the array list (allocated space)
- * [int] used: occupied cells of the array list (used space)
- * [void] **sequence: dynamic array
- *
+ * @var array_list_t::size
+ * size of the array list (allocated space)
+ * @var array_list_t::used
+ * occupied cells of the array list (used space)
+ * @var array_list_t::sequence
+ * dynamic array
  */
 typedef struct array_list_t {
-  int size;
+  int size; // size of the array list (allocated space)
   int used;
   void **sequence;
 } array_list_t;
@@ -43,7 +46,7 @@ ArrayList newArrayList();
  * ArrayList data type constructor
  *
  * Allocates a new ArrayList on the heap with size equal to capacity
- * [int] capacity: size to initialize the array
+ * @param capacity: size to initialize the array
  *
  * returns [ArrayList] a new arraylist
  */

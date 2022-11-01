@@ -26,6 +26,7 @@
         python39Packages.matplotlib
         python39Packages.scipy
         sqlite-web
+        doxygen
       ];
       CPackage = pkgs.stdenv.mkDerivation {
         name = pname;

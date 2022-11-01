@@ -7,8 +7,8 @@ LIBRARIES := sqlite3
 # COMPILER
 CC := mpicc # compiler
 CPPFLAGS := -Iinclude -MMD -MP $(foreach pkg, ${LIBRARIES}, $(shell pkg-config --cflags ${pkg})) # preprocessor flags
-CFLAGS := -fopenmp -lm -g -Wall # compiler flags
-LDFLAGS := -fopenmp -lm -Llib # linker flags
+CFLAGS := -fopenmp -g -Wall -lm # compiler flags
+LDFLAGS := -fopenmp -Llib -lm # linker flags
 LDLIBS := $(foreach pkg, ${LIBRARIES}, $(shell pkg-config --libs ${pkg}))
 
 # DOXYGEN

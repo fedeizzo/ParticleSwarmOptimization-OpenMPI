@@ -26,6 +26,6 @@ ADD . /src
 
 # install
 WORKDIR /src
-# RUN make
+RUN make
 
-# ENTRYPOINT [ "/src/bin/hpc" ]
+ENTRYPOINT [ "/src/bin/hpc" ]
