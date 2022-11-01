@@ -67,7 +67,7 @@ void createMPIRequests(List *messages, List *requests,
         MPI_Request *req = (MPI_Request *)malloc(sizeof(MPI_Request));
         enqueue(messages[pid], msg);
         enqueue(requests[pid], req);
-        printf("I'm %d and I'm waiting %d %p %p\n", processId, pid, msg, req);
+        /* printf("I'm %d and I'm waiting %d %p %p\n", processId, pid, msg, req); */
         MPI_Ibcast(msg, 1, *mpi_datatype, pid, MPI_COMM_WORLD, req);
       }
 }
@@ -90,9 +90,9 @@ void waitMPIRequests(ProcessParticle particle, const int iteration,
       while (currRequest != NULL) {
         int isCompleted = 0;
         MPI_Test((MPI_Request *)currRequest->data, &isCompleted, &status);
-        printf("leggo %p %p con status %d %d %d %d\n", currMessage->data,
-               currRequest->data, status.MPI_ERROR, status.MPI_SOURCE,
-               status.MPI_TAG, status._cancelled);
+        /* printf("leggo %p %p con status %d %d %d %d\n", currMessage->data, */
+        /*        currRequest->data, status.MPI_ERROR, status.MPI_SOURCE, */
+        /*        status.MPI_TAG, status._cancelled); */
         if (isCompleted == 1) {
           processLog("READ", iteration, processId, omp_get_thread_num(),
                      "done");
@@ -161,80 +161,100 @@ void receiveMessage(ProcessParticle particle, const int iterationsNumber,
   MPI_Type_free(&DT_BROADCAST_MESSAGE);
 }
 
+void waitInputBuffer(ProcessParticle particle) {
+  int isBufferFull;
+  do {
+    printf("CICLO\n");
+    isBufferFull = 0;
+    omp_set_lock(&particle->inputBufferLock);
+#pragma omp parallel for reduction(+ : isBufferFull)
+    for (int i = 0; i < particle->totalNumberOfParticles; i++)
+      isBufferFull += particle->inputBuffer[i] != NULL ? 1 : 0;
+    omp_unset_lock(&particle->inputBufferLock);
+    usleep(SLEEP_TIME);
+  } while (isBufferFull != particle->totalNumberOfParticles);
+}
+
+void computeDistances(ProcessParticle particle, int *indexes, double *distances,
+                      PSOData psoData) {
+  omp_set_lock(&particle->inputBufferLock);
+#pragma omp parallel for
+  for (int i = 0; i < particle->totalNumberOfParticles; i++) {
+    indexes[i] = i;
+    distances[i] =
+        psoData->distanceFunction(particle->particle->current->pos,
+                                  particle->inputBuffer[i]->solution.pos,
+                                  particle->particle->current->dimension);
+  }
+  omp_unset_lock(&particle->inputBufferLock);
+}
+
+void obtainBestSocialFitness(ProcessParticle particle, int *indexes,
+                             double *bestFitness, int *indexBestFitness,
+                             PSOData psoData) {
+  omp_set_lock(&particle->inputBufferLock);
+  *bestFitness = particle->inputBuffer[indexes[0]]->solution.fitness;
+  *indexBestFitness = 0;
+  for (int i = 0; i < psoData->neighborhoodPopulation; i++) {
+    double fitness = particle->inputBuffer[indexes[i]]->solution.fitness;
+    if (psoData->fitnessChecker(fitness, *bestFitness)) {
+      *bestFitness = fitness;
+      *indexBestFitness = i;
+    }
+  }
+  omp_unset_lock(&particle->inputBufferLock);
+}
+
+void eraseInputBuffer(ProcessParticle particle) {
+  omp_set_lock(&particle->inputBufferLock);
+#pragma omp for
+  for (int i = 0; i < particle->totalNumberOfParticles; i++) {
+    destroyBroadcastMessage(particle->inputBuffer[i]);
+    particle->inputBuffer[i] = NULL;
+  }
+  /* printf("particle %d [", particle->particle->id); */
+  /* for (int i = 0; i < particle->totalNumberOfParticles; i++) */
+  /*   printf(particle->inputBuffer[i] == NULL ? "NULLO " : "NON_NULLO "); */
+  /* printf("]\n"); */
+  omp_unset_lock(&particle->inputBufferLock);
+}
+
 void computeNewPosition(ProcessParticle particle, const int iterationsNumber,
                         const int processId, PSOData psoData,
                         ProcessParticle *particles,
                         const int numberOfParticles) {
-  int isBufferFull;
+  printf("we are %d mode\n", omp_in_parallel());
   char *logMessage;
   logMessage = (char *)malloc(sizeof(char) * 20);
   for (int iteration = 0; iteration < iterationsNumber; iteration++) {
     sprintf(logMessage, "start particle %d", particle->particle->id);
     processLog("COMPUTING", iteration, processId, omp_get_thread_num(),
                logMessage);
-    do {
-      isBufferFull = 0;
-      omp_set_lock(&particle->inputBufferLock);
-#pragma omp parallel for reduction(+ : isBufferFull)
-      for (int i = 0; i < particle->totalNumberOfParticles; i++)
-        isBufferFull += particle->inputBuffer[i] != NULL ? 1 : 0;
-      omp_unset_lock(&particle->inputBufferLock);
-      usleep(SLEEP_TIME);
-    } while (isBufferFull != particle->totalNumberOfParticles);
+    waitInputBuffer(particle);
     sprintf(logMessage, "doing particle %d", particle->particle->id);
     processLog("COMPUTING", iteration, processId, omp_get_thread_num(),
                logMessage);
     double distances[psoData->particlesNumber];
     int indexes[psoData->particlesNumber];
-    omp_set_lock(&particle->inputBufferLock);
-#pragma omp parallel for
-    for (int i = 0; i < particle->totalNumberOfParticles; i++) {
-      indexes[i] = i;
-      distances[i] =
-          psoData->distanceFunction(particle->particle->current->pos,
-                                    particle->inputBuffer[i]->solution.pos,
-                                    particle->particle->current->dimension);
-    }
-    omp_unset_lock(&particle->inputBufferLock);
+    computeDistances(particle, indexes, distances, psoData);
     // sort
-    omp_set_lock(&particle->inputBufferLock);
-    double bestFitness = particle->inputBuffer[indexes[0]]->solution.fitness;
-    int indexBestFitness = 0;
-    for (int i = 0; i < psoData->neighborhoodPopulation; i++) {
-      double fitness = particle->inputBuffer[indexes[i]]->solution.fitness;
-      if (psoData->fitnessChecker(fitness, bestFitness)) {
-        bestFitness = fitness;
-        indexBestFitness = i;
-      }
-    }
-    omp_unset_lock(&particle->inputBufferLock);
+    double bestFitness;
+    int indexBestFitness;
+    obtainBestSocialFitness(particle, indexes, &bestFitness, &indexBestFitness,
+                            psoData);
 
     omp_set_lock(&particle->inputBufferLock);
-    particle->particle->socialBest->dimension =
-        particle->inputBuffer[indexBestFitness]->solution.fitness;
-    particle->particle->socialBest->fitness =
-        particle->inputBuffer[indexBestFitness]->solution.dimension;
-    for (int i = 0; i < particle->particle->socialBest->dimension; i++)
-      particle->particle->socialBest->pos[i] =
-          particle->inputBuffer[indexBestFitness]->solution.pos[i];
-    for (int i = 0; i < particle->totalNumberOfParticles; i++) {
-      destroyBroadcastMessage(particle->inputBuffer[i]);
-      particle->inputBuffer[i] = NULL;
-    }
+    particle->particle->socialBest =
+        cloneSolution(&particle->inputBuffer[indexBestFitness]->solution);
     omp_unset_lock(&particle->inputBufferLock);
+    eraseInputBuffer(particle);
 
     updateVelocity(particle->particle, psoData->w, psoData->phi_1,
                    psoData->phi_2);
     updatePosition(particle->particle, psoData->fitnessFunction);
 
-    printf("lfkdajsfl\n");
-#pragma omp parallel sections
-    {
-#pragma omp section
-      updateInnerInputBuffer(particles, particle, processId, iteration,
+    updateInnerInputBuffer(particles, particle, processId, iteration,
                              numberOfParticles);
-    }
-    printf("ciao mondo\n");
 
     sprintf(logMessage, "done particle %d", particle->particle->id);
     processLog("COMPUTING", iteration, processId, omp_get_thread_num(),
@@ -276,6 +296,7 @@ void sendMessage(ProcessParticle particle, const int iterationsNumber,
 void updateInnerInputBuffer(ProcessParticle *particles, ProcessParticle src,
                             const int processId, const int iteration,
                             const int numberOfParticles) {
+  #pragma omp for
   for (int i = 0; i < numberOfParticles; i++) {
     ProcessParticle dst = particles[i];
     BroadcastMessage msg = newBroadcastMessage();
@@ -285,10 +306,16 @@ void updateInnerInputBuffer(ProcessParticle *particles, ProcessParticle src,
     do {
       omp_set_lock(&dst->inputBufferLock);
       isWaiting = dst->inputBuffer[src->particle->id] != NULL ? true : false;
+      if (isWaiting == true) {
+        /* printf("the pointer is: %p %d\n",
+         * dst->inputBuffer[src->particle->id], dst->particle->id); */
+        /* printSolution(&(dst->inputBuffer[src->particle->id]->solution)); */
+      }
       omp_unset_lock(&dst->inputBufferLock);
       usleep(SLEEP_TIME);
     } while (isWaiting);
     omp_set_lock(&dst->inputBufferLock);
+    // TODO: see if it is possible to use atomic pragma for the same result
     dst->inputBuffer[src->particle->id] = msg;
     omp_unset_lock(&dst->inputBufferLock);
   }
@@ -319,19 +346,41 @@ void processRoutine(const int numberOfProcesses, const int numberOfThreads,
   for (int i = 0; i < numberOfParticles; i++)
     updateInnerInputBuffer(particles, particles[i], processId, 0,
                            numberOfParticles);
-#pragma omp parallel for
-  for (int i = 0; i < numberOfParticles; i++) {
-#pragma omp parallel sections
-    {
-#pragma omp section
+/* #pragma omp parallel */
+/*   { */
+/* #pragma omp single nowait */
+/*     for (int i = 0; i < numberOfParticles; i++) */
+/*    #pragma omp task */
+/*       { */
+/*       receiveMessage(particles[i], psoData->iterationsNumber, numberOfProcesses, */
+/*                      processId, processToNumberOfParticles); */
+/*       } */
+/* #pragma omp single nowait */
+/*     for (int i = 0; i < numberOfParticles; i++) */
+/*    #pragma omp task */
+/*       { */
+/*       sendMessage(particles[i], psoData->iterationsNumber, processId, */
+/*                   numberOfProcesses); */
+/*       } */
+/* #pragma omp parallel for */
+/*     for (int i = 0; i < numberOfParticles; i++) */
+/*       computeNewPosition(particles[i], psoData->iterationsNumber, processId, */
+/*                          psoData, particles, numberOfParticles); */
+/*   } */
+#pragma omp parallel
+  {
+#pragma omp for nowait
+    for (int i = 0; i < numberOfParticles; i++)
       receiveMessage(particles[i], psoData->iterationsNumber, numberOfProcesses,
                      processId, processToNumberOfParticles);
-#pragma omp section
-      sendMessage(particles[i], psoData->iterationsNumber, processId, numberOfProcesses);
-#pragma omp section
+#pragma omp for nowait
+    for (int i = 0; i < numberOfParticles; i++)
+      sendMessage(particles[i], psoData->iterationsNumber, processId,
+                  numberOfProcesses);
+#pragma omp for nowait
+    for (int i = 0; i < numberOfParticles; i++)
       computeNewPosition(particles[i], psoData->iterationsNumber, processId,
                          psoData, particles, numberOfParticles);
-    }
   }
   printf("Best fitness %f\n", particles[0]->particle->socialBest->fitness);
 

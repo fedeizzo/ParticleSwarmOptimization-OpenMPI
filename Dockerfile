@@ -1,4 +1,4 @@
-FROM ubuntu:22.10
+FROM ubuntu:22.10 AS builder
 
 # set locate
 RUN apt-get clean && apt-get update && apt-get install -y locales
@@ -11,14 +11,11 @@ ENV TZ=Europe/Rome
 
 # install deps
 RUN apt-get install -y \
-	gcc \
 	make \
-	libglib2.0-dev \
 	pkg-config \
 	openmpi-bin \
 	libopenmpi3 \
 	libopenmpi-dev \
-	libomp-dev \
 	libsqlite3-dev
 
 # add content
@@ -28,4 +25,7 @@ ADD . /src
 WORKDIR /src
 RUN make
 
-ENTRYPOINT [ "/src/bin/hpc" ]
+FROM ubuntu:22.10
+COPY --from=builder /src/bin/hpc /src/bin/hpc
+COPY --from=builder /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu
+CMD [ "mpirun", "-n", "1", "/src/bin/hpc" ]

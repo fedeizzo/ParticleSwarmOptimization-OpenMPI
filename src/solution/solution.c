@@ -23,6 +23,7 @@ Solution cloneSolution(Solution solution) {
     new->pos[i] = pos[i];
 
   new->fitness = fitness;
+  new->dimension = solution->dimension;
   return new;
 }
 

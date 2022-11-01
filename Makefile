@@ -6,7 +6,7 @@ LIBRARIES := sqlite3
 
 # COMPILER
 CC := mpicc # compiler
-CPPFLAGS := -Iinclude -MMD -MP $(foreach pkg, ${LIBRARIES}, $(shell pkg-config --cflags ${pkg})) # preprocessor flags
+CPPFLAGS := -Iinclude -lm -MMD -MP $(foreach pkg, ${LIBRARIES}, $(shell pkg-config --cflags ${pkg})) # preprocessor flags
 CFLAGS := -fopenmp -g -Wall -lm # compiler flags
 LDFLAGS := -fopenmp -Llib -lm # linker flags
 LDLIBS := $(foreach pkg, ${LIBRARIES}, $(shell pkg-config --libs ${pkg}))
@@ -58,7 +58,7 @@ build: $(TARGET)
 # building target, dealing with the linking phase, the compiling is over
 $(TARGET): $(OBJ) | $(BIN_DIR)
 	@$(ECHO) "$(GREEN)Program compiled successfully$(NONE)";
-	@$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+	@$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@ -lm
 	@$(ECHO) "$(GREEN)Program linked successfully$(NONE)";
 
 # building objects
