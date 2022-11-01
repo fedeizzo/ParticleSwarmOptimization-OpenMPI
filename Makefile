@@ -23,7 +23,7 @@ DIRS    := $(notdir $(wildcard $(SRC_DIR)/*))
 OBJ_DIR := obj
 BIN_DIR := bin
 INC_DIR := include
-DOC_DIR := doc
+DOC_DIR := docs
 
 # TARGET
 TARGET := $(BIN_DIR)/hpc
