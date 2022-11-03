@@ -1,6 +1,7 @@
 #include "./process.h"
 
 #define SLEEP_TIME 1000
+/* #define SLEEP_TIME 100000 */
 
 void updateInnerInputBuffer(ProcessParticle *particles, ProcessParticle src,
                             const int processId, const int iteration,
@@ -55,108 +56,41 @@ void processLog(const char *operation, const int iteration, const int process,
            iteration, process, thread, step);
 }
 
-void createMPIRequests(List *messages, List *requests,
-                       const int numberOfProcesses, const int processId,
-                       const int *processToNumberOfParticles,
-                       MPI_Datatype *mpi_datatype) {
-#pragma omp parallel for
-  for (int pid = 0; pid < numberOfProcesses; pid++)
-    if (pid != processId)
-      for (int parId = 0; parId < processToNumberOfParticles[pid]; parId++) {
-        BroadcastMessage msg = newBroadcastMessage();
-        MPI_Request *req = (MPI_Request *)malloc(sizeof(MPI_Request));
-        enqueue(messages[pid], msg);
-        enqueue(requests[pid], req);
-        /* printf("I'm %d and I'm waiting %d %p %p\n", processId, pid, msg, req); */
-        MPI_Ibcast(msg, 1, *mpi_datatype, pid, MPI_COMM_WORLD, req);
-      }
+void saveNewMessage(ProcessParticle *particles, const int numberOfParticles,
+                    BroadcastMessage msg, const int processId) {
+  for (int i = 0; i < numberOfParticles; i++) {
+    ProcessParticle particle = particles[i];
+    BroadcastMessage particleMsg = newBroadcastMessage();
+    particleMsg = cloneMessage(msg);
+    omp_set_lock(&particle->inputBufferLock);
+    if (particle->inputBuffer[msg->particleId] == NULL)
+      particle->inputBuffer[msg->particleId] = particleMsg;
+    else
+      log_error("Particle %d, process %d input buffer is full", msg->particleId,
+                processId);
+    omp_unset_lock(&particle->inputBufferLock);
+  }
 }
 
-void waitMPIRequests(ProcessParticle particle, const int iteration,
-                     List *messages, List *requests,
-                     const int numberOfProcesses, const int processId,
-                     const int *processToNumberOfParticles,
-                     MPI_Datatype *mpi_datatype) {
-
-  MPI_Status status;
-  int processesDone;
-  do {
-    processesDone = 0;
-#pragma omp parallel for reduction(+ : processesDone)
-    for (int pid = 0; pid < numberOfProcesses; pid++) {
-      processesDone += isEmpty(requests[pid]) == true ? 1 : 0;
-      Element currRequest = requests[pid]->head;
-      Element currMessage = messages[pid]->head;
-      while (currRequest != NULL) {
-        int isCompleted = 0;
-        MPI_Test((MPI_Request *)currRequest->data, &isCompleted, &status);
-        /* printf("leggo %p %p con status %d %d %d %d\n", currMessage->data, */
-        /*        currRequest->data, status.MPI_ERROR, status.MPI_SOURCE, */
-        /*        status.MPI_TAG, status._cancelled); */
-        if (isCompleted == 1) {
-          processLog("READ", iteration, processId, omp_get_thread_num(),
-                     "done");
-          if (currRequest->prev == NULL) {
-            requests[pid]->head = currRequest->next;
-            messages[pid]->head = currMessage->next;
-          } else {
-            currRequest->prev->next = currRequest->next;
-            currMessage->prev->next = currMessage->next;
-          }
-          if (currRequest->next != NULL) {
-            currRequest->next->prev = currRequest->prev;
-            currMessage->next->prev = currMessage->prev;
-          }
-          BroadcastMessage msg = currMessage->data;
-          int particleId = msg->particleId;
-          omp_set_lock(&particle->inputBufferLock);
-          if (particle->inputBuffer[particleId] == NULL)
-            particle->inputBuffer[particleId] = msg;
-          else
-            log_error("Particle %d, process %d input buffer is full",
-                      particleId, processId);
-          omp_unset_lock(&particle->inputBufferLock);
-          Element lastRequest = currRequest;
-          Element lastMessage = currMessage;
-          free(lastRequest);
-          free(lastMessage);
-        }
-        currRequest = currRequest->next;
-        currMessage = currMessage->next;
-      }
-    }
-    usleep(SLEEP_TIME);
-  } while (processesDone != numberOfProcesses);
-}
-
-void receiveMessage(ProcessParticle particle, const int iterationsNumber,
-                    const int numberOfProcesses, const int processId,
+void receiveMessage(ProcessParticle *particles, const int iterationsNumber,
+                    const int numberOfParticles, const int numberOfProcesses,
+                    const int processId,
                     const int *processToNumberOfParticles) {
   if (numberOfProcesses == 1)
     return;
   MPI_Datatype DT_BROADCAST_MESSAGE =
-      define_datatype_broadcast_message(particle->particle->dimension);
-  List messages[numberOfProcesses];
-  List requests[numberOfProcesses];
-#pragma omp parallel for
-  for (int pid = 0; pid < numberOfProcesses; pid++) {
-    messages[pid] = newList();
-    requests[pid] = newList();
-  }
-
+      define_datatype_broadcast_message(particles[0]->particle->dimension);
   for (int iteration = 0; iteration < iterationsNumber; iteration++) {
     processLog("READ", iteration, processId, omp_get_thread_num(), "start");
-    createMPIRequests(messages, requests, numberOfProcesses, processId,
-                      processToNumberOfParticles, &DT_BROADCAST_MESSAGE);
-    waitMPIRequests(particle, iteration, messages, requests, numberOfProcesses,
-                    processId, processToNumberOfParticles,
-                    &DT_BROADCAST_MESSAGE);
-  }
-
-#pragma omp parallel for
-  for (int pid = 0; pid < numberOfProcesses; pid++) {
-    destroyList(messages[pid], (void *)destroyBroadcastMessage);
-    destroyList(requests[pid], (void *)MPI_Request_free);
+    for (int pid = 0; pid < numberOfProcesses; pid++)
+      if (pid != processId)
+        for (int parId = 0; parId < processToNumberOfParticles[pid]; parId++) {
+          BroadcastMessage msg = newBroadcastMessage();
+          MPI_Bcast(msg, 1, DT_BROADCAST_MESSAGE, pid, MPI_COMM_WORLD);
+          saveNewMessage(particles, numberOfParticles, msg, processId);
+          destroyBroadcastMessage(msg);
+        }
+    processLog("READ", iteration, processId, omp_get_thread_num(), "done");
   }
   MPI_Type_free(&DT_BROADCAST_MESSAGE);
 }
@@ -164,7 +98,6 @@ void receiveMessage(ProcessParticle particle, const int iterationsNumber,
 void waitInputBuffer(ProcessParticle particle) {
   int isBufferFull;
   do {
-    printf("CICLO\n");
     isBufferFull = 0;
     omp_set_lock(&particle->inputBufferLock);
 #pragma omp parallel for reduction(+ : isBufferFull)
@@ -207,96 +140,124 @@ void obtainBestSocialFitness(ProcessParticle particle, int *indexes,
 
 void eraseInputBuffer(ProcessParticle particle) {
   omp_set_lock(&particle->inputBufferLock);
-#pragma omp for
+#pragma omp parallel for
   for (int i = 0; i < particle->totalNumberOfParticles; i++) {
     destroyBroadcastMessage(particle->inputBuffer[i]);
     particle->inputBuffer[i] = NULL;
   }
-  /* printf("particle %d [", particle->particle->id); */
-  /* for (int i = 0; i < particle->totalNumberOfParticles; i++) */
-  /*   printf(particle->inputBuffer[i] == NULL ? "NULLO " : "NON_NULLO "); */
-  /* printf("]\n"); */
   omp_unset_lock(&particle->inputBufferLock);
 }
 
-void computeNewPosition(ProcessParticle particle, const int iterationsNumber,
+void computeNewPosition(ProcessParticle particle, const int iteration,
                         const int processId, PSOData psoData,
                         ProcessParticle *particles,
                         const int numberOfParticles) {
-  printf("we are %d mode\n", omp_in_parallel());
+  /* printf("Current openMP level %d\n", omp_get_level()); */
+  // list of functions that have a openMP depth = 3
+  //   - waitInputBuffer
+  //   - computeDistances
+  //   - eraseInputBuffer
+  //   - updateVelocity
+  //   - updatePosition
   char *logMessage;
   logMessage = (char *)malloc(sizeof(char) * 20);
-  for (int iteration = 0; iteration < iterationsNumber; iteration++) {
-    sprintf(logMessage, "start particle %d", particle->particle->id);
-    processLog("COMPUTING", iteration, processId, omp_get_thread_num(),
-               logMessage);
-    waitInputBuffer(particle);
-    sprintf(logMessage, "doing particle %d", particle->particle->id);
-    processLog("COMPUTING", iteration, processId, omp_get_thread_num(),
-               logMessage);
-    double distances[psoData->particlesNumber];
-    int indexes[psoData->particlesNumber];
-    computeDistances(particle, indexes, distances, psoData);
-    // sort
-    double bestFitness;
-    int indexBestFitness;
-    obtainBestSocialFitness(particle, indexes, &bestFitness, &indexBestFitness,
-                            psoData);
+  sprintf(logMessage, "start particle %d", particle->particle->id);
+  processLog("COMPUTING", iteration, processId, omp_get_thread_num(),
+             logMessage);
+  waitInputBuffer(particle);
+  sprintf(logMessage, "doing particle %d", particle->particle->id);
+  processLog("COMPUTING", iteration, processId, omp_get_thread_num(),
+             logMessage);
+  double distances[psoData->particlesNumber];
+  int indexes[psoData->particlesNumber];
+  computeDistances(particle, indexes, distances, psoData);
+  // sort
+  double bestFitness;
+  int indexBestFitness;
+  obtainBestSocialFitness(particle, indexes, &bestFitness, &indexBestFitness,
+                          psoData);
 
-    omp_set_lock(&particle->inputBufferLock);
-    particle->particle->socialBest =
-        cloneSolution(&particle->inputBuffer[indexBestFitness]->solution);
-    omp_unset_lock(&particle->inputBufferLock);
-    eraseInputBuffer(particle);
+  omp_set_lock(&particle->inputBufferLock);
+  particle->particle->socialBest =
+      cloneSolution(&particle->inputBuffer[indexBestFitness]->solution);
+  omp_unset_lock(&particle->inputBufferLock);
+  eraseInputBuffer(particle);
 
-    updateVelocity(particle->particle, psoData->w, psoData->phi_1,
-                   psoData->phi_2);
-    updatePosition(particle->particle, psoData->fitnessFunction);
+  updateVelocity(particle->particle, psoData->w, psoData->phi_1,
+                 psoData->phi_2);
+  updatePosition(particle->particle, psoData->fitnessFunction);
+  BroadcastMessage outMsg = newBroadcastMessage();
+  initalizeBroacastMessage(outMsg, processId, iteration + 1,
+                           particle->particle->id, particle->particle->current);
+  omp_set_lock(&particle->outputBufferLock);
+  particle->outputBuffer = outMsg;
+  omp_unset_lock(&particle->outputBufferLock);
 
-    updateInnerInputBuffer(particles, particle, processId, iteration,
-                             numberOfParticles);
-
-    sprintf(logMessage, "done particle %d", particle->particle->id);
-    processLog("COMPUTING", iteration, processId, omp_get_thread_num(),
-               logMessage);
-  }
+  sprintf(logMessage, "done particle %d", particle->particle->id);
+  processLog("COMPUTING", iteration, processId, omp_get_thread_num(),
+             logMessage);
   free(logMessage);
 }
-void sendMessage(ProcessParticle particle, const int iterationsNumber,
-                 const int processId, const int numberOfProcesses) {
+
+bool checkParticlesSent(const bool *isParticleSent,
+                        const int numberOfParticles) {
+  for (int i = 0; i < numberOfParticles; i++)
+    if (!isParticleSent[i])
+      return false;
+  return true;
+}
+void sendMessage(ProcessParticle *particles, const int iterationsNumber,
+                 const int numberOfParticles, const int processId,
+                 const int numberOfProcesses) {
   if (numberOfProcesses == 1)
     return;
   MPI_Request request;
   MPI_Datatype DT_BROADCAST_MESSAGE =
-      define_datatype_broadcast_message(particle->particle->dimension);
+      define_datatype_broadcast_message(particles[0]->particle->dimension);
 
+  bool isParticleSent[numberOfParticles];
+
+  char *logMessage;
+  logMessage = (char *)malloc(sizeof(char) * 20);
   for (int iteration = 0; iteration < iterationsNumber; iteration++) {
     processLog("SEND", iteration, processId, omp_get_thread_num(), "start");
-    int isSent = 0;
+    for (int i = 0; i < numberOfParticles; i++)
+      isParticleSent[i] = false;
     do {
-      omp_set_lock(&particle->outputBufferLock);
-      if (particle->outputBuffer != NULL) {
-        isSent = 1;
-        processLog("SEND", iteration, processId, omp_get_thread_num(), "doing");
-        MPI_Ibcast(particle->outputBuffer, 1, DT_BROADCAST_MESSAGE, processId,
-                   MPI_COMM_WORLD, &request);
-        destroyBroadcastMessage(particle->outputBuffer);
-        particle->outputBuffer = NULL;
-        processLog("SEND", iteration, processId, omp_get_thread_num(), "done");
+      for (int particleId = 0; particleId < numberOfParticles; particleId++) {
+        ProcessParticle particle = particles[particleId];
+        omp_set_lock(&particle->outputBufferLock);
+        if (particle->outputBuffer != NULL &&
+            isParticleSent[particleId] == false) {
+          sprintf(logMessage, "doing particle %d", particle->particle->id);
+          processLog("SEND", iteration, processId, omp_get_thread_num(),
+                     logMessage);
+          /* MPI_Ibcast(particle->outputBuffer, 1, DT_BROADCAST_MESSAGE,
+           * processId, */
+          /*            MPI_COMM_WORLD, &request); */
+          MPI_Bcast(particle->outputBuffer, 1, DT_BROADCAST_MESSAGE, processId,
+                    MPI_COMM_WORLD);
+          destroyBroadcastMessage(particle->outputBuffer);
+          particle->outputBuffer = NULL;
+          sprintf(logMessage, "done particle %d", particle->particle->id);
+          processLog("SEND", iteration, processId, omp_get_thread_num(),
+                     logMessage);
+          isParticleSent[particleId] = true;
+        }
+        omp_unset_lock(&particle->outputBufferLock);
       }
-      omp_unset_lock(&particle->outputBufferLock);
       usleep(SLEEP_TIME);
-    } while (isSent != 1);
+    } while (!checkParticlesSent(isParticleSent, numberOfParticles));
   }
 
   MPI_Request_free(&request);
   MPI_Type_free(&DT_BROADCAST_MESSAGE);
+  free(logMessage);
 }
 
 void updateInnerInputBuffer(ProcessParticle *particles, ProcessParticle src,
                             const int processId, const int iteration,
                             const int numberOfParticles) {
-  #pragma omp for
   for (int i = 0; i < numberOfParticles; i++) {
     ProcessParticle dst = particles[i];
     BroadcastMessage msg = newBroadcastMessage();
@@ -306,11 +267,6 @@ void updateInnerInputBuffer(ProcessParticle *particles, ProcessParticle src,
     do {
       omp_set_lock(&dst->inputBufferLock);
       isWaiting = dst->inputBuffer[src->particle->id] != NULL ? true : false;
-      if (isWaiting == true) {
-        /* printf("the pointer is: %p %d\n",
-         * dst->inputBuffer[src->particle->id], dst->particle->id); */
-        /* printSolution(&(dst->inputBuffer[src->particle->id]->solution)); */
-      }
       omp_unset_lock(&dst->inputBufferLock);
       usleep(SLEEP_TIME);
     } while (isWaiting);
@@ -321,66 +277,68 @@ void updateInnerInputBuffer(ProcessParticle *particles, ProcessParticle src,
   }
 }
 
-void processRoutine(const int numberOfProcesses, const int numberOfThreads,
-                    const int processId, const int startingId,
-                    const int *processToNumberOfParticles, PSOData psoData) {
-  int numberOfParticles = processToNumberOfParticles[processId];
-  ProcessParticle *particles =
-      (ProcessParticle *)malloc(numberOfParticles * sizeof(particle_t));
-  for (int i = 0; i < numberOfParticles; i++)
-    particles[i] =
-        newProcessParticle(i + startingId, processId, psoData->particlesNumber,
-                           psoData->problemDimension, psoData->initMaxPosition,
-                           psoData->initMinPosition, psoData->initMaxVelocity,
-                           psoData->initMinVelocity, psoData->fitnessFunction);
-
+void initThread(const int numberOfThreads, const int processId,
+                const int numberOfParticles) {
   int actualNumberOfThreads = numberOfThreads;
   if (3 > numberOfThreads)
     actualNumberOfThreads = 3;
   log_info("Using %d thread for process number %d with %d particles",
            actualNumberOfThreads, processId, numberOfParticles);
   omp_set_num_threads(actualNumberOfThreads);
-  omp_set_nested(1);
+  omp_set_max_active_levels(2);
+}
+
+ProcessParticle *initProcessParticles(const int processId,
+                                      const int numberOfParticles,
+                                      const int startingId, PSOData psoData) {
+  ProcessParticle *particles =
+      (ProcessParticle *)malloc(numberOfParticles * sizeof(particle_t));
+#pragma omp parallel for
+  for (int i = 0; i < numberOfParticles; i++)
+    particles[i] =
+        newProcessParticle(i + startingId, processId, psoData->particlesNumber,
+                           psoData->problemDimension, psoData->initMaxPosition,
+                           psoData->initMinPosition, psoData->initMaxVelocity,
+                           psoData->initMinVelocity, psoData->fitnessFunction);
+  return particles;
+}
+
+void processRoutine(const int numberOfProcesses, const int numberOfThreads,
+                    const int processId, const int startingId,
+                    const int *processToNumberOfParticles, PSOData psoData) {
+  int numberOfParticles = processToNumberOfParticles[processId];
+
+  ProcessParticle *particles =
+      initProcessParticles(processId, numberOfParticles, startingId, psoData);
+  initThread(numberOfThreads, processId, numberOfParticles);
 
 #pragma omp parallel for
   for (int i = 0; i < numberOfParticles; i++)
     updateInnerInputBuffer(particles, particles[i], processId, 0,
                            numberOfParticles);
-/* #pragma omp parallel */
-/*   { */
-/* #pragma omp single nowait */
-/*     for (int i = 0; i < numberOfParticles; i++) */
-/*    #pragma omp task */
-/*       { */
-/*       receiveMessage(particles[i], psoData->iterationsNumber, numberOfProcesses, */
-/*                      processId, processToNumberOfParticles); */
-/*       } */
-/* #pragma omp single nowait */
-/*     for (int i = 0; i < numberOfParticles; i++) */
-/*    #pragma omp task */
-/*       { */
-/*       sendMessage(particles[i], psoData->iterationsNumber, processId, */
-/*                   numberOfProcesses); */
-/*       } */
-/* #pragma omp parallel for */
-/*     for (int i = 0; i < numberOfParticles; i++) */
-/*       computeNewPosition(particles[i], psoData->iterationsNumber, processId, */
-/*                          psoData, particles, numberOfParticles); */
-/*   } */
-#pragma omp parallel
+
+    // openMP depth = 1
+#pragma omp parallel sections
   {
-#pragma omp for nowait
-    for (int i = 0; i < numberOfParticles; i++)
-      receiveMessage(particles[i], psoData->iterationsNumber, numberOfProcesses,
-                     processId, processToNumberOfParticles);
-#pragma omp for nowait
-    for (int i = 0; i < numberOfParticles; i++)
-      sendMessage(particles[i], psoData->iterationsNumber, processId,
-                  numberOfProcesses);
-#pragma omp for nowait
-    for (int i = 0; i < numberOfParticles; i++)
-      computeNewPosition(particles[i], psoData->iterationsNumber, processId,
-                         psoData, particles, numberOfParticles);
+#pragma omp section
+    sendMessage(particles, psoData->iterationsNumber, numberOfParticles,
+                processId, numberOfProcesses);
+#pragma omp section
+    receiveMessage(particles, psoData->iterationsNumber, numberOfParticles,
+                   numberOfProcesses, processId, processToNumberOfParticles);
+#pragma omp section
+    for (int iteration = 0; iteration < psoData->iterationsNumber;
+         iteration++) {
+#pragma omp parallel for
+      for (int i = 0; i < numberOfParticles; i++) {
+        computeNewPosition(particles[i], iteration, processId, psoData,
+                           particles, numberOfParticles);
+      }
+#pragma omp parallel for
+      for (int i = 0; i < numberOfParticles; i++)
+        updateInnerInputBuffer(particles, particles[i], processId, iteration + 1,
+                               numberOfParticles);
+    }
   }
   printf("Best fitness %f\n", particles[0]->particle->socialBest->fitness);
 
