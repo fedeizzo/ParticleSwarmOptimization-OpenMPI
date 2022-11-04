@@ -1,3 +1,11 @@
+/**
+ * @file      particle.h
+ * @brief     Header of particle
+ * @date      Fri Nov  4 12:32:35 2022
+ * @author    Federico Izzo, Samuele Bortolotti
+ * @copyright MIT
+ */
+
 #ifndef __PARTICLE_H_
 #define __PARTICLE_H_
 

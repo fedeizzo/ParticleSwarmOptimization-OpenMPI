@@ -1,3 +1,12 @@
+/**
+ * @file      solution.h
+ * @brief     Header of solution
+ * @date      Fri Nov  4 12:31:53 2022
+ * @author    fedeizzo
+ * @author    Federico Izzo, Samuele Bortolotti
+ * @copyright MIT
+ */
+
 #ifndef __SOLUTION_H__
 #define __SOLUTION_H__
 #include "../../include/config.h"
