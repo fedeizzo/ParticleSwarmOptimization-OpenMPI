@@ -1,8 +1,7 @@
 /**
  * @file      solution.h
- * @brief     Header of solution
+ * @brief     Solution definition
  * @date      Fri Nov  4 12:31:53 2022
- * @author    fedeizzo
  * @author    Federico Izzo, Samuele Bortolotti
  * @copyright MIT
  */

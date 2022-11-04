@@ -1,6 +1,6 @@
 /**
  * @file      particle.h
- * @brief     Header of particle
+ * @brief     Particle definition
  * @date      Fri Nov  4 12:32:35 2022
  * @author    Federico Izzo, Samuele Bortolotti
  * @copyright MIT
