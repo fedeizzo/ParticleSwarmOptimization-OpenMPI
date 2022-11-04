@@ -29,12 +29,8 @@ ProcessParticle newProcessParticle(const int particleId, const int processId,
 
   omp_set_lock(&processParticle->outputBufferLock);
   processParticle->outputBuffer = newBroadcastMessage();
-  processParticle->outputBuffer->iteration = 0;
-  processParticle->outputBuffer->particleId = particleId;
-  processParticle->outputBuffer->mpi_process = processId;
-  gettimeofday(&processParticle->outputBuffer->timestamp, NULL);
-  includeSolution(&processParticle->outputBuffer->solution,
-                  processParticle->particle->current);
+  initalizeBroacastMessage(processParticle->outputBuffer, processId, 0,
+                           particleId, processParticle->particle->current);
   omp_unset_lock(&processParticle->outputBufferLock);
   return processParticle;
 }
@@ -56,8 +52,21 @@ void processLog(const char *operation, const int iteration, const int process,
            iteration, process, thread, step);
 }
 
+void processLogDebug(const char *operation, const int iteration,
+                     const int process, const int thread, const char *step) {
+  log_debug("%-10s :: iteration %d process %d thread %d :: %s", operation,
+            iteration, process, thread, step);
+}
+
+typedef struct {
+  BroadcastMessage msg;
+  int particleId;
+} temp_t;
+typedef temp_t *Temp;
+
 void saveNewMessage(ProcessParticle *particles, const int numberOfParticles,
                     BroadcastMessage msg, const int processId) {
+  List waitingMsg = newList();
   for (int i = 0; i < numberOfParticles; i++) {
     ProcessParticle particle = particles[i];
     BroadcastMessage particleMsg = newBroadcastMessage();
@@ -65,10 +74,32 @@ void saveNewMessage(ProcessParticle *particles, const int numberOfParticles,
     omp_set_lock(&particle->inputBufferLock);
     if (particle->inputBuffer[msg->particleId] == NULL)
       particle->inputBuffer[msg->particleId] = particleMsg;
-    else
-      log_error("Particle %d, process %d input buffer is full", msg->particleId,
-                processId);
+    else {
+      Temp tmp = (Temp)malloc(sizeof(temp_t));
+      tmp->particleId = i;
+      tmp->msg = particleMsg;
+      enqueue(waitingMsg, tmp);
+    }
     omp_unset_lock(&particle->inputBufferLock);
+  }
+
+  while (!isEmpty(waitingMsg)) {
+    Element curr = waitingMsg->head;
+    if (curr->next != NULL)
+      waitingMsg->head = waitingMsg->head->next;
+    else
+      waitingMsg->head = NULL;
+    Temp tmp = (Temp)curr->data;
+    ProcessParticle particle = particles[tmp->particleId];
+    BroadcastMessage particleMsg = tmp->msg;
+    omp_set_lock(&particle->inputBufferLock);
+    if (particle->inputBuffer[msg->particleId] == NULL) {
+      particle->inputBuffer[msg->particleId] = particleMsg;
+      free(curr);
+    } else
+      enqueue(waitingMsg, tmp);
+    omp_unset_lock(&particle->inputBufferLock);
+    sleep(SLEEP_TIME);
   }
 }
 
@@ -87,12 +118,26 @@ void receiveMessage(ProcessParticle *particles, const int iterationsNumber,
         for (int parId = 0; parId < processToNumberOfParticles[pid]; parId++) {
           BroadcastMessage msg = newBroadcastMessage();
           MPI_Bcast(msg, 1, DT_BROADCAST_MESSAGE, pid, MPI_COMM_WORLD);
+#if DEBUG_CHECKS == 1
+          if (msg->iteration != iteration)
+            log_error(
+                "A mismatch in the iteration within receive function occured");
+#endif
           saveNewMessage(particles, numberOfParticles, msg, processId);
           destroyBroadcastMessage(msg);
         }
     processLog("READ", iteration, processId, omp_get_thread_num(), "done");
   }
   MPI_Type_free(&DT_BROADCAST_MESSAGE);
+}
+
+bool checkIterationConsistency(BroadcastMessage *inputBuffer,
+                               const int numberOfParticles) {
+  const int iteration = inputBuffer[0]->iteration;
+  for (int i = 0; i < numberOfParticles; i++)
+    if (inputBuffer[i]->iteration != iteration)
+      return false;
+  return true;
 }
 
 void waitInputBuffer(ProcessParticle particle) {
@@ -106,6 +151,24 @@ void waitInputBuffer(ProcessParticle particle) {
     omp_unset_lock(&particle->inputBufferLock);
     usleep(SLEEP_TIME);
   } while (isBufferFull != particle->totalNumberOfParticles);
+#if DEBUG_CHECKS == 1
+  omp_set_lock(&particle->inputBufferLock);
+  if (!checkIterationConsistency(particle->inputBuffer,
+                                 particle->totalNumberOfParticles))
+    log_error(
+        "A mismatch in the iteration contained in the input buffer occured");
+  omp_unset_lock(&particle->inputBufferLock);
+#endif
+}
+
+void waitOutputBuffer(ProcessParticle particle) {
+  bool isBufferFull = true;
+  do {
+    omp_set_lock(&particle->outputBufferLock);
+    isBufferFull = particle->outputBuffer == NULL ? false : true;
+    omp_unset_lock(&particle->outputBufferLock);
+    usleep(SLEEP_TIME);
+  } while (isBufferFull);
 }
 
 void computeDistances(ProcessParticle particle, int *indexes, double *distances,
@@ -151,7 +214,7 @@ void eraseInputBuffer(ProcessParticle particle) {
 void computeNewPosition(ProcessParticle particle, const int iteration,
                         const int processId, PSOData psoData,
                         ProcessParticle *particles,
-                        const int numberOfParticles) {
+                        const int numberOfParticles, const int numberOfProcesses) {
   /* printf("Current openMP level %d\n", omp_get_level()); */
   // list of functions that have a openMP depth = 3
   //   - waitInputBuffer
@@ -159,12 +222,21 @@ void computeNewPosition(ProcessParticle particle, const int iteration,
   //   - eraseInputBuffer
   //   - updateVelocity
   //   - updatePosition
-  char *logMessage;
-  logMessage = (char *)malloc(sizeof(char) * 20);
+  char logMessage[50];
   sprintf(logMessage, "start particle %d", particle->particle->id);
   processLog("COMPUTING", iteration, processId, omp_get_thread_num(),
              logMessage);
+  sprintf(logMessage, "waiting input buffer particle %d",
+          particle->particle->id);
+  processLogDebug("COMPUTING", iteration, processId, omp_get_thread_num(),
+                  logMessage);
   waitInputBuffer(particle);
+  sprintf(logMessage, "waiting output buffer particle %d",
+          particle->particle->id);
+  processLogDebug("COMPUTING", iteration, processId, omp_get_thread_num(),
+                  logMessage);
+  if (numberOfProcesses > 1)
+    waitOutputBuffer(particle);
   sprintf(logMessage, "doing particle %d", particle->particle->id);
   processLog("COMPUTING", iteration, processId, omp_get_thread_num(),
              logMessage);
@@ -185,18 +257,19 @@ void computeNewPosition(ProcessParticle particle, const int iteration,
 
   updateVelocity(particle->particle, psoData->w, psoData->phi_1,
                  psoData->phi_2);
-  updatePosition(particle->particle, psoData->fitnessFunction);
+  updatePosition(particle->particle, psoData->fitnessFunction, psoData->fitnessChecker);
   BroadcastMessage outMsg = newBroadcastMessage();
   initalizeBroacastMessage(outMsg, processId, iteration + 1,
                            particle->particle->id, particle->particle->current);
-  omp_set_lock(&particle->outputBufferLock);
-  particle->outputBuffer = outMsg;
-  omp_unset_lock(&particle->outputBufferLock);
+  if (numberOfProcesses > 1) {
+    omp_set_lock(&particle->outputBufferLock);
+    particle->outputBuffer = outMsg;
+    omp_unset_lock(&particle->outputBufferLock);
+  }
 
   sprintf(logMessage, "done particle %d", particle->particle->id);
   processLog("COMPUTING", iteration, processId, omp_get_thread_num(),
              logMessage);
-  free(logMessage);
 }
 
 bool checkParticlesSent(const bool *isParticleSent,
@@ -211,7 +284,6 @@ void sendMessage(ProcessParticle *particles, const int iterationsNumber,
                  const int numberOfProcesses) {
   if (numberOfProcesses == 1)
     return;
-  MPI_Request request;
   MPI_Datatype DT_BROADCAST_MESSAGE =
       define_datatype_broadcast_message(particles[0]->particle->dimension);
 
@@ -232,11 +304,13 @@ void sendMessage(ProcessParticle *particles, const int iterationsNumber,
           sprintf(logMessage, "doing particle %d", particle->particle->id);
           processLog("SEND", iteration, processId, omp_get_thread_num(),
                      logMessage);
-          /* MPI_Ibcast(particle->outputBuffer, 1, DT_BROADCAST_MESSAGE,
-           * processId, */
-          /*            MPI_COMM_WORLD, &request); */
           MPI_Bcast(particle->outputBuffer, 1, DT_BROADCAST_MESSAGE, processId,
                     MPI_COMM_WORLD);
+#if DEBUG_CHECKS == 1
+          if (particle->outputBuffer->iteration != iteration)
+            log_error(
+                "A mismatch in the iteration within send function occured");
+#endif
           destroyBroadcastMessage(particle->outputBuffer);
           particle->outputBuffer = NULL;
           sprintf(logMessage, "done particle %d", particle->particle->id);
@@ -250,7 +324,7 @@ void sendMessage(ProcessParticle *particles, const int iterationsNumber,
     } while (!checkParticlesSent(isParticleSent, numberOfParticles));
   }
 
-  MPI_Request_free(&request);
+  /* MPI_Request_free(&request); */
   MPI_Type_free(&DT_BROADCAST_MESSAGE);
   free(logMessage);
 }
@@ -258,6 +332,8 @@ void sendMessage(ProcessParticle *particles, const int iterationsNumber,
 void updateInnerInputBuffer(ProcessParticle *particles, ProcessParticle src,
                             const int processId, const int iteration,
                             const int numberOfParticles) {
+  /* printf("Update inner buffer called during iteration %d by process %d\n",
+   * iteration, processId); */
   for (int i = 0; i < numberOfParticles; i++) {
     ProcessParticle dst = particles[i];
     BroadcastMessage msg = newBroadcastMessage();
@@ -316,6 +392,13 @@ void processRoutine(const int numberOfProcesses, const int numberOfThreads,
   for (int i = 0; i < numberOfParticles; i++)
     updateInnerInputBuffer(particles, particles[i], processId, 0,
                            numberOfParticles);
+    /* for (int i = 0; i < numberOfParticles; i++) { */
+    /*   printf("particle %d: ", i); */
+    /*   for (int j = 0; j < psoData->particlesNumber; j++) { */
+    /*     printf(particles[i]->inputBuffer[j] == NULL ? "Y" : "N"); */
+    /*   } */
+    /*   printf("\n"); */
+    /* } */
 
     // openMP depth = 1
 #pragma omp parallel sections
@@ -332,15 +415,19 @@ void processRoutine(const int numberOfProcesses, const int numberOfThreads,
 #pragma omp parallel for
       for (int i = 0; i < numberOfParticles; i++) {
         computeNewPosition(particles[i], iteration, processId, psoData,
-                           particles, numberOfParticles);
+                           particles, numberOfParticles, numberOfProcesses);
       }
 #pragma omp parallel for
       for (int i = 0; i < numberOfParticles; i++)
-        updateInnerInputBuffer(particles, particles[i], processId, iteration + 1,
-                               numberOfParticles);
+        updateInnerInputBuffer(particles, particles[i], processId,
+                               iteration + 1, numberOfParticles);
     }
   }
-  printf("Best fitness %f\n", particles[0]->particle->socialBest->fitness);
+  double bestFitness = particles[0]->particle->personalBest->fitness;
+  for (int i = 0; i < numberOfParticles; i++)
+    bestFitness =
+        fmax(bestFitness, particles[i]->particle->personalBest->fitness);
+  printf("Best fitness for process %d %f\n", processId, bestFitness);
 
   for (int i = 0; i < numberOfParticles; i++)
     destroyProcessParticle(particles[i]);
