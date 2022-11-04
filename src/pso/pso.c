@@ -14,7 +14,7 @@ PSOData newPSOData(const int problemDimension, const int particlesNumber,
                    const double initMaxVelocity, const double initMinVelocity,
                    double (*fitnessFunction)(double *, int),
                    double (*distanceFunction)(double *, double *, int),
-                   double (*fitnessChecker)(double, double)) {
+                   bool (*fitnessChecker)(double, double)) {
   PSOData psoData = (PSOData)malloc(sizeof(pso_data_t));
   psoData->problemDimension = problemDimension;
   psoData->particlesNumber = particlesNumber;
@@ -35,14 +35,18 @@ PSOData newPSOData(const int problemDimension, const int particlesNumber,
 
 void destroyPSOData(PSOData psoData) { free(psoData); }
 
-void updateGlobal(ArrayList particles, Solution globalBest);
+void updateGlobal(Particle *particles, Solution globalBest,
+                  const int numberOfParticles,
+                  bool (*fitnessChecker)(double, double));
 
-void updateGlobal(ArrayList particles, Solution globalBest) {
+void updateGlobal(Particle *particles, Solution globalBest,
+                  const int numberOfParticles,
+                  bool (*fitnessChecker)(double, double)) {
   int i;
-  for (i = 0; i < getNumberElements(particles); i++) { // n particle
+  for (i = 0; i < numberOfParticles; i++) { // n particle
     // Update the solution
-    Particle particle = (Particle)getDataAtIndex(particles, i);
-    if (particle->current->fitness > globalBest->fitness) {
+    Particle particle = particles[i];
+    if (fitnessChecker(particle->current->fitness, globalBest->fitness)) {
       log_debug("New best global solution found with fitness value %f",
                 particle->current);
       destroySolution(globalBest);
@@ -50,63 +54,62 @@ void updateGlobal(ArrayList particles, Solution globalBest) {
     }
   }
 
-  for (i = 0; i < getNumberElements(particles); i++) { // n particle
+  for (i = 0; i < numberOfParticles; i++) { // n particle
     log_debug("Update social best solution of particle %d", i);
-    Particle particle = (Particle)getDataAtIndex(particles, i);
+    Particle particle = particles[i];
     destroySolution(particle->socialBest);
     particle->socialBest = cloneSolution(globalBest);
   }
 }
 
-bool initParticles(ArrayList particles, int dim, int n, double max, double min,
-                   double v_max, double v_min,
-                   double (*fitnessFunction)(double*, int)) {
+bool initParticles(Particle *particles, PSOData psoData) {
   int i;
   int rc;
   Particle particle;
-  for (i = 0; i < n; i++) {
-    log_debug("Initializing particle %d/%d", i + 1, n);
-    particle = newParticle(i, dim, max, min, v_max, v_min, fitnessFunction);
+  for (i = 0; i < psoData->particlesNumber; i++) {
+    log_debug("Initializing particle %d/%d", i + 1, psoData->particlesNumber);
+    particle =
+        newParticle(i, psoData->problemDimension, psoData->initMaxPosition,
+                    psoData->initMinPosition, psoData->initMaxVelocity,
+                    psoData->initMinVelocity, psoData->fitnessFunction);
     rc = checkAllocationError(particle);
     if (rc == FAILURE)
       return false;
-    push_back(particles, particle);
+    particles[i] = particle;
   }
   return true;
 }
 
-void dumpParticles(ArrayList particles, Database db, const int iteration_step) {
-  for (int i = 0; i < getNumberElements(particles); i++) { // n particles
-    Particle particle = (Particle)getDataAtIndex(particles, i);
+void dumpParticles(Particle *particles, Database db, const int iteration_step,
+                   const int numberOfParticles) {
+  for (int i = 0; i < numberOfParticles; i++) { // n particles
+    Particle particle = particles[i];
     insertSolution(db, particle->current, particle->id, iteration_step);
   }
 }
 
-void particleSwarmOptimization(ArrayList particles, int dimension,
-                               int n_iterations, double w, double phi_1,
-                               double phi_2,
-                               double (*fitnessFunction)(double*, int)) {
+void particleSwarmOptimization(Particle *particles, PSOData psoData) {
   int _;
   int i;
-  Database db = newDatabase("./database.db", dimension);
+  Database db = newDatabase("./database.db", psoData->problemDimension);
   Solution globalBestSolution;
-  globalBestSolution =
-      cloneSolution(((Particle)getDataAtIndex(particles, 0))->current);
+  globalBestSolution = cloneSolution(particles[0]->current);
 
-  for (_ = 0; _ < n_iterations; _++) { // n iterations
-    updateGlobal(particles, globalBestSolution);
-    for (i = 0; i < getNumberElements(particles); i++) { // n particles
-      Particle particle = (Particle)getDataAtIndex(particles, i);
-      updateVelocity(particle, w, phi_1, phi_2);
+  for (_ = 0; _ < psoData->iterationsNumber; _++) { // n iterations
+    updateGlobal(particles, globalBestSolution, psoData->particlesNumber, psoData->fitnessChecker);
+    for (i = 0; i < psoData->particlesNumber; i++) { // n particles
+      Particle particle = particles[i];
+      updateVelocity(particle, psoData->w, psoData->phi_1, psoData->phi_2);
       log_debug("Iteration %d/%d particle %d/%d velocity updated", _ + 1,
-                n_iterations, i + 1, getNumberElements(particles));
+                psoData->iterationsNumber, i + 1, psoData->particlesNumber);
       log_debug("Iteration %d/%d particle %d/%d position updated", _ + 1,
-                n_iterations, i + 1, getNumberElements(particles));
-      updatePosition(particle, fitnessFunction);
+                psoData->iterationsNumber, i + 1, psoData->particlesNumber);
+      updatePosition(particle, psoData->fitnessFunction,
+                     psoData->fitnessChecker);
     }
     log_info("Swarm optimization iteration %d/%d with best fitness %f", _ + 1,
-             n_iterations, globalBestSolution->fitness);
-    dumpParticles(particles, db, _);
+             psoData->iterationsNumber, globalBestSolution->fitness);
+    dumpParticles(particles, db, _, psoData->particlesNumber);
   }
   destroyDatabase(db);
 }
