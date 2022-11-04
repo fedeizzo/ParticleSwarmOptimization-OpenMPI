@@ -1,7 +1,6 @@
 var annotated_dup =
 [
     [ "arguments", "structarguments.html", "structarguments" ],
-    [ "array_list_t", "structarray__list__t.html", "structarray__list__t" ],
     [ "broadcastMessage_t", "structbroadcastMessage__t.html", "structbroadcastMessage__t" ],
     [ "Callback", "structCallback.html", "structCallback" ],
     [ "database_t", "structdatabase__t.html", "structdatabase__t" ],
@@ -11,5 +10,6 @@ var annotated_dup =
     [ "particle_t", "structparticle__t.html", "structparticle__t" ],
     [ "process_particle_t", "structprocess__particle__t.html", "structprocess__particle__t" ],
     [ "pso_data_t", "structpso__data__t.html", "structpso__data__t" ],
-    [ "solution_t", "structsolution__t.html", "structsolution__t" ]
+    [ "solution_t", "structsolution__t.html", "structsolution__t" ],
+    [ "temp_t", "structtemp__t.html", "structtemp__t" ]
 ];

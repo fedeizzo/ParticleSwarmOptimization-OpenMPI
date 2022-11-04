@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['newbroadcastmessage_15',['newBroadcastMessage',['../message_8h.html#a23ff73670ee4b994d74be581f5531ade',1,'message.c']]]
+  ['message_2eh_16',['message.h',['../message_8h.html',1,'']]],
+  ['mpi_5fprocess_17',['mpi_process',['../structbroadcastMessage__t.html#a504ca44fd1a5131cb8b79e1907bdf6a0',1,'broadcastMessage_t']]]
 ];

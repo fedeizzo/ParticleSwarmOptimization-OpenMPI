@@ -293,10 +293,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>initalizeBroacastMess
   </dd>
 </dl>
 <div class="fragment"><div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                                                             {</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  message-&gt;fitness = solution-&gt;fitness;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  message-&gt;dimension = solution-&gt;dimension;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; solution-&gt;dimension; i++)</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    message-&gt;pos[i] = solution-&gt;pos[i];</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  message-&gt;<a class="code" href="structsolution__t.html#ad6d8a7a10e69350738a3d4f5d21e1670">fitness</a> = solution-&gt;<a class="code" href="structsolution__t.html#ad6d8a7a10e69350738a3d4f5d21e1670">fitness</a>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  message-&gt;<a class="code" href="structsolution__t.html#ae5d00140a640db91da86729f8eb59a6e">dimension</a> = solution-&gt;<a class="code" href="structsolution__t.html#ae5d00140a640db91da86729f8eb59a6e">dimension</a>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; solution-&gt;<a class="code" href="structsolution__t.html#ae5d00140a640db91da86729f8eb59a6e">dimension</a>; i++)</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    message-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i] = solution-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i];</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
@@ -332,11 +332,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>initalizeBroacastMess
 </div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="astructbroadcastMessage__t_html"><div class="ttname"><a href="structbroadcastMessage__t.html">broadcastMessage_t</a></div><div class="ttdef"><b>Definition:</b> message.h:28</div></div>
+<div class="ttc" id="astructsolution__t_html_ae5d00140a640db91da86729f8eb59a6e"><div class="ttname"><a href="structsolution__t.html#ae5d00140a640db91da86729f8eb59a6e">solution_t::dimension</a></div><div class="ttdeci">int dimension</div><div class="ttdef"><b>Definition:</b> solution.h:12</div></div>
 <div class="ttc" id="astructbroadcastMessage__t_html_a47c459b45dc4e1148f36d315bed0f820"><div class="ttname"><a href="structbroadcastMessage__t.html#a47c459b45dc4e1148f36d315bed0f820">broadcastMessage_t::solution</a></div><div class="ttdeci">solution_t solution</div><div class="ttdef"><b>Definition:</b> message.h:33</div></div>
 <div class="ttc" id="astructbroadcastMessage__t_html_a504ca44fd1a5131cb8b79e1907bdf6a0"><div class="ttname"><a href="structbroadcastMessage__t.html#a504ca44fd1a5131cb8b79e1907bdf6a0">broadcastMessage_t::mpi_process</a></div><div class="ttdeci">int mpi_process</div><div class="ttdef"><b>Definition:</b> message.h:32</div></div>
+<div class="ttc" id="astructsolution__t_html_a339901c9f46b5c02db2feb76e2e37e3a"><div class="ttname"><a href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">solution_t::pos</a></div><div class="ttdeci">double pos[MAX_MESSAGE_SOL]</div><div class="ttdef"><b>Definition:</b> solution.h:14</div></div>
 <div class="ttc" id="amessage_8h_html_ac4390acce0f4c32d6520afbd37b580b6"><div class="ttname"><a href="message_8h.html#ac4390acce0f4c32d6520afbd37b580b6">BroadcastMessage</a></div><div class="ttdeci">broadcastMessage_t * BroadcastMessage</div><div class="ttdef"><b>Definition:</b> message.h:40</div></div>
 <div class="ttc" id="astructbroadcastMessage__t_html_a33bf38533cacf7c6313840c8554d1655"><div class="ttname"><a href="structbroadcastMessage__t.html#a33bf38533cacf7c6313840c8554d1655">broadcastMessage_t::timestamp</a></div><div class="ttdeci">timestamp_t timestamp</div><div class="ttdef"><b>Definition:</b> message.h:29</div></div>
 <div class="ttc" id="astructbroadcastMessage__t_html_a0e60ec3ebcf0396ff2c2c9e9cd6b0dd8"><div class="ttname"><a href="structbroadcastMessage__t.html#a0e60ec3ebcf0396ff2c2c9e9cd6b0dd8">broadcastMessage_t::iteration</a></div><div class="ttdeci">int iteration</div><div class="ttdef"><b>Definition:</b> message.h:30</div></div>
+<div class="ttc" id="astructsolution__t_html_ad6d8a7a10e69350738a3d4f5d21e1670"><div class="ttname"><a href="structsolution__t.html#ad6d8a7a10e69350738a3d4f5d21e1670">solution_t::fitness</a></div><div class="ttdeci">double fitness</div><div class="ttdef"><b>Definition:</b> solution.h:13</div></div>
 <div class="ttc" id="astructbroadcastMessage__t_html_a2d2cc616fb311f8950269b3d0e4f8bc5"><div class="ttname"><a href="structbroadcastMessage__t.html#a2d2cc616fb311f8950269b3d0e4f8bc5">broadcastMessage_t::particleId</a></div><div class="ttdeci">int particleId</div><div class="ttdef"><b>Definition:</b> message.h:31</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

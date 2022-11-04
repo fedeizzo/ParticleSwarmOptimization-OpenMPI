@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mpi_5fprocess_45',['mpi_process',['../structbroadcastMessage__t.html#a504ca44fd1a5131cb8b79e1907bdf6a0',1,'broadcastMessage_t']]]
+  ['dimension_50',['dimension',['../structparticle__t.html#a1aecbafd3f6b86dd61a02ece347ce0ce',1,'particle_t::dimension()'],['../structsolution__t.html#ae5d00140a640db91da86729f8eb59a6e',1,'solution_t::dimension()']]]
 ];
