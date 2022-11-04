@@ -147,3 +147,5 @@ doc
 /benchmark/.ipynb_checkpoints/
 images/.$hpc-memory-design.drawio.bkp
 /docs/
+benchmark/gif
+*.mp4

@@ -9,8 +9,7 @@ Solution newSolution(int problemDimension) {
   return solution;
 }
 
-void destroySolution(void *ptr) {
-  Solution solution = (Solution)ptr;
+void destroySolution(Solution solution) {
   free(solution);
 }
 
