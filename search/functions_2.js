@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['newbroadcastmessage_48',['newBroadcastMessage',['../message_8h.html#a23ff73670ee4b994d74be581f5531ade',1,'message.c']]]
+  ['includesolution_62',['includeSolution',['../message_8h.html#a01ec39e165f34328fd3c3cea8bb1877a',1,'message.c']]]
 ];

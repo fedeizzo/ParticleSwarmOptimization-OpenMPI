@@ -1,5 +1,6 @@
 var searchData=
 [
   ['callback_3',['Callback',['../structCallback.html',1,'']]],
-  ['current_4',['current',['../structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1',1,'particle_t']]]
+  ['clonesolution_4',['cloneSolution',['../solution_8h.html#a5a24f2a7fb61764a4592167bbf2cfa14',1,'solution.c']]],
+  ['current_5',['current',['../structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1',1,'particle_t']]]
 ];
