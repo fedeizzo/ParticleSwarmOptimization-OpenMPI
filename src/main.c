@@ -91,10 +91,10 @@ int main(int argc, char **argv) {
   /*          arguments.experimentName, arguments.numberOfProcesses, */
   /*          arguments.numberOfThreads); */
   int problemDimension = 2;
-  int particlesNumber = 50;
+  int particlesNumber = 2;
   int iterationsNumber = 50;
   int numberOfThreads = 16;
-  int neighborhoodPopulation = 10;
+  int neighborhoodPopulation = 2;
   double w = 1;
   double phi_1 = 0.5;
   double phi_2 = 0.5;
@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
   double initMinPosition = -500;
   double initMaxVelocity = 10;
   double initMinVelocity = -10;
-  bool USE_OPENMPI = false;
+  bool USE_OPENMPI = true;
 
   if (neighborhoodPopulation > particlesNumber) {
     log_error(
@@ -118,14 +118,14 @@ int main(int argc, char **argv) {
     // # NO OPENMPI or openMP solution                 #
     // #################################################
     /* log_info("Particles initialization"); */
-    log_set_level(LOG_ERROR);
+    log_set_level(LOG_INFO);
     Particle particles[psoData->particlesNumber];
     initParticles(particles, psoData);
     log_info("Swarm optimization");
     particleSwarmOptimization(particles, psoData);
 
   } else {
-    log_set_level(LOG_ERROR);
+    log_set_level(LOG_DEBUG);
     // #################################################
     // # OPENMPI or openMP solution                    #
     // #################################################

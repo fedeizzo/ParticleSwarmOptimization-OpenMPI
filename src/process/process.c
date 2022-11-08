@@ -1,6 +1,8 @@
 #include "./process.h"
 
-#define SLEEP_TIME 1000
+#define SLEEP_TIME 100
+/* #define SEND_SLEEP_TIME 45000 */
+#define SEND_SLEEP_TIME 100000
 /* #define SLEEP_TIME 100000 */
 
 void updateInnerInputBuffer(ProcessParticle *particles, ProcessParticle src,
@@ -113,20 +115,32 @@ void receiveMessage(ProcessParticle *particles, const int iterationsNumber,
       define_datatype_broadcast_message(particles[0]->particle->dimension);
   for (int iteration = 0; iteration < iterationsNumber; iteration++) {
     processLog("READ", iteration, processId, omp_get_thread_num(), "start");
-    for (int pid = 0; pid < numberOfProcesses; pid++)
-      if (pid != processId)
-        for (int parId = 0; parId < processToNumberOfParticles[pid]; parId++) {
-          BroadcastMessage msg = newBroadcastMessage();
-          MPI_Bcast(msg, 1, DT_BROADCAST_MESSAGE, pid, MPI_COMM_WORLD);
-#if DEBUG_CHECKS == 1
-          if (msg->iteration != iteration)
-            log_error(
-                "A mismatch in the iteration within receive function occured");
-#endif
-          saveNewMessage(particles, numberOfParticles, msg, processId);
-          destroyBroadcastMessage(msg);
+    for (int pid = 0; pid < numberOfProcesses; pid++) {
+      if (pid != processId) {
+        printf("sto facendo pid %d\n", pid);
+        BroadcastMessage messages[processToNumberOfParticles[pid]];
+        for (int i = 0; i < processToNumberOfParticles[pid]; i++) 
+	  messages[i] = newBroadcastMessage();
+        MPI_Bcast(messages, processToNumberOfParticles[pid],
+                  DT_BROADCAST_MESSAGE, pid, MPI_COMM_WORLD);
+        printf("Ricevuto\n");
+        for (int i = 0; i < processToNumberOfParticles[pid]; i++) {
+          BroadcastMessage msg = messages[i];
+          printf("Message particella %d\n", msg->particleId);
+          /* saveNewMessage(particles, numberOfParticles, msg, processId); */
+          /* destroyBroadcastMessage(msg); */
         }
-    processLog("READ", iteration, processId, omp_get_thread_num(), "done");
+        printf("Salvato\n");
+        processLog("READ", iteration, processId, omp_get_thread_num(), "done");
+        /* #if DEBUG_CHECKS == 1 */
+        /*           if (msg->iteration != iteration) */
+        /*             log_error( */
+        /*                 "A mismatch in the iteration within receive
+         * function occured"); */
+        /* #endif */
+        /* MPI_Barrier(MPI_COMM_WORLD); */
+      }
+    }
   }
   MPI_Type_free(&DT_BROADCAST_MESSAGE);
 }
@@ -213,8 +227,8 @@ void eraseInputBuffer(ProcessParticle particle) {
 
 void computeNewPosition(ProcessParticle particle, const int iteration,
                         const int processId, PSOData psoData,
-                        ProcessParticle *particles,
-                        const int numberOfParticles, const int numberOfProcesses) {
+                        ProcessParticle *particles, const int numberOfParticles,
+                        const int numberOfProcesses) {
   /* printf("Current openMP level %d\n", omp_get_level()); */
   // list of functions that have a openMP depth = 3
   //   - waitInputBuffer
@@ -257,7 +271,8 @@ void computeNewPosition(ProcessParticle particle, const int iteration,
 
   updateVelocity(particle->particle, psoData->w, psoData->phi_1,
                  psoData->phi_2);
-  updatePosition(particle->particle, psoData->fitnessFunction, psoData->fitnessChecker);
+  updatePosition(particle->particle, psoData->fitnessFunction,
+                 psoData->fitnessChecker);
   BroadcastMessage outMsg = newBroadcastMessage();
   initalizeBroacastMessage(outMsg, processId, iteration + 1,
                            particle->particle->id, particle->particle->current);
@@ -272,8 +287,8 @@ void computeNewPosition(ProcessParticle particle, const int iteration,
              logMessage);
 }
 
-bool checkParticlesSent(const bool *isParticleSent,
-                        const int numberOfParticles) {
+bool checkParticlesReady(const bool *isParticleSent,
+                         const int numberOfParticles) {
   for (int i = 0; i < numberOfParticles; i++)
     if (!isParticleSent[i])
       return false;
@@ -287,46 +302,46 @@ void sendMessage(ProcessParticle *particles, const int iterationsNumber,
   MPI_Datatype DT_BROADCAST_MESSAGE =
       define_datatype_broadcast_message(particles[0]->particle->dimension);
 
-  bool isParticleSent[numberOfParticles];
+  bool isParticleReady[numberOfParticles];
+  broadcastMessage_t messages[numberOfParticles];
 
-  char *logMessage;
-  logMessage = (char *)malloc(sizeof(char) * 20);
   for (int iteration = 0; iteration < iterationsNumber; iteration++) {
     processLog("SEND", iteration, processId, omp_get_thread_num(), "start");
     for (int i = 0; i < numberOfParticles; i++)
-      isParticleSent[i] = false;
+      isParticleReady[i] = false;
+
     do {
-      for (int particleId = 0; particleId < numberOfParticles; particleId++) {
-        ProcessParticle particle = particles[particleId];
-        omp_set_lock(&particle->outputBufferLock);
-        if (particle->outputBuffer != NULL &&
-            isParticleSent[particleId] == false) {
-          sprintf(logMessage, "doing particle %d", particle->particle->id);
-          processLog("SEND", iteration, processId, omp_get_thread_num(),
-                     logMessage);
-          MPI_Bcast(particle->outputBuffer, 1, DT_BROADCAST_MESSAGE, processId,
-                    MPI_COMM_WORLD);
-#if DEBUG_CHECKS == 1
-          if (particle->outputBuffer->iteration != iteration)
-            log_error(
-                "A mismatch in the iteration within send function occured");
-#endif
-          destroyBroadcastMessage(particle->outputBuffer);
-          particle->outputBuffer = NULL;
-          sprintf(logMessage, "done particle %d", particle->particle->id);
-          processLog("SEND", iteration, processId, omp_get_thread_num(),
-                     logMessage);
-          isParticleSent[particleId] = true;
-        }
-        omp_unset_lock(&particle->outputBufferLock);
-      }
+      for (int i = 0; i < numberOfParticles; i++)
+        if (particles[i]->outputBuffer != NULL)
+          isParticleReady[i] = true;
       usleep(SLEEP_TIME);
-    } while (!checkParticlesSent(isParticleSent, numberOfParticles));
+    } while (!checkParticlesReady(isParticleReady, numberOfParticles));
+
+    for (int particleId = 0; particleId < numberOfParticles; particleId++) {
+      ProcessParticle particle = particles[particleId];
+      omp_set_lock(&particle->outputBufferLock);
+      /* messages[particleId] = cloneMessage(particle->outputBuffer); */
+      messages[particleId] = cloneMessageStructToStruct(*particle->outputBuffer);
+      destroyBroadcastMessage(particle->outputBuffer);
+      particle->outputBuffer = NULL;
+      omp_unset_lock(&particle->outputBufferLock);
+    }
+    processLog("SEND", iteration, processId, omp_get_thread_num(), "doing");
+    for (int particleId = 0; particleId < numberOfParticles; particleId++) {
+      printf("sto per inviare particella %d\n", messages[particleId].particleId);
+    }
+    MPI_Bcast(messages, numberOfParticles, DT_BROADCAST_MESSAGE, processId,
+              MPI_COMM_WORLD);
+    processLog("SEND", iteration, processId, omp_get_thread_num(), "done");
+    /* #if DEBUG_CHECKS == 1 */
+    /*           if (particle->outputBuffer->iteration != iteration) */
+    /*             log_error( */
+    /*                 "A mismatch in the iteration within send function
+     * occured"); */
+    /* #endif */
   }
 
-  /* MPI_Request_free(&request); */
   MPI_Type_free(&DT_BROADCAST_MESSAGE);
-  free(logMessage);
 }
 
 void updateInnerInputBuffer(ProcessParticle *particles, ProcessParticle src,

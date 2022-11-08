@@ -154,3 +154,17 @@ BroadcastMessage cloneMessageStructToPointer(broadcastMessage_t msg) {
   }
   return message;
 }
+
+broadcastMessage_t cloneMessageStructToStruct(broadcastMessage_t msg) {
+  broadcastMessage_t message;
+  message.iteration = 0;
+  message.particleId = msg.particleId;
+  message.mpi_process = msg.mpi_process;
+  gettimeofday(&message.timestamp, NULL);
+  message.solution.dimension = msg.solution.dimension;
+  message.solution.fitness = msg.solution.fitness;
+  for (int j = 0; j < message.solution.dimension; j++) {
+    message.solution.pos[j] = msg.solution.pos[j];
+  }
+  return message;
+}

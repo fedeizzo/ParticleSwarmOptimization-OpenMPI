@@ -5,6 +5,6 @@
 #define FAILURE 0
 #define MAX_MESSAGE_SOL 500
 
-#define DEBUG_CHECKS 0
+#define DEBUG_CHECKS 1
 
 #endif
