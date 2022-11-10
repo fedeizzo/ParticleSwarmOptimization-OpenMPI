@@ -80,6 +80,15 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
 /* Our argp parser. */
 static struct argp argp = {options, parse_opt, args_doc, doc};
 
+void printMatrix(int a[5][5]) {
+  for (int i = 0; i < 5; i++) {
+    printf("[ ");
+    for (int j = 0; j < 5; j++)
+      printf("%d, ", a[i][j]);
+    printf("]\n");
+  }
+}
+
 int main(int argc, char **argv) {
   /* struct arguments arguments; */
 
@@ -91,9 +100,9 @@ int main(int argc, char **argv) {
   /*          arguments.experimentName, arguments.numberOfProcesses, */
   /*          arguments.numberOfThreads); */
   int problemDimension = 2;
-  int particlesNumber = 2;
-  int iterationsNumber = 50;
-  int numberOfThreads = 16;
+  int particlesNumber = 10;
+  int iterationsNumber = 2;
+  int numberOfThreads = 1;
   int neighborhoodPopulation = 2;
   double w = 1;
   double phi_1 = 0.5;
@@ -118,14 +127,12 @@ int main(int argc, char **argv) {
     // # NO OPENMPI or openMP solution                 #
     // #################################################
     /* log_info("Particles initialization"); */
-    log_set_level(LOG_INFO);
+    log_set_level(LOG_ERROR);
     Particle particles[psoData->particlesNumber];
     initParticles(particles, psoData);
-    log_info("Swarm optimization");
     particleSwarmOptimization(particles, psoData);
-
   } else {
-    log_set_level(LOG_DEBUG);
+    log_set_level(LOG_INFO);
     // #################################################
     // # OPENMPI or openMP solution                    #
     // #################################################
@@ -151,52 +158,5 @@ int main(int argc, char **argv) {
                    processToNumberOfParticles, psoData);
     MPI_Finalize();
   }
-  /* int data = 5; */
-  /* if (process_id == 0) { */
-  /*   data = 10; */
-  /* } else if (process_id == 2) { */
-  /*   data = 20; */
-  /* } */
-
-  /* if (process_id == 0) { */
-  /*   MPI_Request *request = (MPI_Request*) malloc(sizeof(MPI_Request)); */
-  /*   // timestamp 0 */
-  /*   MPI_Ibcast(&data, 1, MPI_INT, 0, MPI_COMM_WORLD, request); */
-  /*   data = 15; */
-  /*   sleep(5); */
-  /*   // timestamp 5 */
-  /*   MPI_Ibcast(&data, 1, MPI_INT, 0, MPI_COMM_WORLD, request); */
-  /* } */
-  /* else if (process_id == 1) { */
-  /*   int completed_1 = 0, completed_2 = 0; */
-  /*   MPI_Request *request[2]; */
-  /*   MPI_Status status; */
-  /*   for (int i = 0; i < 2; i++) */
-  /*    request[i] = (MPI_Request*) malloc(sizeof(MPI_Request)); */
-  /*   int data2; */
-  /*   // timestamp 20 */
-  /*   sleep(10); */
-  /*   MPI_Ibcast(&data, 1, MPI_INT, 0, MPI_COMM_WORLD, request[0]); */
-  /*   MPI_Ibcast(&data2, 1, MPI_INT, 0, MPI_COMM_WORLD, request[1]); */
-  /*   do { */
-  /*     MPI_Test(request[0], &completed_1, &status); */
-  /*     printf("Completed req 0: %d\n", completed_1); */
-  /*     MPI_Test(request[1], &completed_2, &status); */
-  /*     printf("Completed req 1%d\n", completed_2); */
-  /*     sleep(1); */
-  /*   } while (completed_1 != 1 || completed_2 != 1); */
-  /*   printf("process_id %d data %d %d\n", process_id, data, data2); */
-  /* } else if (process_id == 2) { */
-  /*   MPI_Request *request = (MPI_Request*) malloc(sizeof(MPI_Request)); */
-  /*   sleep(1); */
-  /*   // timestamp 1 */
-  /*   MPI_Ibcast(&data, 1, MPI_INT, 0, MPI_COMM_WORLD, request); */
-  /*   printf("process_id %d send data = %d\n", process_id, data); */
-  /*   sleep(1); */
-  /*   // timestamp 2 */
-  /*   MPI_Ibcast(&data, 1, MPI_INT, 0, MPI_COMM_WORLD, request); */
-  /*   printf("process_id %d send data = %d\n", process_id, data); */
-  /* } */
-
   return 0;
 }

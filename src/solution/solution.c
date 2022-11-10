@@ -14,14 +14,11 @@ void destroySolution(Solution solution) {
 }
 
 Solution cloneSolution(Solution solution) {
-  double *pos = solution->pos;
-  double fitness = solution->fitness;
-
   Solution new = (Solution)malloc(sizeof(struct solution_t));
   for (int i = 0; i < solution->dimension; i++)
-    new->pos[i] = pos[i];
+    new->pos[i] = solution->pos[i];
 
-  new->fitness = fitness;
+  new->fitness = solution->fitness;
   new->dimension = solution->dimension;
   return new;
 }

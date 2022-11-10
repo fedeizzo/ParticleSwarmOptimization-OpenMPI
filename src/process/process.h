@@ -13,8 +13,8 @@
 typedef struct process_particle_t {
   int totalNumberOfParticles;
   Particle particle;
-  BroadcastMessage *inputBuffer;
-  BroadcastMessage outputBuffer;
+  broadcastMessage_t *inputBuffer;
+  broadcastMessage_t outputBuffer;
   bool isMessageReady;
   omp_lock_t inputBufferLock;
   omp_lock_t outputBufferLock;

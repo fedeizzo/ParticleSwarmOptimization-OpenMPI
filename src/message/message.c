@@ -6,7 +6,7 @@ void reduceMaxFitness(BroadcastMessage in, BroadcastMessage inout, int *len,
 
 MPI_Datatype define_double_array(int dimension) {
   MPI_Datatype DT_DOUBLE_ARRAY;
-  MPI_Type_vector(dimension, 1, dimension, MPI_DOUBLE, &DT_DOUBLE_ARRAY);
+  MPI_Type_vector(MAX_MESSAGE_SOL, 1, MAX_MESSAGE_SOL, MPI_DOUBLE, &DT_DOUBLE_ARRAY);
   MPI_Type_commit(&DT_DOUBLE_ARRAY);
   return DT_DOUBLE_ARRAY;
 }
@@ -35,7 +35,7 @@ MPI_Datatype define_datatype_solution_message(int dimension) {
   // Create the datatype
   MPI_Datatype DT_SOLUTION_MESSAGE;
   MPI_Datatype DT_DOUBLE_ARRAY = define_double_array(dimension);
-  int lengths[3] = {1, 1, dimension};
+  int lengths[3] = {1, 1, MAX_MESSAGE_SOL};
 
   MPI_Aint displacements[3];
   MPI_Aint base_address;
@@ -66,10 +66,10 @@ MPI_Datatype define_datatype_broadcast_message(int dimension) {
   MPI_Aint displacements[5];
   MPI_Aint base_address;
   MPI_Get_address(&broadcast, &base_address);
-  MPI_Get_address(&broadcast.iteration, &displacements[0]);
+  MPI_Get_address(&broadcast.timestamp, &displacements[0]);
   MPI_Get_address(&broadcast.particleId, &displacements[1]);
   MPI_Get_address(&broadcast.mpi_process, &displacements[2]);
-  MPI_Get_address(&broadcast.timestamp, &displacements[3]);
+  MPI_Get_address(&broadcast.iteration, &displacements[3]);
   MPI_Get_address(&broadcast.solution, &displacements[4]);
   displacements[0] = MPI_Aint_diff(displacements[0], base_address);
   displacements[1] = MPI_Aint_diff(displacements[1], base_address);
@@ -143,7 +143,7 @@ BroadcastMessage cloneMessage(BroadcastMessage message) {
 
 BroadcastMessage cloneMessageStructToPointer(broadcastMessage_t msg) {
   BroadcastMessage message = newBroadcastMessage();
-  message->iteration = 0;
+  message->iteration = msg.iteration;
   message->particleId = msg.particleId;
   message->mpi_process = msg.mpi_process;
   gettimeofday(&message->timestamp, NULL);
@@ -157,7 +157,7 @@ BroadcastMessage cloneMessageStructToPointer(broadcastMessage_t msg) {
 
 broadcastMessage_t cloneMessageStructToStruct(broadcastMessage_t msg) {
   broadcastMessage_t message;
-  message.iteration = 0;
+  message.iteration = msg.iteration;
   message.particleId = msg.particleId;
   message.mpi_process = msg.mpi_process;
   gettimeofday(&message.timestamp, NULL);
