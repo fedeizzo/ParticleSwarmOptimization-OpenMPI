@@ -10,6 +10,5 @@ var annotated_dup =
     [ "particle_t", "structparticle__t.html", "structparticle__t" ],
     [ "process_particle_t", "structprocess__particle__t.html", "structprocess__particle__t" ],
     [ "pso_data_t", "structpso__data__t.html", "structpso__data__t" ],
-    [ "solution_t", "structsolution__t.html", "structsolution__t" ],
-    [ "temp_t", "structtemp__t.html", "structtemp__t" ]
+    [ "solution_t", "structsolution__t.html", "structsolution__t" ]
 ];
