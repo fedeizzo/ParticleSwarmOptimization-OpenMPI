@@ -68,6 +68,7 @@ Particle newParticle(int id, int problemDimension, double max, double min,
 }
 
 void updateVelocity(Particle particle, double w, double phi_1, double phi_2) {
+  // TODO: parallelizable
   for (int i = 0; i < particle->dimension; i++) {
     double v = particle->velocity[i];
     double pbp = particle->personalBest->pos[i];
@@ -75,8 +76,8 @@ void updateVelocity(Particle particle, double w, double phi_1, double phi_2) {
     double cp = particle->current->pos[i];
 
     v = v * w;
-    v = phi_1 * randfrom(0.0, 1.0) * (pbp - cp);
-    v = phi_1 * randfrom(0.0, 1.0) * (sbp - cp);
+    v += phi_1 * randfrom(0.0, 1.0) * (pbp - cp);
+    v += phi_2 * randfrom(0.0, 1.0) * (sbp - cp);
     particle->velocity[i] = v;
   }
 }
@@ -84,11 +85,13 @@ void updateVelocity(Particle particle, double w, double phi_1, double phi_2) {
 void updatePosition(Particle particle, double (*fitnessFunction)(double *, int),
                     bool (*fitnessChecker)(double, double)) {
   double oldFitness;
+  // TODO parallelizable
   for (int i = 0; i < particle->dimension; i++)
     particle->current->pos[i] += particle->velocity[i];
 
   oldFitness = particle->current->fitness;
   updateFitness(particle, fitnessFunction);
+
   if (fitnessChecker(particle->current->fitness, oldFitness)) {
     destroySolution(particle->personalBest);
     particle->personalBest = cloneSolution(particle->current);

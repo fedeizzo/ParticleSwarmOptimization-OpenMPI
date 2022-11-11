@@ -35,5 +35,5 @@ PSOData newPSOData(const int problemDimension, const int particlesNumber,
 
 void destroyPSOData(PSOData psoData);
 void particleSwarmOptimization(Particle *particles, PSOData psoData);
-bool initParticles(Particle *particles, PSOData psoData);
+bool initParticles(Particle *particles, PSOData psoData, int startingId);
 #endif

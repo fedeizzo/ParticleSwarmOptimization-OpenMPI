@@ -6,7 +6,8 @@ void reduceMaxFitness(BroadcastMessage in, BroadcastMessage inout, int *len,
 
 MPI_Datatype define_double_array(int dimension) {
   MPI_Datatype DT_DOUBLE_ARRAY;
-  MPI_Type_vector(MAX_MESSAGE_SOL, 1, MAX_MESSAGE_SOL, MPI_DOUBLE, &DT_DOUBLE_ARRAY);
+  MPI_Type_vector(MAX_MESSAGE_SOL, 1, MAX_MESSAGE_SOL, MPI_DOUBLE,
+                  &DT_DOUBLE_ARRAY);
   MPI_Type_commit(&DT_DOUBLE_ARRAY);
   return DT_DOUBLE_ARRAY;
 }
@@ -76,7 +77,7 @@ MPI_Datatype define_datatype_broadcast_message(int dimension) {
   displacements[2] = MPI_Aint_diff(displacements[2], base_address);
   displacements[3] = MPI_Aint_diff(displacements[3], base_address);
   displacements[4] = MPI_Aint_diff(displacements[4], base_address);
-  MPI_Datatype types[5] = {MPI_INT, MPI_INT, MPI_INT, DT_TIMEVAL,
+  MPI_Datatype types[5] = {DT_TIMEVAL, MPI_INT, MPI_INT, MPI_INT,
                            DT_SOLUTION_MESSAGE};
   MPI_Type_create_struct(5, lengths, displacements, types,
                          &DT_BROADCAST_MESSAGE);

@@ -62,16 +62,18 @@ void updateGlobal(Particle *particles, Solution globalBest,
   }
 }
 
-bool initParticles(Particle *particles, PSOData psoData) {
+bool initParticles(Particle *particles, PSOData psoData, int startingId) {
   int i;
   int rc;
   Particle particle;
+  // TODO could be parallelized
   for (i = 0; i < psoData->particlesNumber; i++) {
-    log_debug("Initializing particle %d/%d", i + 1, psoData->particlesNumber);
-    particle =
-        newParticle(i, psoData->problemDimension, psoData->initMaxPosition,
-                    psoData->initMinPosition, psoData->initMaxVelocity,
-                    psoData->initMinVelocity, psoData->fitnessFunction);
+    log_debug("Initializing particle %d/%d", i + 1 + startingId,
+              psoData->particlesNumber);
+    particle = newParticle(i + startingId, psoData->problemDimension,
+                           psoData->initMaxPosition, psoData->initMinPosition,
+                           psoData->initMaxVelocity, psoData->initMinVelocity,
+                           psoData->fitnessFunction);
     rc = checkAllocationError(particle);
     if (rc == FAILURE)
       return false;
@@ -96,7 +98,8 @@ void particleSwarmOptimization(Particle *particles, PSOData psoData) {
   globalBestSolution = cloneSolution(particles[0]->current);
 
   for (_ = 0; _ < psoData->iterationsNumber; _++) { // n iterations
-    updateGlobal(particles, globalBestSolution, psoData->particlesNumber, psoData->fitnessChecker);
+    updateGlobal(particles, globalBestSolution, psoData->particlesNumber,
+                 psoData->fitnessChecker);
     for (i = 0; i < psoData->particlesNumber; i++) { // n particles
       Particle particle = particles[i];
       updateVelocity(particle, psoData->w, psoData->phi_1, psoData->phi_2);

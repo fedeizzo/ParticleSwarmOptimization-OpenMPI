@@ -99,16 +99,16 @@ int main(int argc, char **argv) {
    */
   /*          arguments.experimentName, arguments.numberOfProcesses, */
   /*          arguments.numberOfThreads); */
-  int problemDimension = 2;
-  int particlesNumber = 10;
-  int iterationsNumber = 2;
-  int numberOfThreads = 1;
-  int neighborhoodPopulation = 2;
+  int problemDimension = 10;
+  int particlesNumber = 100;
+  int iterationsNumber = 50;
+  int numberOfThreads = 2;
+  int neighborhoodPopulation = 100;
   double w = 1;
-  double phi_1 = 0.5;
-  double phi_2 = 0.5;
-  double initMaxPosition = 500;
-  double initMinPosition = -500;
+  double phi_1 = 0.0;
+  double phi_2 = 0.0;
+  double initMaxPosition = 500.0;
+  double initMinPosition = -500.0;
   double initMaxVelocity = 10;
   double initMinVelocity = -10;
   bool USE_OPENMPI = true;
@@ -123,16 +123,17 @@ int main(int argc, char **argv) {
       neighborhoodPopulation, w, phi_1, phi_2, initMaxPosition, initMinPosition,
       initMaxVelocity, initMinVelocity, *sphere, *euclideanDistance, *minimize);
   if (!USE_OPENMPI) {
+    srand(0);
     // #################################################
     // # NO OPENMPI or openMP solution                 #
     // #################################################
     /* log_info("Particles initialization"); */
-    log_set_level(LOG_ERROR);
+    log_set_level(LOG_INFO);
     Particle particles[psoData->particlesNumber];
-    initParticles(particles, psoData);
+    initParticles(particles, psoData, 0);
     particleSwarmOptimization(particles, psoData);
   } else {
-    log_set_level(LOG_INFO);
+    log_set_level(LOG_ERROR);
     // #################################################
     // # OPENMPI or openMP solution                    #
     // #################################################
@@ -141,18 +142,31 @@ int main(int argc, char **argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &n_processes);
     MPI_Comm_rank(MPI_COMM_WORLD, &process_id);
 
-    /** EVERY PROCESS HAS A DIFFERENT RANDOM GENERATOR **/
-    srand(85 + process_id);
+    // Impossible to paralleize
+    if (n_processes > particlesNumber) {
+      if (process_id == 0)
+        log_error(
+            "Processes number must be lower or equal than particles number");
+      MPI_Finalize();
+      exit(1);
+    }
 
+    /** EVERY PROCESS HAS A DIFFERENT RANDOM GENERATOR **/
+    srand(0 + process_id);
+
+    // Partition the particles equally: each process should have the same,
+    // except fo tthe process 0 which is prioritize to have 1 less
     int particlesNumberPerProcess = psoData->particlesNumber / n_processes;
     int particlesNumberReminder = psoData->particlesNumber % n_processes;
     int processToNumberOfParticles[n_processes];
+    // TODO si può parallelizzare
     for (int i = 0; i < n_processes; i++) {
       processToNumberOfParticles[i] = particlesNumberPerProcess;
       if (i != 0 && i <= particlesNumberReminder)
         processToNumberOfParticles[i]++;
     }
 
+    // Otteniamo l'id della particella
     int startingId = process_id * particlesNumberPerProcess;
     processRoutine(n_processes, numberOfThreads, process_id, startingId,
                    processToNumberOfParticles, psoData);
