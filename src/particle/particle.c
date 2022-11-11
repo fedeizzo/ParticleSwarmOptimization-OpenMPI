@@ -58,7 +58,6 @@ Particle newParticle(int id, int problemDimension, double max, double min,
     particle->velocity = (double *)malloc(problemDimension * sizeof(double));
     randomArrayInitialization(particle->velocity, problemDimension, v_min / 3,
                               v_max / 3);
-
     updateFitness(particle, fitnessFunction);
 
     particle->personalBest = cloneSolution(particle->current);

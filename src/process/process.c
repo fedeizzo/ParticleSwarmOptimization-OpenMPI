@@ -1,4 +1,5 @@
 #include "./process.h"
+#include <stdio.h>
 
 void processLog(const char *operation, const int iteration, const int process,
                 const int thread, const char *step) {
@@ -35,6 +36,50 @@ void obtainBestSocialFitness(Particle particle, int *indexes,
       *bestFitness = fitness;
       *indexBestFitness = i;
     }
+  }
+}
+
+int partition(broadcastMessage_t *a, int p, int r,
+              bool (*fitnessChecker)(double, double)) {
+  broadcastMessage_t lt[r - p];
+  broadcastMessage_t gt[r - p];
+  broadcastMessage_t key = a[r];
+  int i;
+  int j;
+  int lt_n = 0;
+  int gt_n = 0;
+
+  for (i = p; i < r; i++) {
+    if (fitnessChecker(a[i].solution.fitness, a[r].solution.fitness)) {
+      lt[lt_n++] = a[i];
+    } else {
+      gt[gt_n++] = a[i];
+    }
+  }
+
+  for (i = 0; i < lt_n; i++) {
+    a[p + i] = lt[i];
+  }
+
+  a[p + lt_n] = key;
+
+  for (j = 0; j < gt_n; j++) {
+    a[p + lt_n + j + 1] = gt[j];
+  }
+
+  return p + lt_n;
+}
+
+void quicksort(broadcastMessage_t *a, int p, int r,
+               bool (*fitnessChecker)(double, double)) {
+  int div;
+
+  if (p < r) {
+    div = partition(a, p, r, fitnessChecker);
+#pragma omp task shared(a)
+    quicksort(a, p, div - 1, fitnessChecker);
+#pragma omp task shared(a)
+    quicksort(a, div + 1, r, fitnessChecker);
   }
 }
 
@@ -80,6 +125,62 @@ void initOutputBuffer(broadcastMessage_t *outputBuffer, Particle *particles,
   }
 }
 
+void mergeArrays(broadcastMessage_t *arr, int *displacements, const int dim,
+                 const int numberOfProcesses,
+                 bool (*fitnessChecker)(double, double)) {
+  // Set of indexes of the array
+  int indexes[numberOfProcesses];
+  broadcastMessage_t old[dim];
+
+#pragma omp parallel
+  {
+#pragma omp for
+    for (int i = 0; i < dim; i++) {
+      old[i] = arr[i];
+    }
+#pragma omp for
+    for (int i = 0; i < numberOfProcesses; i++) {
+      indexes[i] = displacements[i];
+    }
+  }
+
+  double *min = NULL;
+  double val = 0.0;
+  // Number of dimension
+  for (int i = 0; i < dim; i++) {
+    int indexToUpdate;
+    min = NULL;
+    for (int j = 0; j < numberOfProcesses; j++) {
+      // Reached the limit of their chunks
+      if (((j < dim - 1) && (indexes[j] >= displacements[j + 1])) ||
+          ((j == dim - 1) && (indexes[j] >= dim))) {
+        continue;
+      }
+      // Unset one which is better is found
+      if (min == NULL ||
+          fitnessChecker(arr[indexes[j]].solution.fitness, *min)) {
+        indexToUpdate = j;
+        min = &val;
+        *min = arr[indexes[j]].solution.fitness;
+      }
+    }
+
+    // Update
+    arr[i] = old[indexes[indexToUpdate]];
+    indexes[indexToUpdate]++;
+  }
+}
+
+void sortParticles(broadcastMessage_t *outputBuffer,
+                   const int processParticlesNumber,
+                   bool (*fitnessChecker)(double, double)) {
+#pragma omp parallel
+  {
+#pragma omp single
+    quicksort(outputBuffer, 0, processParticlesNumber - 1, fitnessChecker);
+  }
+}
+
 void processRoutine(const int processesNumber, const int threadsNumber,
                     const int pid, const int startingId,
                     const int *processToNumberOfParticles, PSOData psoData) {
@@ -121,9 +222,18 @@ void processRoutine(const int processesNumber, const int threadsNumber,
   // Parallel algorithm
   for (int iteration = 0; iteration < psoData->iterationsNumber; iteration++) {
     if (processesNumber > 1) {
+      sortParticles(outputBuffer, processParticlesNumber,
+                    psoData->fitnessChecker);
       MPI_Allgatherv(outputBuffer, processParticlesNumber, DT_BROADCAST_MESSAGE,
                      inputBuffer, processToNumberOfParticles, cumulatedSum,
                      DT_BROADCAST_MESSAGE, MPI_COMM_WORLD);
+      mergeArrays(inputBuffer, cumulatedSum, psoData->particlesNumber,
+                  processesNumber, psoData->fitnessChecker);
+      printf("Received buffer: ");
+      for (int k = 0; k < psoData->particlesNumber; k++) {
+        printf("%f\t", inputBuffer[k].solution.fitness);
+      }
+      printf("\n");
     }
 
     processLog("GATHERING", iteration, pid, omp_get_thread_num(), "done");

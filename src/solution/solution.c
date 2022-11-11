@@ -9,9 +9,7 @@ Solution newSolution(int problemDimension) {
   return solution;
 }
 
-void destroySolution(Solution solution) {
-  free(solution);
-}
+void destroySolution(Solution solution) { free(solution); }
 
 Solution cloneSolution(Solution solution) {
   Solution new = (Solution)malloc(sizeof(struct solution_t));

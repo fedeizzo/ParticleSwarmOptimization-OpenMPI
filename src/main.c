@@ -99,14 +99,14 @@ int main(int argc, char **argv) {
    */
   /*          arguments.experimentName, arguments.numberOfProcesses, */
   /*          arguments.numberOfThreads); */
-  int problemDimension = 10;
-  int particlesNumber = 100;
-  int iterationsNumber = 50;
+  int problemDimension = 3;
+  int particlesNumber = 4;
+  int iterationsNumber = 15;
   int numberOfThreads = 2;
-  int neighborhoodPopulation = 100;
+  int neighborhoodPopulation = 4;
   double w = 1;
-  double phi_1 = 0.0;
-  double phi_2 = 0.0;
+  double phi_1 = 0.8;
+  double phi_2 = 0.8;
   double initMaxPosition = 500.0;
   double initMinPosition = -500.0;
   double initMaxVelocity = 10;
@@ -152,7 +152,7 @@ int main(int argc, char **argv) {
     }
 
     /** EVERY PROCESS HAS A DIFFERENT RANDOM GENERATOR **/
-    srand(0 + process_id);
+    srand(0 + process_id * 10);
 
     // Partition the particles equally: each process should have the same,
     // except fo tthe process 0 which is prioritize to have 1 less
