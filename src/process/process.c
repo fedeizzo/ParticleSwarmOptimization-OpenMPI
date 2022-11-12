@@ -39,47 +39,45 @@ void obtainBestSocialFitness(Particle particle, int *indexes,
   }
 }
 
-int partition(broadcastMessage_t *a, int p, int r,
-              bool (*fitnessChecker)(double, double)) {
-  broadcastMessage_t lt[r - p];
-  broadcastMessage_t gt[r - p];
-  broadcastMessage_t key = a[r];
+int partition(int *neighborhoodIndex, double *distances, int p, int r) {
+  int lt[r - p];
+  int gt[r - p];
+  int key = neighborhoodIndex[r];
   int i;
   int j;
   int lt_n = 0;
   int gt_n = 0;
 
   for (i = p; i < r; i++) {
-    if (fitnessChecker(a[i].solution.fitness, a[r].solution.fitness)) {
-      lt[lt_n++] = a[i];
+    if (distances[neighborhoodIndex[i]] < distances[neighborhoodIndex[r]]) {
+      lt[lt_n++] = neighborhoodIndex[i];
     } else {
-      gt[gt_n++] = a[i];
+      gt[gt_n++] = neighborhoodIndex[i];
     }
   }
 
   for (i = 0; i < lt_n; i++) {
-    a[p + i] = lt[i];
+    neighborhoodIndex[p + i] = lt[i];
   }
 
-  a[p + lt_n] = key;
+  neighborhoodIndex[p + lt_n] = key;
 
   for (j = 0; j < gt_n; j++) {
-    a[p + lt_n + j + 1] = gt[j];
+    neighborhoodIndex[p + lt_n + j + 1] = gt[j];
   }
 
   return p + lt_n;
 }
 
-void quicksort(broadcastMessage_t *a, int p, int r,
-               bool (*fitnessChecker)(double, double)) {
+void quicksort(int *neighborhoodIndex, double *distances, int p, int r) {
   int div;
 
   if (p < r) {
-    div = partition(a, p, r, fitnessChecker);
-#pragma omp task shared(a)
-    quicksort(a, p, div - 1, fitnessChecker);
-#pragma omp task shared(a)
-    quicksort(a, div + 1, r, fitnessChecker);
+    div = partition(neighborhoodIndex, distances, p, r);
+#pragma omp task shared(neighborhoodIndex)
+    quicksort(neighborhoodIndex, distances, p, div - 1);
+#pragma omp task shared(neighborhoodIndex)
+    quicksort(neighborhoodIndex, distances, div + 1, r);
   }
 }
 
@@ -125,62 +123,27 @@ void initOutputBuffer(broadcastMessage_t *outputBuffer, Particle *particles,
   }
 }
 
-void mergeArrays(broadcastMessage_t *arr, int *displacements, const int dim,
-                 const int numberOfProcesses,
-                 bool (*fitnessChecker)(double, double)) {
-  // Set of indexes of the array
-  int indexes[numberOfProcesses];
-  broadcastMessage_t old[dim];
-
-  // Initialization stage: old is the old array and indexes is the array of
-  // current index values
-#pragma omp parallel
-  {
-#pragma omp for
-    for (int i = 0; i < dim; i++) {
-      old[i] = arr[i];
-    }
-#pragma omp for
-    for (int i = 0; i < numberOfProcesses; i++) {
-      indexes[i] = displacements[i];
-    }
-  }
-
-  double *min = NULL;
-  double val = 0.0;
-  // Number of dimension
-  for (int i = 0; i < dim; i++) {
-    int indexToUpdate;
-    min = NULL;
-    for (int j = 0; j < numberOfProcesses; j++) {
-      // Reached the limit of their chunks
-      if (((j < numberOfProcesses - 1) &&
-           (indexes[j] >= displacements[j + 1])) ||
-          ((j == numberOfProcesses - 1) && (indexes[j] >= dim))) {
-        continue;
-      }
-      // Set the best is found
-      if (min == NULL ||
-          fitnessChecker(old[indexes[j]].solution.fitness, *min)) {
-        indexToUpdate = j;
-        min = &val;
-        *min = old[indexes[j]].solution.fitness;
-      }
-    }
-
-    // Update
-    arr[i] = old[indexes[indexToUpdate]];
-    indexes[indexToUpdate]++;
-  }
-}
-
-void sortParticles(broadcastMessage_t *outputBuffer,
-                   const int processParticlesNumber,
-                   bool (*fitnessChecker)(double, double)) {
+void sortDistances(int *neighborhoodIndex, double *distances,
+                   const int dimension) {
 #pragma omp parallel
   {
 #pragma omp single
-    quicksort(outputBuffer, 0, processParticlesNumber - 1, fitnessChecker);
+    quicksort(neighborhoodIndex, distances, 0, dimension - 1);
+  }
+}
+
+void computeNeighbors(PSOData psoData, Particle *particles,
+                      int **neighborhoodIndex, double **distances,
+                      broadcastMessage_t *inputBuffer,
+                      const int processParticlesNumber) {
+  // Compute the distances for each of my particle using parallelism
+  for (int i = 0; i < processParticlesNumber; i++)
+    computeDistances(particles[i], neighborhoodIndex[i], distances[i], psoData,
+                     inputBuffer);
+
+  // Sort the distances for each of my particle
+  for (int i = 0; i < processParticlesNumber; i++) {
+    sortDistances(neighborhoodIndex[i], distances[i], psoData->particlesNumber);
   }
 }
 
@@ -201,7 +164,6 @@ void processRoutine(const int processesNumber, const int threadsNumber,
 
   // Cumulated sum for the gather
   int cumulatedSum[processesNumber];
-
   // Gather displacement calculation (probably cannot be parallelized)
   for (int i = 0; i < processesNumber; i++)
     if (i == 0)
@@ -222,25 +184,29 @@ void processRoutine(const int processesNumber, const int threadsNumber,
   // Initialize the input buffer
   initOutputBuffer(outputBuffer, particles, pid, processParticlesNumber, 0);
 
+  int **neighborhoodIndex =
+      (int **)malloc(sizeof(int *) * processParticlesNumber);
+  double **distances =
+      (double **)malloc(sizeof(double *) * processParticlesNumber);
+  for (int i = 0; i < processParticlesNumber; i++) {
+    neighborhoodIndex[i] =
+        (int *)malloc(sizeof(int) * psoData->particlesNumber);
+    distances[i] = (double *)malloc(sizeof(double) * psoData->particlesNumber);
+  }
+
   // Parallel algorithm
   for (int iteration = 0; iteration < psoData->iterationsNumber; iteration++) {
     if (processesNumber > 1) {
-      sortParticles(outputBuffer, processParticlesNumber,
-                    psoData->fitnessChecker);
       MPI_Allgatherv(outputBuffer, processParticlesNumber, DT_BROADCAST_MESSAGE,
                      inputBuffer, processToNumberOfParticles, cumulatedSum,
                      DT_BROADCAST_MESSAGE, MPI_COMM_WORLD);
-      mergeArrays(inputBuffer, cumulatedSum, psoData->particlesNumber,
-                  processesNumber, psoData->fitnessChecker);
-      printf("Received buffer: ");
-      for (int k = 0; k < psoData->particlesNumber; k++) {
-        printf("%f\t", inputBuffer[k].solution.fitness);
-      }
-      printf("\n");
+      computeNeighbors(psoData, particles, neighborhoodIndex, distances,
+                       inputBuffer, processParticlesNumber);
     }
 
     processLog("GATHERING", iteration, pid, omp_get_thread_num(), "done");
 
+    // TODO: integrate the neighbors in the compute new positions
 #pragma omp parallel for
     for (int i = 0; i < processParticlesNumber; i++)
       computeNewPosition(particles[i], iteration, pid, psoData, particles, i,
@@ -258,6 +224,13 @@ void processRoutine(const int processesNumber, const int threadsNumber,
                       ? bestFitness
                       : particles[i]->personalBest->fitness;
   printf("Best fitness for process %d %f\n", pid, bestFitness);
+
+  for (int i = 0; i < processParticlesNumber; i++) {
+    free(neighborhoodIndex[i]);
+    free(distances[i]);
+  }
+  free(neighborhoodIndex);
+  free(distances);
 
   // TODO si può parallelizzare
   for (int i = 0; i < processParticlesNumber; i++)
