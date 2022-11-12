@@ -99,16 +99,16 @@ int main(int argc, char **argv) {
    */
   /*          arguments.experimentName, arguments.numberOfProcesses, */
   /*          arguments.numberOfThreads); */
-  int problemDimension = 3;
-  int particlesNumber = 4;
-  int iterationsNumber = 15;
-  int numberOfThreads = 2;
+  int problemDimension = 10;
+  int particlesNumber = 8;
+  int iterationsNumber = 100;
+  int numberOfThreads = 4;
   int neighborhoodPopulation = 4;
   double w = 1;
   double phi_1 = 0.8;
   double phi_2 = 0.8;
-  double initMaxPosition = 500.0;
-  double initMinPosition = -500.0;
+  double initMaxPosition = 30.0;
+  double initMinPosition = -30.0;
   double initMaxVelocity = 10;
   double initMinVelocity = -10;
   bool USE_OPENMPI = true;

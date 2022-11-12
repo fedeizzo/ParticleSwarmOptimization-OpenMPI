@@ -132,6 +132,8 @@ void mergeArrays(broadcastMessage_t *arr, int *displacements, const int dim,
   int indexes[numberOfProcesses];
   broadcastMessage_t old[dim];
 
+  // Initialization stage: old is the old array and indexes is the array of
+  // current index values
 #pragma omp parallel
   {
 #pragma omp for
@@ -152,16 +154,17 @@ void mergeArrays(broadcastMessage_t *arr, int *displacements, const int dim,
     min = NULL;
     for (int j = 0; j < numberOfProcesses; j++) {
       // Reached the limit of their chunks
-      if (((j < dim - 1) && (indexes[j] >= displacements[j + 1])) ||
-          ((j == dim - 1) && (indexes[j] >= dim))) {
+      if (((j < numberOfProcesses - 1) &&
+           (indexes[j] >= displacements[j + 1])) ||
+          ((j == numberOfProcesses - 1) && (indexes[j] >= dim))) {
         continue;
       }
-      // Unset one which is better is found
+      // Set the best is found
       if (min == NULL ||
-          fitnessChecker(arr[indexes[j]].solution.fitness, *min)) {
+          fitnessChecker(old[indexes[j]].solution.fitness, *min)) {
         indexToUpdate = j;
         min = &val;
-        *min = arr[indexes[j]].solution.fitness;
+        *min = old[indexes[j]].solution.fitness;
       }
     }
 
