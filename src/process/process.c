@@ -84,20 +84,20 @@ void quicksort(int *neighborhoodIndex, double *distances, int p, int r) {
 void computeNewPosition(Particle particle, const int iteration,
                         const int processId, PSOData psoData,
                         Particle *particles, const int index,
-                        const int numberOfProcesses,
+                        const int numberOfProcesses, int **neighborhoodIndex,
                         broadcastMessage_t *inputBuffer,
                         broadcastMessage_t *outputBuffer) {
-  double distances[psoData->particlesNumber];
-  int indexes[psoData->particlesNumber];
+  /** double distances[psoData->particlesNumber]; */
+  /** int indexes[psoData->particlesNumber]; */
   // Compute the distances in a parallel manner
-  computeDistances(particle, indexes, distances, psoData, inputBuffer);
+  /** computeDistances(particle, indexes, distances, psoData, inputBuffer); */
   // TODO missing sort, would be better to put it before the send and then a
   // merge
   double bestFitness;
   int indexBestFitness;
   // Obtain the best social fitness
-  obtainBestSocialFitness(particle, indexes, &bestFitness, &indexBestFitness,
-                          psoData, inputBuffer);
+  obtainBestSocialFitness(particle, neighborhoodIndex[index], &bestFitness,
+                          &indexBestFitness, psoData, inputBuffer);
 
   destroySolution(particle->socialBest);
   // Get the social best
@@ -196,13 +196,13 @@ void processRoutine(const int processesNumber, const int threadsNumber,
 
   // Parallel algorithm
   for (int iteration = 0; iteration < psoData->iterationsNumber; iteration++) {
-    if (processesNumber > 1) {
+    if (processesNumber > 1)
       MPI_Allgatherv(outputBuffer, processParticlesNumber, DT_BROADCAST_MESSAGE,
                      inputBuffer, processToNumberOfParticles, cumulatedSum,
                      DT_BROADCAST_MESSAGE, MPI_COMM_WORLD);
-      computeNeighbors(psoData, particles, neighborhoodIndex, distances,
-                       inputBuffer, processParticlesNumber);
-    }
+
+    computeNeighbors(psoData, particles, neighborhoodIndex, distances,
+                     inputBuffer, processParticlesNumber);
 
     processLog("GATHERING", iteration, pid, omp_get_thread_num(), "done");
 
@@ -210,7 +210,8 @@ void processRoutine(const int processesNumber, const int threadsNumber,
 #pragma omp parallel for
     for (int i = 0; i < processParticlesNumber; i++)
       computeNewPosition(particles[i], iteration, pid, psoData, particles, i,
-                         processesNumber, inputBuffer, outputBuffer);
+                         processesNumber, neighborhoodIndex, inputBuffer,
+                         outputBuffer);
     processLog("COMPUTING", iteration, pid, omp_get_thread_num(), "done");
   }
 

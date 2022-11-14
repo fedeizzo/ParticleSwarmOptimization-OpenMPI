@@ -100,10 +100,10 @@ int main(int argc, char **argv) {
   /*          arguments.experimentName, arguments.numberOfProcesses, */
   /*          arguments.numberOfThreads); */
   int problemDimension = 10;
-  int particlesNumber = 4;
+  int particlesNumber = 6;
   int iterationsNumber = 10;
   int numberOfThreads = 2;
-  int neighborhoodPopulation = 4;
+  int neighborhoodPopulation = 3;
   double w = 1;
   double phi_1 = 0.8;
   double phi_2 = 0.8;
