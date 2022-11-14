@@ -26,7 +26,7 @@ INC_DIR := include
 DOC_DIR := docs
 
 # TARGET
-TARGET := $(BIN_DIR)/hpc
+TARGET := $(BIN_DIR)/particle-swarm-optimization
 
 # FILES
 SRC := $(shell find $(SRC_DIR) -name '*.c')

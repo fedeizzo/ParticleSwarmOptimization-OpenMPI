@@ -1,11 +1,5 @@
 #include "pso.h"
-#include "../../include/config.h"
 #include "../database/database.h"
-#include "../log/log.h"
-#include "../utils/utils.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 PSOData newPSOData(const int problemDimension, const int particlesNumber,
                    const int iterationsNumber, const int neighborhoodPopulation,
@@ -30,6 +24,79 @@ PSOData newPSOData(const int problemDimension, const int particlesNumber,
   psoData->fitnessFunction = fitnessFunction;
   psoData->distanceFunction = distanceFunction;
   psoData->fitnessChecker = fitnessChecker;
+  return psoData;
+}
+
+static int PSOIniHandler(PSOData psoData, const char *section, const char *name,
+                         const char *value) {
+  char *ptr;
+#define MATCH(s, n) strcmp(section, s) == 0 && strcmp(name, n) == 0
+  if (MATCH("global", "problemDimension"))
+    psoData->problemDimension = atoi(value);
+  else if (MATCH("global", "particlesNumber"))
+    psoData->particlesNumber = atoi(value);
+  else if (MATCH("global", "iterationsNumber"))
+    psoData->iterationsNumber = atoi(value);
+  else if (MATCH("global", "neighborhoodPopulation"))
+    psoData->neighborhoodPopulation = atoi(value);
+  else if (MATCH("velocity", "w"))
+    psoData->w = strtod(value, &ptr);
+  else if (MATCH("velocity", "phi_1"))
+    psoData->phi_1 = strtod(value, &ptr);
+  else if (MATCH("velocity", "phi_2"))
+    psoData->phi_2 = strtod(value, &ptr);
+  else if (MATCH("randomBounds", "initMaxPosition"))
+    psoData->initMaxPosition = strtod(value, &ptr);
+  else if (MATCH("randomBounds", "initMinPosition"))
+    psoData->initMinPosition = strtod(value, &ptr);
+  else if (MATCH("randomBounds", "initMaxVelocity"))
+    psoData->initMaxVelocity = strtod(value, &ptr);
+  else if (MATCH("randomBounds", "initMinVelocity"))
+    psoData->initMinVelocity = strtod(value, &ptr);
+  else if (MATCH("functions", "fitness")) {
+    if (strcmp(value, "sphere"))
+      psoData->fitnessFunction = sphere;
+    else if (strcmp(value, "wave"))
+      psoData->fitnessFunction = wave;
+    else {
+      log_error("Error reading pso data from ini file: fitness function %s not "
+                "implemented",
+                value);
+      return 1;
+    }
+  } else if (MATCH("functions", "distance")) {
+    if (strcmp(value, "euclidean"))
+      psoData->distanceFunction = euclideanDistance;
+    else {
+      log_error(
+          "Error reading pso data from ini file: distance function %s not "
+          "implemented",
+          value);
+      return 1;
+    }
+  } else if (MATCH("functions", "fitnessGoal")) {
+    if (strcmp(value, "minimum"))
+      psoData->fitnessChecker = minimize;
+    else if (strcmp(value, "maximum"))
+      psoData->fitnessChecker = minimize;
+    else {
+      log_error("Error reading pso data from ini file: fitness goal %s not "
+                "implemented",
+                value);
+      return 1;
+    }
+  } else
+    return 1;
+
+  return 0;
+}
+
+PSOData newPSODataFromFile(const char *path) {
+  PSOData psoData = (PSOData)malloc(sizeof(pso_data_t));
+  if (ini_parse(path, (ini_handler)PSOIniHandler, psoData) < 0) {
+    log_error("Error reading pso data from ini file");
+    exit(1);
+  }
   return psoData;
 }
 
@@ -90,10 +157,14 @@ void dumpParticles(Particle *particles, Database db, const int iteration_step,
   }
 }
 
-void particleSwarmOptimization(Particle *particles, PSOData psoData) {
+void particleSwarmOptimization(Particle *particles, PSOData psoData,
+                               const char *databasePath) {
   int _;
   int i;
-  Database db = newDatabase("./database.db", psoData->problemDimension);
+  bool useDB = strcmp(databasePath, "") == 0 ? false : true;
+  Database db;
+  if (useDB)
+    db = newDatabase(databasePath, psoData, -1, -1);
   Solution globalBestSolution;
   globalBestSolution = cloneSolution(particles[0]->current);
 
@@ -112,7 +183,9 @@ void particleSwarmOptimization(Particle *particles, PSOData psoData) {
     }
     log_info("Swarm optimization iteration %d/%d with best fitness %f", _ + 1,
              psoData->iterationsNumber, globalBestSolution->fitness);
-    dumpParticles(particles, db, _, psoData->particlesNumber);
+    if (useDB)
+      dumpParticles(particles, db, _, psoData->particlesNumber);
   }
-  destroyDatabase(db);
+  if (useDB)
+    destroyDatabase(db);
 }

@@ -6,6 +6,7 @@
 #include "../particle/particle.h"
 #include "../pso/pso.h"
 #include "../list/list.h"
+#include "../database/database.h"
 #include <math.h>
 #include <omp.h>
 #include <stdlib.h>
@@ -24,5 +25,5 @@ typedef process_particle_t *ProcessParticle;
 
 void processRoutine(const int numberOfProcesses, const int numberOfThreads,
                     const int processId, const int startingId,
-                    const int *processToNumberOfParticles, PSOData psoData);
+                    const int *processToNumberOfParticles, PSOData psoData, const char *databasePath);
 #endif

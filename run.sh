@@ -50,4 +50,4 @@ fi
 
 # Run the MPI program
 module load mpich-3.2
-mpirun.actual -n $PROCESS_NUMBER ~/hpc-2022/bin/hpc
+mpirun.actual -n $PROCESS_NUMBER ~/ParticleSwarmOptimization-OpenMPI/bin/particle-swarm-optimization

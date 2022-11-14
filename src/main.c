@@ -1,9 +1,7 @@
 #include "log/log.h"
-/* #include "particle/particle.h" */
 #include "problems/problems.h"
 #include "process/process.h"
 #include "pso/pso.h"
-/* #include "pso/multiprocess.h" */
 #include <argp.h>
 #include <error.h>
 #include <mpi.h>
@@ -14,33 +12,30 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-/* Program name and version */
-const char *argp_program_version = "HPC4DS 0.1";
-/* Program documentation. */
+const char *argp_program_version = "ParticleSwarmOptimization-OpenMPI 0.1";
 static char doc[] =
     "A Cooperating parallelized solution for Genetic Algorithm\n\
 A tool that takes a set of continuous or discrete variables and an optimization problem designed \
 to work with them. The goal is to find the optimal solution \
 by exploiting Genetic Algorithms and the computational power offered by the cluster";
 
-/* A description of the arguments we accept. */
-static char args_doc[] = "<experiment_name>";
+static char args_doc[] = "<config-file> <database-file>";
 
 /* Keys for options without short-options. */
 #define OPT_ABORT 1 /* –abort */
 
 /* The options we understand. */
 static struct argp_option options[] = {
-    {"number-of-processes", 'n', "COUNT", OPTION_ARG_OPTIONAL,
-     "Number of processes"},
     {"number-of-threads", 'm', "COUNT", OPTION_ARG_OPTIONAL,
      "Number of threads for process"},
+    {"use-openmpi", 'u', 0, 0, "Use OpenMPI"},
     {0}};
 
 /* Used by main to communicate with parse_opt. */
 struct arguments {
-  char *experimentName;
-  int numberOfProcesses;
+  char *configFile;
+  char *databaseFile;
+  bool useOpenMPI;
   int numberOfThreads;
 };
 
@@ -49,80 +44,69 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state) {
   /* Get the input argument from argp_parse, which we
      know is a pointer to our arguments structure. */
   struct arguments *arguments = state->input;
-  unsigned int eax = 11, ebx = 0, ecx = 1, edx = 0;
 
-  asm volatile("cpuid"
-               : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx)
-               : "0"(eax), "2"(ecx)
-               :);
   switch (key) {
-  case 'n':
-    arguments->numberOfProcesses = arg ? atoi(arg) : eax;
-    break;
   case 'm':
-    arguments->numberOfThreads = arg ? atoi(arg) : edx;
+    arguments->numberOfThreads = arg ? atoi(arg) : -1;
+    break;
+  case 'u':
+    arguments->useOpenMPI = true;
     break;
   case ARGP_KEY_NO_ARGS:
     argp_usage(state); /* No argument specified */
   case ARGP_KEY_ARG:
-    if (state->arg_num >= 1)
+    if (state->arg_num >= 2)
       argp_usage(state);
-    arguments->experimentName = arg;
+    else if (state->arg_num == 0)
+      arguments->configFile = arg;
+    else
+      arguments->databaseFile = arg;
     break;
   case ARGP_KEY_END:
-    /* argp_usage(state); */
+    if (state->arg_num < 1) {
+      argp_usage(state);
+    }
     break;
   default:
     return ARGP_ERR_UNKNOWN;
   }
   return 0;
 }
-/* Our argp parser. */
+
 static struct argp argp = {options, parse_opt, args_doc, doc};
 
-void printMatrix(int a[5][5]) {
-  for (int i = 0; i < 5; i++) {
-    printf("[ ");
-    for (int j = 0; j < 5; j++)
-      printf("%d, ", a[i][j]);
-    printf("]\n");
+bool isValidFile(const char *path) {
+  FILE *fp = fopen(path, "r");
+  if (!fp) {
+    fclose(fp);
+    return false;
+  } else {
+    fclose(fp);
+    return true;
   }
 }
 
 int main(int argc, char **argv) {
-  /* struct arguments arguments; */
+  struct arguments arguments;
+  arguments.numberOfThreads = 1;
+  arguments.useOpenMPI = false;
+  arguments.databaseFile = "";
 
-  /* argp_parse(&argp, argc, argv, 0, 0, &arguments); */
+  argp_parse(&argp, argc, argv, 0, 0, &arguments);
+  int numberOfThreads = arguments.numberOfThreads;
 
-  /* log_set_level(LOG_INFO); */
-  /* log_info("Experiment name: %s, %d processes, %d threads for each process",
-   */
-  /*          arguments.experimentName, arguments.numberOfProcesses, */
-  /*          arguments.numberOfThreads); */
-  int problemDimension = 10;
-  int particlesNumber = 6;
-  int iterationsNumber = 10;
-  int numberOfThreads = 2;
-  int neighborhoodPopulation = 3;
-  double w = 1;
-  double phi_1 = 0.8;
-  double phi_2 = 0.8;
-  double initMaxPosition = 30.0;
-  double initMinPosition = -30.0;
-  double initMaxVelocity = 10;
-  double initMinVelocity = -10;
-  bool USE_OPENMPI = true;
+  if (!isValidFile(arguments.configFile)) {
+    log_error("Provide valid config file");
+    exit(1);
+  }
+  PSOData psoData = newPSODataFromFile(arguments.configFile);
 
-  if (neighborhoodPopulation > particlesNumber) {
+  if (psoData->neighborhoodPopulation > psoData->particlesNumber) {
     log_error(
         "Neighborhood population must be lower or equal than particles number");
     exit(1);
   }
-  PSOData psoData = newPSOData(
-      problemDimension, particlesNumber, iterationsNumber,
-      neighborhoodPopulation, w, phi_1, phi_2, initMaxPosition, initMinPosition,
-      initMaxVelocity, initMinVelocity, *sphere, *euclideanDistance, *minimize);
-  if (!USE_OPENMPI) {
+  if (!arguments.useOpenMPI) {
     srand(0);
     // #################################################
     // # NO OPENMPI or openMP solution                 #
@@ -131,9 +115,9 @@ int main(int argc, char **argv) {
     log_set_level(LOG_INFO);
     Particle particles[psoData->particlesNumber];
     initParticles(particles, psoData, 0);
-    particleSwarmOptimization(particles, psoData);
+    particleSwarmOptimization(particles, psoData, arguments.databaseFile);
   } else {
-    log_set_level(LOG_ERROR);
+    log_set_level(LOG_INFO);
     // #################################################
     // # OPENMPI or openMP solution                    #
     // #################################################
@@ -143,7 +127,7 @@ int main(int argc, char **argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &process_id);
 
     // Impossible to paralleize
-    if (n_processes > particlesNumber) {
+    if (n_processes > psoData->particlesNumber) {
       if (process_id == 0)
         log_error(
             "Processes number must be lower or equal than particles number");
@@ -169,7 +153,7 @@ int main(int argc, char **argv) {
     // Otteniamo l'id della particella
     int startingId = process_id * particlesNumberPerProcess;
     processRoutine(n_processes, numberOfThreads, process_id, startingId,
-                   processToNumberOfParticles, psoData);
+                   processToNumberOfParticles, psoData, arguments.databaseFile);
     MPI_Finalize();
   }
   return 0;

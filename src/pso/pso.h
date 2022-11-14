@@ -1,9 +1,16 @@
 #ifndef __PSO_H__
 #define __PSO_H__
 
+#include "../../include/config.h"
+#include "../ini/ini.h"
+#include "../log/log.h"
 #include "../particle/particle.h"
+#include "../problems/problems.h"
 #include "../solution/solution.h"
+#include "../utils/utils.h"
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct {
   int problemDimension;
@@ -32,8 +39,8 @@ PSOData newPSOData(const int problemDimension, const int particlesNumber,
                    double (*fitnessFunction)(double *, int),
                    double (*distanceFunction)(double *, double *, int),
                    bool (*fitnessChecker)(double, double));
-
+PSOData newPSODataFromFile(const char *path);
 void destroyPSOData(PSOData psoData);
-void particleSwarmOptimization(Particle *particles, PSOData psoData);
+void particleSwarmOptimization(Particle *particles, PSOData psoData, const char *databasePath);
 bool initParticles(Particle *particles, PSOData psoData, int startingId);
 #endif

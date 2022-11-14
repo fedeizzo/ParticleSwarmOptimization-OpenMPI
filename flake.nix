@@ -4,7 +4,7 @@
   inputs.nixpkgs.url = "nixpkgs/nixos-22.05";
   outputs = { self, nixpkgs }:
     let
-      pname = "HPC_program";
+      pname = "pso";
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       runtimeDeps = with pkgs; [
@@ -16,7 +16,6 @@
         pkg-config
         glib
         llvmPackages_13.openmp
-        libyaml
       ];
       shellDeps = with pkgs; [
         python39

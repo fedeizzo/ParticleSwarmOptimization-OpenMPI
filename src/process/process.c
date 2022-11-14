@@ -149,7 +149,12 @@ void computeNeighbors(PSOData psoData, Particle *particles,
 
 void processRoutine(const int processesNumber, const int threadsNumber,
                     const int pid, const int startingId,
-                    const int *processToNumberOfParticles, PSOData psoData) {
+                    const int *processToNumberOfParticles, PSOData psoData,
+                    const char *databasePath) {
+  Database db;
+  bool useDB = strcmp(databasePath, "") || pid != 0 ? false : true;
+  if (useDB)
+    db = newDatabase(databasePath, psoData, threadsNumber, processesNumber);
   // Number of particles for process
   int processParticlesNumber = processToNumberOfParticles[pid];
 
@@ -196,14 +201,16 @@ void processRoutine(const int processesNumber, const int threadsNumber,
 
   // Parallel algorithm
   for (int iteration = 0; iteration < psoData->iterationsNumber; iteration++) {
-    if (processesNumber > 1)
+    if (processesNumber > 1) {
       MPI_Allgatherv(outputBuffer, processParticlesNumber, DT_BROADCAST_MESSAGE,
                      inputBuffer, processToNumberOfParticles, cumulatedSum,
                      DT_BROADCAST_MESSAGE, MPI_COMM_WORLD);
 
-    computeNeighbors(psoData, particles, neighborhoodIndex, distances,
-                     inputBuffer, processParticlesNumber);
-
+      computeNeighbors(psoData, particles, neighborhoodIndex, distances,
+                       inputBuffer, processParticlesNumber);
+      mergeArrays(inputBuffer, cumulatedSum, psoData->particlesNumber,
+                  processesNumber, psoData->fitnessChecker);
+    }
     processLog("GATHERING", iteration, pid, omp_get_thread_num(), "done");
 
     // TODO: integrate the neighbors in the compute new positions
@@ -213,6 +220,9 @@ void processRoutine(const int processesNumber, const int threadsNumber,
                          processesNumber, neighborhoodIndex, inputBuffer,
                          outputBuffer);
     processLog("COMPUTING", iteration, pid, omp_get_thread_num(), "done");
+    if (useDB)
+      for (int i = 0; i < processParticlesNumber; i++)
+        insertSolution(db, particles[i]->current, particles[i]->id, iteration);
   }
 
   // BEST FITNESS:
@@ -237,5 +247,7 @@ void processRoutine(const int processesNumber, const int threadsNumber,
   for (int i = 0; i < processParticlesNumber; i++)
     destroyParticle(particles[i]);
 
+  if (useDB)
+    destroyDatabase(db);
   MPI_Type_free(&DT_BROADCAST_MESSAGE);
 }

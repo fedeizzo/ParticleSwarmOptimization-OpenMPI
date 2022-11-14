@@ -26,6 +26,6 @@ WORKDIR /src
 RUN make
 
 FROM ubuntu:22.10
-COPY --from=builder /src/bin/hpc /src/bin/hpc
+COPY --from=builder /src/bin/particle-swarm-optimization /src/bin/particle-swarm-optimization
 COPY --from=builder /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu
-CMD [ "mpirun", "-n", "1", "/src/bin/hpc" ]
+CMD [ "mpirun", "-n", "1", "/src/bin/particle-swarm-optimization" ]
