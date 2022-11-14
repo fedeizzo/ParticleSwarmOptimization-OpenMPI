@@ -91,26 +91,31 @@ $(document).ready(function(){initNavTree('database_8h_source.html',''); initResi
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef __DATABASE_H__</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define __DATABASE_H__</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;../solution/solution.h&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;../utils/utils.h&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;sqlite3.h&gt;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="structdatabase__t.html">    8</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structdatabase__t.html">database_t</a> {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;  sqlite3 *db;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;  sqlite3_stmt *insertStmt;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;} <a class="code" href="structdatabase__t.html">database_t</a>;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">typedef</span> <a class="code" href="structdatabase__t.html">database_t</a> *<a class="code" href="structdatabase__t.html">Database</a>;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<a class="code" href="structdatabase__t.html">Database</a> newDatabase(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, <span class="keyword">const</span> <span class="keywordtype">int</span> solutionDimension);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keywordtype">void</span> insertSolution(<a class="code" href="structdatabase__t.html">Database</a> db, <span class="keyword">const</span> <a class="code" href="structsolution__t.html">Solution</a> solution, <span class="keyword">const</span> <span class="keywordtype">int</span> particleId,</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                    <span class="keyword">const</span> <span class="keywordtype">int</span> iteration_step);</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keywordtype">void</span> destroyDatabase(<a class="code" href="structdatabase__t.html">Database</a> db);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;../pso/pso.h&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;../solution/solution.h&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;../utils/utils.h&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;sqlite3.h&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="structdatabase__t.html">    9</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structdatabase__t.html">database_t</a> {</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;  sqlite3 *db;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  sqlite3_stmt *insertSolutionStmt;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;  sqlite3_stmt *insertExperimentStmt;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  <span class="keywordtype">int</span> experiment_id;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;} <a class="code" href="structdatabase__t.html">database_t</a>;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">typedef</span> <a class="code" href="structdatabase__t.html">database_t</a> *<a class="code" href="structdatabase__t.html">Database</a>;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<a class="code" href="structdatabase__t.html">Database</a> newDatabase(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, <a class="code" href="structpso__data__t.html">PSOData</a> psoData,</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                     <span class="keyword">const</span> <span class="keywordtype">int</span> threadsNumber, <span class="keyword">const</span> <span class="keywordtype">int</span> processesNumber);</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keywordtype">void</span> insertSolution(<a class="code" href="structdatabase__t.html">Database</a> db, <span class="keyword">const</span> <a class="code" href="structsolution__t.html">Solution</a> solution, <span class="keyword">const</span> <span class="keywordtype">int</span> particleId,</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;                    <span class="keyword">const</span> <span class="keywordtype">int</span> iteration_step);</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keywordtype">void</span> destroyDatabase(<a class="code" href="structdatabase__t.html">Database</a> db);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="astructsolution__t_html"><div class="ttname"><a href="structsolution__t.html">solution_t</a></div><div class="ttdef"><b>Definition:</b> solution.h:19</div></div>
-<div class="ttc" id="astructdatabase__t_html"><div class="ttname"><a href="structdatabase__t.html">database_t</a></div><div class="ttdef"><b>Definition:</b> database.h:8</div></div>
+<div class="ttc" id="astructdatabase__t_html"><div class="ttname"><a href="structdatabase__t.html">database_t</a></div><div class="ttdef"><b>Definition:</b> database.h:9</div></div>
+<div class="ttc" id="astructpso__data__t_html"><div class="ttname"><a href="structpso__data__t.html">pso_data_t</a></div><div class="ttdef"><b>Definition:</b> pso.h:15</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['list_5ft_46',['list_t',['../structlist__t.html',1,'']]],
-  ['log_5fevent_47',['log_Event',['../structlog__Event.html',1,'']]]
+  ['ini_5fparse_5fstring_5fctx_47',['ini_parse_string_ctx',['../structini__parse__string__ctx.html',1,'']]]
 ];
