@@ -88,9 +88,8 @@ void updatePosition(Particle particle, double (*fitnessFunction)(double *, int),
   for (int i = 0; i < particle->dimension; i++)
     particle->current->pos[i] += particle->velocity[i];
 
-  oldFitness = particle->current->fitness;
+  oldFitness = particle->personalBest->fitness;
   updateFitness(particle, fitnessFunction);
-
   if (fitnessChecker(particle->current->fitness, oldFitness)) {
     destroySolution(particle->personalBest);
     particle->personalBest = cloneSolution(particle->current);

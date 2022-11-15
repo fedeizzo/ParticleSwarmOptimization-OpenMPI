@@ -24,6 +24,9 @@ typedef struct {
   double initMinPosition;
   double initMaxVelocity;
   double initMinVelocity;
+  char *fitnessFunctionName;
+  char *distanceFunctionName;
+  char *fitnessCheckerName;
   double (*fitnessFunction)(double *, int);
   double (*distanceFunction)(double *, double *, int);
   bool (*fitnessChecker)(double, double);

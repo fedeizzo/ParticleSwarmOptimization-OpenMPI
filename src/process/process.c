@@ -208,8 +208,6 @@ void processRoutine(const int processesNumber, const int threadsNumber,
 
       computeNeighbors(psoData, particles, neighborhoodIndex, distances,
                        inputBuffer, processParticlesNumber);
-      mergeArrays(inputBuffer, cumulatedSum, psoData->particlesNumber,
-                  processesNumber, psoData->fitnessChecker);
     }
     processLog("GATHERING", iteration, pid, omp_get_thread_num(), "done");
 

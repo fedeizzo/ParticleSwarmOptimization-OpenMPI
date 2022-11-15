@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-const int STR_BUFFER_SIZE = 400;
+const int STR_BUFFER_SIZE = 800;
 const char *CREATE_EXPERIMENT_TABLE =
     "CREATE TABLE IF NOT EXISTS experiments ("
     "experiment_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
@@ -21,7 +21,10 @@ const char *CREATE_EXPERIMENT_TABLE =
     "init_max_position REAL NOT NULL,"
     "init_min_position REAL NOT NULL,"
     "init_max_velocity REAL NOT NULL,"
-    "init_min_velocity REAL NOT NULL"
+    "init_min_velocity REAL NOT NULL,"
+    "fitness_function TEXT NOT NULL,"
+    "distance_function TEXT NOT NULL,"
+    "fitness_goal TEXT NOT NULL"
     ");";
 const char *GET_EXPERIMENT_ID =
     "SELECT * FROM experiments ORDER BY experiment_id DESC LIMIT 1;";
@@ -44,8 +47,9 @@ const char *EXPERIMENT_ADD_EXPERIMENT =
     "INSERT INTO experiments(problem_dimension, particles_number, "
     "iterations_number, threads_number, processes_number, "
     "neighborhood_population, inertia, phi_1, phi_2, init_max_position, "
-    "init_min_position, init_max_velocity, init_min_velocity) values "
-    "(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    "init_min_position, init_max_velocity, init_min_velocity, "
+    "fitness_function, distance_function, fitness_goal) values "
+    "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 void createExperimentTable(sqlite3 *db) {
   log_info("Create experiment table");
@@ -166,6 +170,9 @@ void insertExperiment(Database db, PSOData psoData, const int threadsNumber,
   sqlite3_bind_double(stmt, 11, psoData->initMinPosition);
   sqlite3_bind_double(stmt, 12, psoData->initMaxVelocity);
   sqlite3_bind_double(stmt, 13, psoData->initMinVelocity);
+  sqlite3_bind_text(stmt, 14, psoData->fitnessFunctionName, strlen(psoData->fitnessFunctionName) * sizeof(char), SQLITE_STATIC);
+  sqlite3_bind_text(stmt, 15, psoData->distanceFunctionName, strlen(psoData->distanceFunctionName) * sizeof(char), SQLITE_STATIC);
+  sqlite3_bind_text(stmt, 16, psoData->fitnessCheckerName, strlen(psoData->fitnessCheckerName) * sizeof(char), SQLITE_STATIC);
   int rc = sqlite3_step(stmt);
   if (rc != SQLITE_DONE)
     log_error("Error executing experiment table statement: %s",

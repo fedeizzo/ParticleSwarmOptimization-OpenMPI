@@ -7,6 +7,10 @@
 double sphere(double *array, int dimensionNumber);
 double wave(double *array, int dimensionNumber);
 double euclideanDistance(double *p1, double *p2, int dimensionNumber);
+double Easom(double *array, int dimensionNumber);
+double Ackley(double *array, int dimensionNumber);
+double Himmelblau(double *array, int dimensionNumber);
+double HolderTable(double *array, int dimensionNumber);
 bool maximize(double d1, double d2);
 bool minimize(double d1, double d2);
 #endif

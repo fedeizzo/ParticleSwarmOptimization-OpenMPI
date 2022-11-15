@@ -94,15 +94,17 @@ int main(int argc, char **argv) {
 
   argp_parse(&argp, argc, argv, 0, 0, &arguments);
   int numberOfThreads = arguments.numberOfThreads;
+  log_set_level(LOG_INFO);
 
   if (!isValidFile(arguments.configFile)) {
-    log_error("Provide valid config file");
+    log_error("%-10s :: %s", "INIT", "Provide valid config file");
     exit(1);
   }
   PSOData psoData = newPSODataFromFile(arguments.configFile);
 
   if (psoData->neighborhoodPopulation > psoData->particlesNumber) {
     log_error(
+        "%-10s :: %s", "INIT",
         "Neighborhood population must be lower or equal than particles number");
     exit(1);
   }
@@ -111,13 +113,10 @@ int main(int argc, char **argv) {
     // #################################################
     // # NO OPENMPI or openMP solution                 #
     // #################################################
-    /* log_info("Particles initialization"); */
-    log_set_level(LOG_INFO);
     Particle particles[psoData->particlesNumber];
     initParticles(particles, psoData, 0);
     particleSwarmOptimization(particles, psoData, arguments.databaseFile);
   } else {
-    log_set_level(LOG_INFO);
     // #################################################
     // # OPENMPI or openMP solution                    #
     // #################################################

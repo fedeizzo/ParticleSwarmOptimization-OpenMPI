@@ -1,4 +1,6 @@
 #include "./problems.h"
+#define PI 3.141592654
+#define E 2.71828
 
 double sphere(double *array, int dimensionNumber) {
   double squared_sum = 0;
@@ -14,11 +16,37 @@ double wave(double *array, int dimensionNumber) {
   int i;
   for (i = 0; i < dimensionNumber; i++)
     if (i == 0)
-	squared_sum += array[i] * array[i] * array[i];
+      squared_sum += array[i] * array[i] * array[i];
     else
-	squared_sum += array[i] * array[i];
+      squared_sum += array[i] * array[i];
 
   return squared_sum;
+}
+
+double Easom(double *array, int dimensionNumber) {
+  double x = array[0];
+  double y = array[1];
+  return -cos(x) * cos(y) * exp(-((x - PI) * (x - PI) + (y - PI) * (y - PI)));
+}
+
+double Ackley(double *array, int dimensionNumber) {
+  double x = array[0];
+  double y = array[1];
+  return -20.0 * exp(-0.2 * sqrt(0.5 * (x * x + y * y))) -
+         exp(0.5 * (cos(2 * PI * x) + cos(2 * PI * y))) + E + 20;
+}
+
+double Himmelblau(double *array, int dimensionNumber) {
+  double x = array[0];
+  double y = array[1];
+  return (x * x + y - 11) * (x * x + y - 11) +
+         (x + y * y - 7) * (x + y * y - 7);
+}
+
+double HolderTable(double *array, int dimensionNumber) {
+  double x = array[0];
+  double y = array[1];
+  return -fabs(sin(x) * cos(y) * exp(fabs(1 - (sqrt(x * x + y * y) / PI))));
 }
 
 double euclideanDistance(double *p1, double *p2, int dimensionNumber) {

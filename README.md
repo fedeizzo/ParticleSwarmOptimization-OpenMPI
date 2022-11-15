@@ -1,6 +1,19 @@
 # Particle Swarm Optimization OpenMPI
 /ParticleSwarmOptimization-openMPI/ provides an basic implementation of [PSO](https://en.wikipedia.org/wiki/Particle_swarm_optimization) with support for cluster computation through [OpenMPI](https://www.open-mpi.org/), moreover it uses [OpenMP](https://www.openmp.org/) for thread parallelization.
 
+## How to use
+### Build
+```bash
+make
+```
+
+### Run
+```bash
+./bin/particle-swarm-optimization pso-data.ini
+```
+
+for optional arguments plese execute `./bin/particle-swarm-optimization --help`.
+
 ## OpeMPI
 OpeMPI library is used to convey information across processes running on different nodes of a cluster. The basic information unit is composed as a broadcast message shared over the whole network, in this way all particles of Particle Swarm Optimization (PSO) are able to know all information associated to other members of the swarm.
 
