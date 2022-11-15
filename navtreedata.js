@@ -24,8 +24,12 @@ var NAVTREE =
 [
   [ "PSO - OpenMPI, OpenMP", "index.html", [
     [ "Particle Swarm Optimization OpenMPI", "index.html", [
-      [ "OpeMPI", "index.html#autotoc_md1", null ],
-      [ "Process", "index.html#autotoc_md2", null ]
+      [ "How to use", "index.html#autotoc_md1", [
+        [ "Build", "index.html#autotoc_md2", null ],
+        [ "Run", "index.html#autotoc_md3", null ]
+      ] ],
+      [ "OpeMPI", "index.html#autotoc_md4", null ],
+      [ "Process", "index.html#autotoc_md5", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],

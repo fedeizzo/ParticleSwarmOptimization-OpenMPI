@@ -1,8 +1,11 @@
 var structpso__data__t =
 [
     [ "distanceFunction", "structpso__data__t.html#aa3f0720255b7a7f93d69c2ab6d380e62", null ],
+    [ "distanceFunctionName", "structpso__data__t.html#ab9f68e38aee7a942fbf8bc59754c6090", null ],
     [ "fitnessChecker", "structpso__data__t.html#adb0be254f799aa3109fc0de3f63de43b", null ],
+    [ "fitnessCheckerName", "structpso__data__t.html#aa9256856a644d7364f7c7654a48eaecf", null ],
     [ "fitnessFunction", "structpso__data__t.html#a60a091cb315165f3475e7e406ec2d9db", null ],
+    [ "fitnessFunctionName", "structpso__data__t.html#adfb5cd55dae3af11d688dd8dc4256486", null ],
     [ "initMaxPosition", "structpso__data__t.html#a5efdac3d75a8535d177a7e4c1f740936", null ],
     [ "initMaxVelocity", "structpso__data__t.html#a5540b22877dba5c7287e927298a9a5e3", null ],
     [ "initMinPosition", "structpso__data__t.html#a8a1cd309010621954086143b590ab18e", null ],
