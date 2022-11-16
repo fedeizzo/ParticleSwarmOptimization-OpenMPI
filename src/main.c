@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
 
   argp_parse(&argp, argc, argv, 0, 0, &arguments);
   int numberOfThreads = arguments.numberOfThreads;
-  log_set_level(LOG_INFO);
+  log_set_level(LOG_ERROR);
 
   if (!isValidFile(arguments.configFile)) {
     log_error("%-10s :: %s", "INIT", "Provide valid config file");
@@ -108,13 +108,18 @@ int main(int argc, char **argv) {
         "Neighborhood population must be lower or equal than particles number");
     exit(1);
   }
+  log_info("%-10s :: %s", "INIT",
+           arguments.useOpenMPI == 1 ? "Using parallel openMPI version"
+                                     : "Using serial version");
   if (!arguments.useOpenMPI) {
     srand(0);
+    omp_set_num_threads(0);
+    omp_set_max_active_levels(0);
     // #################################################
     // # NO OPENMPI or openMP solution                 #
     // #################################################
     Particle particles[psoData->particlesNumber];
-    initParticles(particles, psoData, 0);
+    initParticles(particles, psoData->particlesNumber, psoData, 0);
     particleSwarmOptimization(particles, psoData, arguments.databaseFile);
   } else {
     // #################################################

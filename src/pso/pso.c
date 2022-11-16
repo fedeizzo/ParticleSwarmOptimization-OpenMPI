@@ -92,7 +92,7 @@ static int PSOIniHandler(PSOData psoData, const char *section, const char *name,
                 value);
       return 1;
     }
-    psoData->fitnessFunctionName = (char*) malloc(strlen(value) * sizeof(char));
+    psoData->fitnessFunctionName = (char *)malloc(strlen(value) * sizeof(char));
     strcpy(psoData->fitnessFunctionName, value);
     log_debug("%-10s :: fitness function  :: %s", "PSODATA", value);
   } else if (MATCH("functions", "distance")) {
@@ -106,7 +106,8 @@ static int PSOIniHandler(PSOData psoData, const char *section, const char *name,
       return 1;
     }
 
-    psoData->distanceFunctionName = (char*) malloc(strlen(value) * sizeof(char));
+    psoData->distanceFunctionName =
+        (char *)malloc(strlen(value) * sizeof(char));
     strcpy(psoData->distanceFunctionName, value);
     log_debug("%-10s :: distance function :: %s", "PSODATA", value);
   } else if (MATCH("functions", "fitnessGoal")) {
@@ -120,7 +121,7 @@ static int PSOIniHandler(PSOData psoData, const char *section, const char *name,
                 value);
       return 1;
     }
-    psoData->fitnessCheckerName = (char*) malloc(strlen(value) * sizeof(char));
+    psoData->fitnessCheckerName = (char *)malloc(strlen(value) * sizeof(char));
     strcpy(psoData->fitnessCheckerName, value);
     log_debug("%-10s :: fitness goal      :: %s", "PSODATA", value);
   } else
@@ -140,6 +141,41 @@ PSOData newPSODataFromFile(const char *path) {
 
 void destroyPSOData(PSOData psoData) { free(psoData); }
 
+void computeDistancesSerial(Particle particle, int *indexes, double *distances,
+                      PSOData psoData, Particle *particles) {
+#pragma omp for
+  for (int i = 0; i < psoData->particlesNumber; i++) {
+    indexes[i] = i;
+    distances[i] = psoData->distanceFunction(particle->current->pos,
+                                             particles[i]->current->pos,
+                                             particle->current->dimension);
+  }
+}
+
+void sortDistancesSerial(int *neighborhoodIndex, double *distances,
+                   const int dimension) {
+#pragma omp parallel
+  {
+#pragma omp single
+    quicksort(neighborhoodIndex, distances, 0, dimension - 1);
+  }
+}
+
+void computeNeighborsSerial(PSOData psoData, Particle *particles,
+                      int **neighborhoodIndex, double **distances,
+                      const int processParticlesNumber) {
+// Compute the distances for each of my particle using parallelism
+#pragma omp parallel for
+  for (int i = 0; i < processParticlesNumber; i++)
+    computeDistancesSerial(particles[i], neighborhoodIndex[i], distances[i], psoData,
+                     particles);
+
+// Sort the distances for each of my particle
+#pragma omp for
+  for (int i = 0; i < processParticlesNumber; i++)
+    sortDistancesSerial(neighborhoodIndex[i], distances[i], psoData->particlesNumber);
+}
+
 void updateGlobal(Particle *particles, Solution globalBest,
                   const int numberOfParticles,
                   bool (*fitnessChecker)(double, double));
@@ -157,33 +193,46 @@ void updateGlobal(Particle *particles, Solution globalBest,
       globalBest = cloneSolution(particle->current);
     }
   }
+}
 
-  for (i = 0; i < numberOfParticles; i++) { // n particle
-    log_debug("%-10s :: Update social best solution of particle %d", "COMPUTING", i);
-    Particle particle = particles[i];
-    destroySolution(particle->socialBest);
-    particle->socialBest = cloneSolution(globalBest);
+void obtainBestSocialFitnessSerial(Particle particle, int *indexes,
+                             double *bestFitness, int *indexBestFitness,
+                             PSOData psoData, Particle *particles) {
+  *bestFitness = particles[indexes[0]]->current->fitness;
+  *indexBestFitness = 0;
+  // TODO: understand if it is possible to parallelize
+  for (int i = 0; i < psoData->neighborhoodPopulation; i++) {
+    double fitness = particles[indexes[i]]->current->fitness;
+    if (psoData->fitnessChecker(fitness, *bestFitness)) {
+      *bestFitness = fitness;
+      *indexBestFitness = i;
+    }
   }
 }
 
-bool initParticles(Particle *particles, PSOData psoData, int startingId) {
-  int i;
-  int rc;
-  Particle particle;
-  // TODO could be parallelized
-  for (i = 0; i < psoData->particlesNumber; i++) {
-    log_debug("%-10s :: Initializing particle %d/%d", "INIT",
-              i + 1 + startingId, psoData->particlesNumber);
-    particle = newParticle(i + startingId, psoData->problemDimension,
-                           psoData->initMaxPosition, psoData->initMinPosition,
-                           psoData->initMaxVelocity, psoData->initMinVelocity,
-                           psoData->fitnessFunction);
-    rc = checkAllocationError(particle);
-    if (rc == FAILURE)
-      return false;
+void updateSocialSerial(Particle particle, int *indexes, PSOData psoData, Particle *particles) {
+  double bestFitness;
+  int indexBestFitness;
+  obtainBestSocialFitnessSerial(particle, indexes, &bestFitness,
+                          &indexBestFitness, psoData, particles);
+  destroySolution(particle->socialBest);
+  particle->socialBest = cloneSolution(particles[indexBestFitness]->current);
+  log_debug("%-10s :: Update social best solution of particle %d", "COMPUTING",
+            particle->id);
+}
+
+void initParticles(Particle *particles, const int particlesNumber,
+                   PSOData psoData, const int startingId) {
+#pragma omp parallel for
+  for (int i = 0; i < particlesNumber; i++) {
+    Particle particle = newParticle(
+        i + startingId, psoData->problemDimension, psoData->initMaxPosition,
+        psoData->initMinPosition, psoData->initMaxVelocity,
+        psoData->initMinVelocity, psoData->fitnessFunction);
     particles[i] = particle;
+    log_debug("%-10s :: Initializing particle %d in range %d-%d", "INIT",
+              i + 1 + startingId, startingId, startingId + particlesNumber);
   }
-  return true;
 }
 
 void dumpParticles(Particle *particles, Database db, const int iteration_step,
@@ -205,12 +254,25 @@ void particleSwarmOptimization(Particle *particles, PSOData psoData,
   Solution globalBestSolution;
   globalBestSolution = cloneSolution(particles[0]->current);
 
+  int **neighborhoodIndex =
+      (int **)malloc(sizeof(int *) * psoData->particlesNumber);
+  double **distances =
+      (double **)malloc(sizeof(double *) * psoData->particlesNumber);
+#pragma omp parallel for
+  for (int i = 0; i < psoData->particlesNumber; i++) {
+    neighborhoodIndex[i] =
+        (int *)malloc(sizeof(int) * psoData->particlesNumber);
+    distances[i] = (double *)malloc(sizeof(double) * psoData->particlesNumber);
+  }
+
   for (_ = 0; _ < psoData->iterationsNumber; _++) {
+    computeNeighborsSerial(psoData, particles, neighborhoodIndex, distances,
+                     psoData->particlesNumber);
     updateGlobal(particles, globalBestSolution, psoData->particlesNumber,
                  psoData->fitnessChecker);
     for (i = 0; i < psoData->particlesNumber; i++) {
       Particle particle = particles[i];
-
+      updateSocialSerial( particle, neighborhoodIndex[i], psoData, particles);
       updateVelocity(particle, psoData->w, psoData->phi_1, psoData->phi_2);
       log_debug("%-10s :: Iteration %d/%d particle %d/%d velocity updated",
                 "COMPUTING", _ + 1, psoData->iterationsNumber, i + 1,
@@ -226,6 +288,16 @@ void particleSwarmOptimization(Particle *particles, PSOData psoData,
     if (useDB)
       dumpParticles(particles, db, _, psoData->particlesNumber);
   }
+  printf("Best fitness %f\n", globalBestSolution->fitness);
+
+  for (int i = 0; i < psoData->particlesNumber; i++) {
+    free(neighborhoodIndex[i]);
+    free(distances[i]);
+  }
+  free(neighborhoodIndex);
+  free(distances);
+  for (int i = 0; i < psoData->particlesNumber; i++)
+    destroyParticle(particles[i]);
   if (useDB)
     destroyDatabase(db);
 }

@@ -48,26 +48,22 @@ Particle newParticle(int id, int problemDimension, double max, double min,
                      double (*fitnessFunction)(double *, int)) {
   Particle particle = NULL;
   particle = (Particle)malloc(sizeof(struct particle_t));
-  int rc = checkAllocationError(particle);
-  if (rc == SUCCESS) {
-    particle->id = id;
-    particle->dimension = problemDimension;
-    particle->current = newSolution(problemDimension);
-    randomArrayInitialization(particle->current->pos, problemDimension, min,
-                              max);
-    particle->velocity = (double *)malloc(problemDimension * sizeof(double));
-    randomArrayInitialization(particle->velocity, problemDimension, v_min / 3,
-                              v_max / 3);
-    updateFitness(particle, fitnessFunction);
+  particle->id = id;
+  particle->dimension = problemDimension;
+  particle->current = newSolution(problemDimension);
+  randomArrayInitialization(particle->current->pos, problemDimension, min, max);
+  particle->velocity = (double *)malloc(problemDimension * sizeof(double));
+  randomArrayInitialization(particle->velocity, problemDimension, v_min / 3,
+                            v_max / 3);
+  updateFitness(particle, fitnessFunction);
 
-    particle->personalBest = cloneSolution(particle->current);
-    particle->socialBest = cloneSolution(particle->current);
-  }
+  particle->personalBest = cloneSolution(particle->current);
+  particle->socialBest = cloneSolution(particle->current);
   return particle;
 }
 
 void updateVelocity(Particle particle, double w, double phi_1, double phi_2) {
-  // TODO: parallelizable
+#pragma omp parallel for
   for (int i = 0; i < particle->dimension; i++) {
     double v = particle->velocity[i];
     double pbp = particle->personalBest->pos[i];
@@ -84,7 +80,7 @@ void updateVelocity(Particle particle, double w, double phi_1, double phi_2) {
 void updatePosition(Particle particle, double (*fitnessFunction)(double *, int),
                     bool (*fitnessChecker)(double, double)) {
   double oldFitness;
-  // TODO parallelizable
+#pragma omp parallel for
   for (int i = 0; i < particle->dimension; i++)
     particle->current->pos[i] += particle->velocity[i];
 

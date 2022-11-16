@@ -100,6 +100,7 @@ char *logSolutionMessage(solution_t message) {
 void includeSolution(solution_t *message, Solution solution) {
   message->fitness = solution->fitness;
   message->dimension = solution->dimension;
+#pragma omp parallel for
   for (int i = 0; i < solution->dimension; i++)
     message->pos[i] = solution->pos[i];
 }

@@ -13,6 +13,7 @@ void destroySolution(Solution solution) { free(solution); }
 
 Solution cloneSolution(Solution solution) {
   Solution new = (Solution)malloc(sizeof(struct solution_t));
+#pragma omp parallel for
   for (int i = 0; i < solution->dimension; i++)
     new->pos[i] = solution->pos[i];
 

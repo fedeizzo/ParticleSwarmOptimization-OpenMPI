@@ -1,12 +1,13 @@
 #ifndef __PROCESS_H_
 #define __PROCESS_H_
 
+#include "../database/database.h"
+#include "../list/list.h"
 #include "../log/log.h"
 #include "../message/message.h"
 #include "../particle/particle.h"
 #include "../pso/pso.h"
-#include "../list/list.h"
-#include "../database/database.h"
+#include "../sort/sort.h"
 #include <math.h>
 #include <omp.h>
 #include <stdlib.h>

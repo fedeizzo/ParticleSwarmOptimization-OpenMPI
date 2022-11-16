@@ -8,6 +8,7 @@
 #include "../problems/problems.h"
 #include "../solution/solution.h"
 #include "../utils/utils.h"
+#include "../sort/sort.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,5 +46,5 @@ PSOData newPSOData(const int problemDimension, const int particlesNumber,
 PSOData newPSODataFromFile(const char *path);
 void destroyPSOData(PSOData psoData);
 void particleSwarmOptimization(Particle *particles, PSOData psoData, const char *databasePath);
-bool initParticles(Particle *particles, PSOData psoData, int startingId);
+void initParticles(Particle *particles, const int particlesNumber, PSOData psoData, const int startingId);
 #endif
