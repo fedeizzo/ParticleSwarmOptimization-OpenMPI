@@ -16,8 +16,6 @@ jobs:
     - uses: actions/checkout@v3
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
-      with:
-        platforms: "linux/amd64"
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
     - name: Login to DockerHub
@@ -33,3 +31,4 @@ jobs:
         platforms: linux/amd64,linux/arm64
         push: true
         tags: pso:latest
+        platforms: "linux/amd64"
