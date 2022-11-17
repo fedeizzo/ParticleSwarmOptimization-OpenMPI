@@ -2,9 +2,11 @@
 
 # Directives to PBS
 
-#PBS -l select=1:ncpus=1:mem=1mb
+#PBS -l select=1:ncpus=5:mem=1mb
 #PBS -l walltime=0:05:00
 #PBS -q short_cpuQ
+#PBS -o run_output.txt
+#PBS -e run_error.txt
 
 # SCRIPT: run.sh
 # AUTHOR: Samuele Bortolotti <samuele@studenti.unitn.it>
@@ -16,8 +18,8 @@
 
 # If number of processes is not specified, then declare it
 if [ -z $PROCESS_NUMBER ]; then
-  PROCESS_NUMBER=2
-  CONFIG_PATH="~/ParticleSwarmOptimization-OpenMPI/pso-data.ini"
+  PROCESS_NUMBER=5
+  CONFIG_PATH="$HOME/ParticleSwarmOptimization-OpenMPI/pso-data.ini"
   NUMBER_OF_THREADS=1
 fi
 
@@ -70,12 +72,13 @@ if [ $# -eq 1 ] && [[ $1 =~ ^[[:digit:]]+$ ]]; then
 fi
 
 # Run the MPI program
+echo $HOSTNAME
+module load singularity-3.4.0 mpich-3.2.1--gcc-9.1.0
 mpiexec -n $PROCESS_NUMBER udocker run \
        -v $CONFIG_PATH:/src/bin/pso-data.ini \
-       --hostenv --hostauth --user=${USERID} \
-       pso:latest \
+       --hostenv --hostauth --user=$(id -u) --nobanner \
+       pso \
        ./particle-swarm-optimization \
        -u \
        --number-of-threads=$NUMBER_OF_THREADS \
        pso-data.ini
-
