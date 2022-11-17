@@ -37,7 +37,7 @@ update_container() {
     colorPrint "Creating container from latest image, this operation may take a while"
     udocker create --name=pso --force fedeizzo/pso:latest
     colorPrint "Done"
-    udocker setup --execmode=S1 pso
+    udocker setup --execmode=F4 pso
 }
 
 usage() {
@@ -73,8 +73,7 @@ fi
 
 # Run the MPI program
 echo $HOSTNAME
-module load singularity-3.4.0 mpich-3.2.1--gcc-9.1.0
-mpiexec -n $PROCESS_NUMBER udocker run \
+time mpiexec -n $PROCESS_NUMBER udocker run \
        -v $CONFIG_PATH:/src/bin/pso-data.ini \
        --hostenv --hostauth --user=$(id -u) --nobanner \
        pso \
