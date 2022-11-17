@@ -21,13 +21,12 @@ jobs:
     - name: Login to DockerHub
       uses: docker/login-action@v2
       with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Build and push
       uses: docker/build-push-action@v3
       with:
         context: .
         platforms: linux/amd64
         push: true
-        tags: pso:latest
+        tags: fedeizzo/pso:latest
