@@ -254,7 +254,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>initalizeBroacastMess
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;{ free(message); }</div>
+<div class="fragment"><div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;{ free(message); }</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -295,9 +295,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>initalizeBroacastMess
 <div class="fragment"><div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                                                             {</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  message-&gt;<a class="code" href="structsolution__t.html#ad6d8a7a10e69350738a3d4f5d21e1670">fitness</a> = solution-&gt;<a class="code" href="structsolution__t.html#ad6d8a7a10e69350738a3d4f5d21e1670">fitness</a>;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  message-&gt;<a class="code" href="structsolution__t.html#ae5d00140a640db91da86729f8eb59a6e">dimension</a> = solution-&gt;<a class="code" href="structsolution__t.html#ae5d00140a640db91da86729f8eb59a6e">dimension</a>;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; solution-&gt;<a class="code" href="structsolution__t.html#ae5d00140a640db91da86729f8eb59a6e">dimension</a>; i++)</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    message-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i] = solution-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i];</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">#pragma omp parallel for</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; solution-&gt;<a class="code" href="structsolution__t.html#ae5d00140a640db91da86729f8eb59a6e">dimension</a>; i++)</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    message-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i] = solution-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i];</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -318,14 +319,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>initalizeBroacastMess
 
 <p>Create a new brodcast message. </p>
 <dl class="section return"><dt>Returns</dt><dd>the created broadcast message </dd></dl>
-<div class="fragment"><div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                                       {</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  <a class="code" href="structbroadcastMessage__t.html">BroadcastMessage</a> message =</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;      (<a class="code" href="message_8h.html#ac4390acce0f4c32d6520afbd37b580b6">BroadcastMessage</a>)malloc(<span class="keyword">sizeof</span>(<a class="code" href="structbroadcastMessage__t.html">broadcastMessage_t</a>));</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;  <span class="keywordflow">if</span> (checkAllocationError(message) == FAILURE) {</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    perror(<span class="stringliteral">&quot;Error in allocation of the broadcast message\n&quot;</span>);</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  }</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  <span class="keywordflow">return</span> message;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;}</div>
+<div class="fragment"><div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                                       {</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  <a class="code" href="structbroadcastMessage__t.html">BroadcastMessage</a> message =</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;      (<a class="code" href="message_8h.html#ac4390acce0f4c32d6520afbd37b580b6">BroadcastMessage</a>)malloc(<span class="keyword">sizeof</span>(<a class="code" href="structbroadcastMessage__t.html">broadcastMessage_t</a>));</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  <span class="keywordflow">if</span> (checkAllocationError(message) == FAILURE) {</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    perror(<span class="stringliteral">&quot;Error in allocation of the broadcast message\n&quot;</span>);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  }</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;  <span class="keywordflow">return</span> message;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
