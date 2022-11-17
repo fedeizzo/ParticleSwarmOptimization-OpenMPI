@@ -24,8 +24,9 @@ ADD . /src
 # install
 WORKDIR /src
 RUN make
+WORKDIR /src/bin
 
-FROM ubuntu:22.10
-COPY --from=builder /src/bin/particle-swarm-optimization /src/bin/particle-swarm-optimization
-COPY --from=builder /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu
-CMD [ "mpirun", "-n", "1", "/src/bin/particle-swarm-optimization" ]
+# FROM ubuntu:22.10
+# COPY --from=builder /src/bin/particle-swarm-optimization /src/bin/particle-swarm-optimization
+# COPY --from=builder /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu
+# CMD [ "mpirun", "-n", "1", "/src/bin/particle-swarm-optimization" ]
