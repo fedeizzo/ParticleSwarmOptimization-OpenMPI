@@ -31,3 +31,4 @@ jobs:
         platforms: linux/amd64,linux/arm64
         push: true
         tags: pso:latest
+        platforms: "linux/amd64"
