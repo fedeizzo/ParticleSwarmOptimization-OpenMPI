@@ -17,7 +17,26 @@
 # If number of processes is not specified, then declare it
 if [ -z $PROCESS_NUMBER ]; then
   PROCESS_NUMBER=2
+  CONFIG_PATH="~/ParticleSwarmOptimization-OpenMPI/pso-data.ini"
+  NUMBER_OF_THREADS=1
 fi
+
+colorPrint() {
+  echo -e "$(tput setaf 6)$1$(tput sgr0)"
+}
+
+errorPrint() {
+  echo -e "$(tput setaf 1)$1$(tput sgr0)"
+}
+
+update_container() {
+    colorPrint "Pulling latest image"
+    udocker pull fedeizzo/pso:latest
+    colorPrint "Creating container from latest image, this operation may take a while"
+    udocker create --name=pso --force fedeizzo/pso:latest
+    colorPrint "Done"
+    udocker setup --execmode=S1 pso
+}
 
 usage() {
   test $# = 0 || echo "$@"
@@ -26,6 +45,7 @@ usage() {
   echo Runs the MPI program on the cluster
   echo Options:
   echo "  -h, --help                    Print this help"
+  echo "  -u, --update                  Update container"
   echo
   exit 1
 }
@@ -34,6 +54,7 @@ args=
 while [ $# != 0 ]; do
   case $1 in
     -h|--help) usage ;;
+    -u|--update) update_container ; exit 0 ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;
   esac
@@ -49,5 +70,12 @@ if [ $# -eq 1 ] && [[ $1 =~ ^[[:digit:]]+$ ]]; then
 fi
 
 # Run the MPI program
-module load mpich-3.2
-mpirun.actual -n $PROCESS_NUMBER ~/ParticleSwarmOptimization-OpenMPI/bin/particle-swarm-optimization
+mpiexec -n $PROCESS_NUMBER udocker run \
+       -v $CONFIG_PATH:/src/bin/pso-data.ini \
+       --hostenv --hostauth --user=${USERID} \
+       pso:latest \
+       ./particle-swarm-optimization \
+       -u \
+       --number-of-threads=$NUMBER_OF_THREADS \
+       pso-data.ini
+

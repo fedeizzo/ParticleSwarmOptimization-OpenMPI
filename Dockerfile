@@ -1,4 +1,4 @@
-FROM ubuntu:22.10 AS builder
+FROM ubuntu:16.04 AS builder
 
 # set locate
 RUN apt-get clean && apt-get update && apt-get install -y locales
@@ -13,9 +13,7 @@ ENV TZ=Europe/Rome
 RUN apt-get install -y \
 	make \
 	pkg-config \
-	openmpi-bin \
-	libopenmpi3 \
-	libopenmpi-dev \
+	mpich \
 	libsqlite3-dev
 
 # add content
@@ -25,6 +23,8 @@ ADD . /src
 WORKDIR /src
 RUN make
 WORKDIR /src/bin
+
+RUN cp ../pso-data.ini .
 
 # FROM ubuntu:22.10
 # COPY --from=builder /src/bin/particle-swarm-optimization /src/bin/particle-swarm-optimization
