@@ -1,9 +1,4 @@
 #include "./database.h"
-#include "../log/log.h"
-#include "../solution/solution.h"
-#include <sqlite3.h>
-#include <stdlib.h>
-#include <string.h>
 
 const int STR_BUFFER_SIZE = 800;
 const char *CREATE_EXPERIMENT_TABLE =

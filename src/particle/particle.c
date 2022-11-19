@@ -6,15 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*
- * HEADERS
- */
 void randomArrayInitialization(double *array, int n, double min, double max);
 void updateFitness(Particle particle, double (*fitnessFunction)(double *, int));
-
-/**
- * IMPLEMENTATIONS
- */
 
 void printParticle(void *data) {
   Particle particle = (Particle)data;
@@ -40,9 +33,6 @@ void destroyParticle(void *ptr) {
   free(particle);
 }
 
-/**
- *
- */
 Particle newParticle(int id, int problemDimension, double max, double min,
                      double v_max, double v_min,
                      double (*fitnessFunction)(double *, int)) {

@@ -15,6 +15,7 @@
 #include "../utils/utils.h"
 #include <mpi.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/time.h>
 
 typedef struct timeval timestamp_t;
@@ -48,7 +49,7 @@ typedef broadcastMessage_t *BroadcastMessage;
 MPI_Datatype define_datatype_broadcast_message(int dimension);
 
 /**
- * @brief Create a new brodcast message
+ * @brief Creates a new brodcast message
  * @return the created broadcast message
  */
 BroadcastMessage newBroadcastMessage();
@@ -57,19 +58,37 @@ void initalizeBroacastMessage(BroadcastMessage message, const int process_id,
                               Solution solution);
 
 /**
- * @brief Destroy a broadcast message
+ * @brief Destroies a broadcast message
  * @param[in] message the message to destroy
  */
 void destroyBroadcastMessage(BroadcastMessage message);
 
 /**
- * @brief Include a solution within a broadcast message
+ * @brief Includes a solution within a broadcast message
  * @details Make a deep copy of a solution within the solution_t contained in the broadcast message
  * @param[inout] message message in which the deep copy is done
  * @param[in] solution solution deep copied
  */
 void includeSolution(solution_t *message, Solution solution);
+
+/**
+ * @brief Clones the passed message
+ * @param[in] message message to clone
+ * @return returns the cloned message
+ */
 BroadcastMessage cloneMessage(BroadcastMessage message);
+
+/**
+ * @brief Clones the passed message
+ * @param[in] message message to clone
+ * @return returns the cloned message
+ */
 BroadcastMessage cloneMessageStructToPointer(broadcastMessage_t msg);
+
+/**
+ * @brief Clones the passed message
+ * @param[in] message message to clone
+ * @return returns the cloned message
+ */
 broadcastMessage_t cloneMessageStructToStruct(broadcastMessage_t msg);
 #endif

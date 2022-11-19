@@ -60,7 +60,7 @@ void updatePosition(Particle particle, double (*fitnessFunction)(double *, int),
                     bool (*fitnessChecker)(double, double));
 
 /**
- * @brief Destroy a particle
+ * @brief Destroies a particle
  * @param[in] ptr the particle to destroy
  */
 void destroyParticle(void *ptr);

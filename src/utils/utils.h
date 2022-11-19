@@ -1,3 +1,11 @@
+/**
+ * @file      utils.h
+ * @brief     Util functions definition
+ * @date      Sat Nov 19 15:13:05 2022
+ * @author    Federico Izzo, Sameuele Bortolotti
+ * @copyright MIT
+ */
+
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
@@ -15,17 +23,10 @@
 
 
 /**
- * Wrap fucntion to check correct allocation with malloc
- *
- * args:
- *    void *ptr: pointer to check
- *
- * returns:
- *    0 in case of success, otherwise -1
+ * @brief Random double generator
+ * @param[in] min minimum value
+ * @param[in] max maximum value
+ * @return returns the double generated number
  */
-int checkAllocationError(void *ptr);
-void printDouble(void *ptr);
-void printDoubleInLine(void *ptr);
-void die(char *msg);
 double randfrom(double min, double max);
 #endif

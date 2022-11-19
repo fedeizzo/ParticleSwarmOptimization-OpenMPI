@@ -1,5 +1,4 @@
 #include "message.h"
-#include <string.h>
 
 void reduceMaxFitness(BroadcastMessage in, BroadcastMessage inout, int *len,
                       MPI_Datatype *dptr);
@@ -108,9 +107,6 @@ void includeSolution(solution_t *message, Solution solution) {
 BroadcastMessage newBroadcastMessage() {
   BroadcastMessage message =
       (BroadcastMessage)malloc(sizeof(broadcastMessage_t));
-  if (checkAllocationError(message) == FAILURE) {
-    perror("Error in allocation of the broadcast message\n");
-  }
   return message;
 }
 
