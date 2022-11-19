@@ -31,6 +31,7 @@ var NAVTREE =
       [ "OpeMPI", "index.html#autotoc_md4", null ],
       [ "Process", "index.html#autotoc_md5", null ]
     ] ],
+    [ "LICENSE", "md_LICENSE.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],

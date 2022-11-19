@@ -6,7 +6,7 @@ var indexSectionsWithContent =
   3: "cdinpu",
   4: "cdfimpstv",
   5: "b",
-  6: "p"
+  6: "lp"
 };
 
 var indexSectionNames =
