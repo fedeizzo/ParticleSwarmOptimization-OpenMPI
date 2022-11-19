@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['id_73',['id',['../structparticle__t.html#a5b4a399ec0f75c10ed1529cf1d585674',1,'particle_t']]],
-  ['iteration_74',['iteration',['../structbroadcastMessage__t.html#a0e60ec3ebcf0396ff2c2c9e9cd6b0dd8',1,'broadcastMessage_t']]]
+  ['fitness_133',['fitness',['../structsolution__t.html#ad6d8a7a10e69350738a3d4f5d21e1670',1,'solution_t']]],
+  ['fitnesschecker_134',['fitnessChecker',['../structpso__data__t.html#adb0be254f799aa3109fc0de3f63de43b',1,'pso_data_t']]],
+  ['fitnesscheckername_135',['fitnessCheckerName',['../structpso__data__t.html#aa9256856a644d7364f7c7654a48eaecf',1,'pso_data_t']]],
+  ['fitnessfunction_136',['fitnessFunction',['../structpso__data__t.html#a60a091cb315165f3475e7e406ec2d9db',1,'pso_data_t']]],
+  ['fitnessfunctionname_137',['fitnessFunctionName',['../structpso__data__t.html#adfb5cd55dae3af11d688dd8dc4256486',1,'pso_data_t']]]
 ];

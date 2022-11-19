@@ -92,37 +92,36 @@ $(document).ready(function(){initNavTree('process_8h_source.html',''); initResiz
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define __PROCESS_H_</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;../database/database.h&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;../list/list.h&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;../log/log.h&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;../message/message.h&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;../particle/particle.h&quot;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;../pso/pso.h&quot;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;../sort/sort.h&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;math.h&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;omp.h&gt;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="structprocess__particle__t.html">   15</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structprocess__particle__t.html">process_particle_t</a> {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <span class="keywordtype">int</span> totalNumberOfParticles;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <a class="code" href="structparticle__t.html">Particle</a> particle;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <a class="code" href="structbroadcastMessage__t.html">broadcastMessage_t</a> *inputBuffer;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <a class="code" href="structbroadcastMessage__t.html">broadcastMessage_t</a> outputBuffer;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <span class="keywordtype">bool</span> isMessageReady;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  omp_lock_t inputBufferLock;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  omp_lock_t outputBufferLock;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;} <a class="code" href="structprocess__particle__t.html">process_particle_t</a>;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">typedef</span> <a class="code" href="structprocess__particle__t.html">process_particle_t</a> *<a class="code" href="structprocess__particle__t.html">ProcessParticle</a>;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keywordtype">void</span> processRoutine(<span class="keyword">const</span> <span class="keywordtype">int</span> numberOfProcesses, <span class="keyword">const</span> <span class="keywordtype">int</span> numberOfThreads,</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                    <span class="keyword">const</span> <span class="keywordtype">int</span> processId, <span class="keyword">const</span> <span class="keywordtype">int</span> startingId,</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                    <span class="keyword">const</span> <span class="keywordtype">int</span> *processToNumberOfParticles, <a class="code" href="structpso__data__t.html">PSOData</a> psoData, <span class="keyword">const</span> <span class="keywordtype">char</span> *databasePath);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;../log/log.h&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;../message/message.h&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;../particle/particle.h&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;../pso/pso.h&quot;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;../sort/sort.h&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;math.h&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;omp.h&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="structprocess__particle__t.html">   14</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structprocess__particle__t.html">process_particle_t</a> {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  <span class="keywordtype">int</span> totalNumberOfParticles;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <a class="code" href="structparticle__t.html">Particle</a> particle;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <a class="code" href="structbroadcastMessage__t.html">broadcastMessage_t</a> *inputBuffer;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <a class="code" href="structbroadcastMessage__t.html">broadcastMessage_t</a> outputBuffer;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <span class="keywordtype">bool</span> isMessageReady;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  omp_lock_t inputBufferLock;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  omp_lock_t outputBufferLock;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;} <a class="code" href="structprocess__particle__t.html">process_particle_t</a>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">typedef</span> <a class="code" href="structprocess__particle__t.html">process_particle_t</a> *<a class="code" href="structprocess__particle__t.html">ProcessParticle</a>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">void</span> processRoutine(<span class="keyword">const</span> <span class="keywordtype">int</span> numberOfProcesses, <span class="keyword">const</span> <span class="keywordtype">int</span> numberOfThreads,</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                    <span class="keyword">const</span> <span class="keywordtype">int</span> processId, <span class="keyword">const</span> <span class="keywordtype">int</span> startingId,</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                    <span class="keyword">const</span> <span class="keywordtype">int</span> *processToNumberOfParticles, <a class="code" href="structpso__data__t.html">PSOData</a> psoData, <span class="keyword">const</span> <span class="keywordtype">char</span> *databasePath);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="astructbroadcastMessage__t_html"><div class="ttname"><a href="structbroadcastMessage__t.html">broadcastMessage_t</a></div><div class="ttdef"><b>Definition:</b> message.h:28</div></div>
-<div class="ttc" id="astructprocess__particle__t_html"><div class="ttname"><a href="structprocess__particle__t.html">process_particle_t</a></div><div class="ttdef"><b>Definition:</b> process.h:15</div></div>
-<div class="ttc" id="astructpso__data__t_html"><div class="ttname"><a href="structpso__data__t.html">pso_data_t</a></div><div class="ttdef"><b>Definition:</b> pso.h:16</div></div>
+<div class="ttc" id="astructbroadcastMessage__t_html"><div class="ttname"><a href="structbroadcastMessage__t.html">broadcastMessage_t</a></div><div class="ttdef"><b>Definition:</b> message.h:29</div></div>
+<div class="ttc" id="astructprocess__particle__t_html"><div class="ttname"><a href="structprocess__particle__t.html">process_particle_t</a></div><div class="ttdef"><b>Definition:</b> process.h:14</div></div>
+<div class="ttc" id="astructpso__data__t_html"><div class="ttname"><a href="structpso__data__t.html">pso_data_t</a></div><div class="ttdef"><b>Definition:</b> pso.h:28</div></div>
 <div class="ttc" id="astructparticle__t_html"><div class="ttname"><a href="structparticle__t.html">particle_t</a></div><div class="ttdef"><b>Definition:</b> particle.h:19</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

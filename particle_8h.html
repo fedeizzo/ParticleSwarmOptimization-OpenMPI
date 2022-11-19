@@ -126,7 +126,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:a7aa3ae9b4a993e233a4197d72b98c382"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates position of the given particle.  <a href="particle_8h.html#a7aa3ae9b4a993e233a4197d72b98c382">More...</a><br /></td></tr>
 <tr class="separator:a7aa3ae9b4a993e233a4197d72b98c382"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a668ad9d88f50ec6ca2a33b721e4ad197"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="particle_8h.html#a668ad9d88f50ec6ca2a33b721e4ad197">destroyParticle</a> (void *ptr)</td></tr>
-<tr class="memdesc:a668ad9d88f50ec6ca2a33b721e4ad197"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy a particle.  <a href="particle_8h.html#a668ad9d88f50ec6ca2a33b721e4ad197">More...</a><br /></td></tr>
+<tr class="memdesc:a668ad9d88f50ec6ca2a33b721e4ad197"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroies a particle.  <a href="particle_8h.html#a668ad9d88f50ec6ca2a33b721e4ad197">More...</a><br /></td></tr>
 <tr class="separator:a668ad9d88f50ec6ca2a33b721e4ad197"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -151,21 +151,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Destroy a particle. </p>
+<p>Destroies a particle. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">ptr</td><td>the particle to destroy </td></tr>
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                                {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <a class="code" href="structparticle__t.html">Particle</a> particle = (<a class="code" href="structparticle__t.html">Particle</a>)ptr;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <a class="code" href="solution_8h.html#a3623d1e13becf306546dea4a484be812">destroySolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <a class="code" href="solution_8h.html#a3623d1e13becf306546dea4a484be812">destroySolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#ad68f1e0845a0cd45497cd4c715949370">personalBest</a>);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  <a class="code" href="solution_8h.html#a3623d1e13becf306546dea4a484be812">destroySolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#a141685b7ed963e52bcb5b2d5fc45c5e7">socialBest</a>);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  free(particle-&gt;<a class="code" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a>);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  free(particle);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
+<div class="fragment"><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                                {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <a class="code" href="structparticle__t.html">Particle</a> particle = (<a class="code" href="structparticle__t.html">Particle</a>)ptr;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <a class="code" href="solution_8h.html#a3623d1e13becf306546dea4a484be812">destroySolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <a class="code" href="solution_8h.html#a3623d1e13becf306546dea4a484be812">destroySolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#ad68f1e0845a0cd45497cd4c715949370">personalBest</a>);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  <a class="code" href="solution_8h.html#a3623d1e13becf306546dea4a484be812">destroySolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#a141685b7ed963e52bcb5b2d5fc45c5e7">socialBest</a>);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  free(particle-&gt;<a class="code" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a>);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  free(particle);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -239,22 +239,22 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>returns the created particle </dd></dl>
-<div class="fragment"><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                                                               {</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  <a class="code" href="structparticle__t.html">Particle</a> particle = NULL;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  particle = (<a class="code" href="structparticle__t.html">Particle</a>)malloc(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> <a class="code" href="structparticle__t.html">particle_t</a>));</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  particle-&gt;<a class="code" href="structparticle__t.html#a5b4a399ec0f75c10ed1529cf1d585674">id</a> = id;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  particle-&gt;<a class="code" href="structparticle__t.html#a1aecbafd3f6b86dd61a02ece347ce0ce">dimension</a> = problemDimension;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a> = <a class="code" href="solution_8h.html#a74fb9d2c9a6bec5b5c12ad8d4187fc6c">newSolution</a>(problemDimension);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  randomArrayInitialization(particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>, problemDimension, min, max);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  particle-&gt;<a class="code" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a> = (<span class="keywordtype">double</span> *)malloc(problemDimension * <span class="keyword">sizeof</span>(<span class="keywordtype">double</span>));</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  randomArrayInitialization(particle-&gt;<a class="code" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a>, problemDimension, v_min / 3,</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                            v_max / 3);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  updateFitness(particle, fitnessFunction);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  particle-&gt;<a class="code" href="structparticle__t.html#ad68f1e0845a0cd45497cd4c715949370">personalBest</a> = <a class="code" href="solution_8h.html#a5a24f2a7fb61764a4592167bbf2cfa14">cloneSolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  particle-&gt;<a class="code" href="structparticle__t.html#a141685b7ed963e52bcb5b2d5fc45c5e7">socialBest</a> = <a class="code" href="solution_8h.html#a5a24f2a7fb61764a4592167bbf2cfa14">cloneSolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  <span class="keywordflow">return</span> particle;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;}</div>
+<div class="fragment"><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                                                               {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  <a class="code" href="structparticle__t.html">Particle</a> particle = NULL;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  particle = (<a class="code" href="structparticle__t.html">Particle</a>)malloc(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> <a class="code" href="structparticle__t.html">particle_t</a>));</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  particle-&gt;<a class="code" href="structparticle__t.html#a5b4a399ec0f75c10ed1529cf1d585674">id</a> = id;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  particle-&gt;<a class="code" href="structparticle__t.html#a1aecbafd3f6b86dd61a02ece347ce0ce">dimension</a> = problemDimension;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a> = <a class="code" href="solution_8h.html#a74fb9d2c9a6bec5b5c12ad8d4187fc6c">newSolution</a>(problemDimension);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  randomArrayInitialization(particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>, problemDimension, min, max);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  particle-&gt;<a class="code" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a> = (<span class="keywordtype">double</span> *)malloc(problemDimension * <span class="keyword">sizeof</span>(<span class="keywordtype">double</span>));</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  randomArrayInitialization(particle-&gt;<a class="code" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a>, problemDimension, v_min / 3,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                            v_max / 3);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  updateFitness(particle, fitnessFunction);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  particle-&gt;<a class="code" href="structparticle__t.html#ad68f1e0845a0cd45497cd4c715949370">personalBest</a> = <a class="code" href="solution_8h.html#a5a24f2a7fb61764a4592167bbf2cfa14">cloneSolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  particle-&gt;<a class="code" href="structparticle__t.html#a141685b7ed963e52bcb5b2d5fc45c5e7">socialBest</a> = <a class="code" href="solution_8h.html#a5a24f2a7fb61764a4592167bbf2cfa14">cloneSolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  <span class="keywordflow">return</span> particle;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -299,19 +299,19 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                                                            {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  <span class="keywordtype">double</span> oldFitness;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">#pragma omp parallel for</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; particle-&gt;<a class="code" href="structparticle__t.html#a1aecbafd3f6b86dd61a02ece347ce0ce">dimension</a>; i++)</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i] += particle-&gt;<a class="code" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a>[i];</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;  oldFitness = particle-&gt;<a class="code" href="structparticle__t.html#ad68f1e0845a0cd45497cd4c715949370">personalBest</a>-&gt;<a class="code" href="structsolution__t.html#ad6d8a7a10e69350738a3d4f5d21e1670">fitness</a>;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  updateFitness(particle, fitnessFunction);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  <span class="keywordflow">if</span> (fitnessChecker(particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>-&gt;<a class="code" href="structsolution__t.html#ad6d8a7a10e69350738a3d4f5d21e1670">fitness</a>, oldFitness)) {</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <a class="code" href="solution_8h.html#a3623d1e13becf306546dea4a484be812">destroySolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#ad68f1e0845a0cd45497cd4c715949370">personalBest</a>);</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    particle-&gt;<a class="code" href="structparticle__t.html#ad68f1e0845a0cd45497cd4c715949370">personalBest</a> = <a class="code" href="solution_8h.html#a5a24f2a7fb61764a4592167bbf2cfa14">cloneSolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>);</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}</div>
+<div class="fragment"><div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                                                            {</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="keywordtype">double</span> oldFitness;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#pragma omp parallel for</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; particle-&gt;<a class="code" href="structparticle__t.html#a1aecbafd3f6b86dd61a02ece347ce0ce">dimension</a>; i++)</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i] += particle-&gt;<a class="code" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a>[i];</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  oldFitness = particle-&gt;<a class="code" href="structparticle__t.html#ad68f1e0845a0cd45497cd4c715949370">personalBest</a>-&gt;<a class="code" href="structsolution__t.html#ad6d8a7a10e69350738a3d4f5d21e1670">fitness</a>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  updateFitness(particle, fitnessFunction);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <span class="keywordflow">if</span> (fitnessChecker(particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>-&gt;<a class="code" href="structsolution__t.html#ad6d8a7a10e69350738a3d4f5d21e1670">fitness</a>, oldFitness)) {</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <a class="code" href="solution_8h.html#a3623d1e13becf306546dea4a484be812">destroySolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#ad68f1e0845a0cd45497cd4c715949370">personalBest</a>);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    particle-&gt;<a class="code" href="structparticle__t.html#ad68f1e0845a0cd45497cd4c715949370">personalBest</a> = <a class="code" href="solution_8h.html#a5a24f2a7fb61764a4592167bbf2cfa14">cloneSolution</a>(particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  }</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -363,20 +363,20 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<div class="fragment"><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                                                                             {</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">#pragma omp parallel for</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; particle-&gt;<a class="code" href="structparticle__t.html#a1aecbafd3f6b86dd61a02ece347ce0ce">dimension</a>; i++) {</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">double</span> v = particle-&gt;<a class="code" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a>[i];</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">double</span> pbp = particle-&gt;<a class="code" href="structparticle__t.html#ad68f1e0845a0cd45497cd4c715949370">personalBest</a>-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i];</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">double</span> sbp = particle-&gt;<a class="code" href="structparticle__t.html#a141685b7ed963e52bcb5b2d5fc45c5e7">socialBest</a>-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i];</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">double</span> cp = particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i];</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    v = v * w;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    v += phi_1 * randfrom(0.0, 1.0) * (pbp - cp);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    v += phi_2 * randfrom(0.0, 1.0) * (sbp - cp);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    particle-&gt;<a class="code" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a>[i] = v;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  }</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;}</div>
+<div class="fragment"><div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                                                                             {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#pragma omp parallel for</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; particle-&gt;<a class="code" href="structparticle__t.html#a1aecbafd3f6b86dd61a02ece347ce0ce">dimension</a>; i++) {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">double</span> v = particle-&gt;<a class="code" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a>[i];</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">double</span> pbp = particle-&gt;<a class="code" href="structparticle__t.html#ad68f1e0845a0cd45497cd4c715949370">personalBest</a>-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i];</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">double</span> sbp = particle-&gt;<a class="code" href="structparticle__t.html#a141685b7ed963e52bcb5b2d5fc45c5e7">socialBest</a>-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i];</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">double</span> cp = particle-&gt;<a class="code" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i];</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    v = v * w;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    v += phi_1 * <a class="code" href="utils_8h.html#a2ce6a31e2039082e82e3a79975147cb8">randfrom</a>(0.0, 1.0) * (pbp - cp);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    v += phi_2 * <a class="code" href="utils_8h.html#a2ce6a31e2039082e82e3a79975147cb8">randfrom</a>(0.0, 1.0) * (sbp - cp);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    particle-&gt;<a class="code" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a>[i] = v;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;  }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -394,6 +394,7 @@ Functions</h2></td></tr>
 <div class="ttc" id="astructsolution__t_html_ad6d8a7a10e69350738a3d4f5d21e1670"><div class="ttname"><a href="structsolution__t.html#ad6d8a7a10e69350738a3d4f5d21e1670">solution_t::fitness</a></div><div class="ttdeci">double fitness</div><div class="ttdef"><b>Definition:</b> solution.h:21</div></div>
 <div class="ttc" id="astructparticle__t_html_a1aecbafd3f6b86dd61a02ece347ce0ce"><div class="ttname"><a href="structparticle__t.html#a1aecbafd3f6b86dd61a02ece347ce0ce">particle_t::dimension</a></div><div class="ttdeci">int dimension</div><div class="ttdef"><b>Definition:</b> particle.h:21</div></div>
 <div class="ttc" id="asolution_8h_html_a3623d1e13becf306546dea4a484be812"><div class="ttname"><a href="solution_8h.html#a3623d1e13becf306546dea4a484be812">destroySolution</a></div><div class="ttdeci">void destroySolution(Solution solution)</div><div class="ttdoc">Destroys the passed solution.</div><div class="ttdef"><b>Definition:</b> solution.c:12</div></div>
+<div class="ttc" id="autils_8h_html_a2ce6a31e2039082e82e3a79975147cb8"><div class="ttname"><a href="utils_8h.html#a2ce6a31e2039082e82e3a79975147cb8">randfrom</a></div><div class="ttdeci">double randfrom(double min, double max)</div><div class="ttdoc">Random double generator.</div><div class="ttdef"><b>Definition:</b> utils.c:3</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

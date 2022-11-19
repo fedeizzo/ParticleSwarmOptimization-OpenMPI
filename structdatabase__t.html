@@ -91,22 +91,83 @@ $(document).ready(function(){initNavTree('structdatabase__t.html',''); initResiz
 <div class="title">database_t Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="database_8h_source.html">database.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a96c0ad703e5a4bedcde6e9af1b01d854"><td class="memItemLeft" align="right" valign="top"><a id="a96c0ad703e5a4bedcde6e9af1b01d854"></a>
-sqlite3 *&#160;</td><td class="memItemRight" valign="bottom"><b>db</b></td></tr>
+<tr class="memitem:a96c0ad703e5a4bedcde6e9af1b01d854"><td class="memItemLeft" align="right" valign="top">sqlite3 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdatabase__t.html#a96c0ad703e5a4bedcde6e9af1b01d854">db</a></td></tr>
 <tr class="separator:a96c0ad703e5a4bedcde6e9af1b01d854"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea1d0083927fdb05791a4483e943f00e"><td class="memItemLeft" align="right" valign="top"><a id="aea1d0083927fdb05791a4483e943f00e"></a>
-sqlite3_stmt *&#160;</td><td class="memItemRight" valign="bottom"><b>insertSolutionStmt</b></td></tr>
+<tr class="memitem:aea1d0083927fdb05791a4483e943f00e"><td class="memItemLeft" align="right" valign="top">sqlite3_stmt *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdatabase__t.html#aea1d0083927fdb05791a4483e943f00e">insertSolutionStmt</a></td></tr>
 <tr class="separator:aea1d0083927fdb05791a4483e943f00e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab98d89bd836cdf641043229d79faf2f5"><td class="memItemLeft" align="right" valign="top"><a id="ab98d89bd836cdf641043229d79faf2f5"></a>
-sqlite3_stmt *&#160;</td><td class="memItemRight" valign="bottom"><b>insertExperimentStmt</b></td></tr>
+<tr class="memitem:ab98d89bd836cdf641043229d79faf2f5"><td class="memItemLeft" align="right" valign="top">sqlite3_stmt *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdatabase__t.html#ab98d89bd836cdf641043229d79faf2f5">insertExperimentStmt</a></td></tr>
 <tr class="separator:ab98d89bd836cdf641043229d79faf2f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae427ee7067f136ab873dd1cc9f9b6833"><td class="memItemLeft" align="right" valign="top"><a id="ae427ee7067f136ab873dd1cc9f9b6833"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>experiment_id</b></td></tr>
+<tr class="memitem:ae427ee7067f136ab873dd1cc9f9b6833"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdatabase__t.html#ae427ee7067f136ab873dd1cc9f9b6833">experiment_id</a></td></tr>
 <tr class="separator:ae427ee7067f136ab873dd1cc9f9b6833"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contains database stub and associated statements </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="a96c0ad703e5a4bedcde6e9af1b01d854"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96c0ad703e5a4bedcde6e9af1b01d854">&#9670;&nbsp;</a></span>db</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sqlite3* database_t::db</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Database stub </p>
+
+</div>
+</div>
+<a id="ae427ee7067f136ab873dd1cc9f9b6833"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae427ee7067f136ab873dd1cc9f9b6833">&#9670;&nbsp;</a></span>experiment_id</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int database_t::experiment_id</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Experiment id </p>
+
+</div>
+</div>
+<a id="ab98d89bd836cdf641043229d79faf2f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab98d89bd836cdf641043229d79faf2f5">&#9670;&nbsp;</a></span>insertExperimentStmt</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sqlite3_stmt* database_t::insertExperimentStmt</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Statement for the experiment creation </p>
+
+</div>
+</div>
+<a id="aea1d0083927fdb05791a4483e943f00e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea1d0083927fdb05791a4483e943f00e">&#9670;&nbsp;</a></span>insertSolutionStmt</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sqlite3_stmt* database_t::insertSolutionStmt</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Statement for the solution creation </p>
+
+</div>
+</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/database/<a class="el" href="database_8h_source.html">database.h</a></li>
 </ul>
