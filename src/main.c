@@ -3,7 +3,6 @@
 #include "process/process.h"
 #include "pso/pso.h"
 #include <argp.h>
-#include <error.h>
 #include <mpi.h>
 #include <omp.h>
 #include <stdbool.h>
@@ -94,7 +93,7 @@ int main(int argc, char **argv) {
 
   argp_parse(&argp, argc, argv, 0, 0, &arguments);
   int numberOfThreads = arguments.numberOfThreads;
-  log_set_level(LOG_INFO);
+  log_set_level(LOG_ERROR);
 
   if (!isValidFile(arguments.configFile)) {
     log_error("%-10s :: %s", "INIT", "Provide valid config file");

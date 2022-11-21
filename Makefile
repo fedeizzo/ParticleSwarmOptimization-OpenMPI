@@ -3,6 +3,7 @@
 
 # LIBRARIES
 LIBRARIES := sqlite3
+LINKING_LIBRARIES :=
 
 # COMPILER
 CC := mpicc # compiler
@@ -58,7 +59,7 @@ build: $(TARGET)
 # building target, dealing with the linking phase, the compiling is over
 $(TARGET): $(OBJ) | $(BIN_DIR)
 	@$(ECHO) "$(GREEN)Program compiled successfully$(NONE)";
-	@$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@ -lm
+	@$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@ -lm $(LINKING_LIBRARIES)
 	@$(ECHO) "$(GREEN)Program linked successfully$(NONE)";
 
 # building objects
