@@ -18,6 +18,7 @@
         llvmPackages_13.openmp
       ];
       reportDeps = with pkgs; [
+        gnumake
         pandoc
         (texlive.combine {
           inherit (texlive)
@@ -37,7 +38,6 @@
         python39Packages.scipy
         sqlite-web
         doxygen
-        pandoc
       ];
       CPackage = pkgs.stdenv.mkDerivation {
         name = pname;
@@ -61,7 +61,7 @@
         nativeBuildInputs = reportDeps;
         PATH = pkgs.lib.makeBinPath nativeBuildInputs;
         buildPhase = ''
-          ./scripts/generate_report.sh
+          make report
         '';
         installPhase = ''
           mkdir -p $out
@@ -88,7 +88,7 @@
       };
       devShell."${system}" = pkgs.mkShell {
         name = "${pname}_shell";
-        nativeBuildInputs = buildDeps ++ runtimeDeps ++ shellDeps;
+        nativeBuildInputs = buildDeps ++ runtimeDeps ++ shellDeps ++ reportDeps;
       };
     };
 }

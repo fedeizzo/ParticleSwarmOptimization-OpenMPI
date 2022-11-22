@@ -1,6 +1,9 @@
 # NOTE, for the pkg-config you might require to add yours in the path variable 
 # export PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH"
 
+# DOCKER
+DOCKER_TAG :=
+
 # LIBRARIES
 LIBRARIES := sqlite3
 LINKING_LIBRARIES :=
@@ -52,7 +55,7 @@ NONE := \033[0m
 # all
 all: clean build
 # phony: not targets
-.PHONY: all clean help build
+.PHONY: all clean help build report
 
 build: $(TARGET)
 
@@ -79,15 +82,31 @@ doc:
 	@$(MKDIR) $(DOC_DIR)
 	@$(DOXYGEN) $(DOXYFILE) $(DOXYGEN_CONF)
 
+report:
+	@./scripts/generate_report.sh
+
+cluster-run:
+	@./scripts/generate_cluster_runs.sh
+
+cluster-pull:
+	@./scripts/build.sh --cluster
+
+docker-build:
+	@./scripts/build.sh $(DOCKER_TAG)
+
 open-doc:
 	@$(OPEN) $(DOC_DIR)/$(DOXYGEN_INDEX)
 
 help: 
 	@$(ECHO) "$(BLUE)Makefile help\n \
-	* build    : compiles the program and creates the object files and the executable files\n \
-	* clean    : removes all the object and binary files\n \
-	* doc      : generates the code documentation in HTML\n \
-	* open-doc : compiles and then opens the HTML documentation\n \
-	* all      : clean and then compiles$(NONE)";
+	* build        : compiles the program and creates the object files and the executable files\n \
+	* clean        : removes all the object and binary files\n \
+	* doc          : generates the code documentation in HTML\n \
+	* report       : generates pdf report\n \
+	* cluster-run  : launches multiple qsub runs\n \
+	* cluster-pull : pulls latest udocker container\n \
+	* docker-build : builds latest docker container\n \
+	* open-doc     : compiles and then opens the HTML documentation\n \
+	* all          : clean and then compiles$(NONE)";
 
 -include $(OBJ:.o=.d) # The dash is used to silence errors if the files don't exist yet

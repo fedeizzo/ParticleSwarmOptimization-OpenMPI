@@ -38,15 +38,6 @@ errorPrint() {
   echo -e "$(tput setaf 1)$1$(tput sgr0)"
 }
 
-update_container() {
-    colorPrint "Pulling latest image"
-    udocker pull fedeizzo/pso:latest
-    colorPrint "Creating container from latest image, this operation may take a while"
-    udocker create --name=pso --force fedeizzo/pso:latest
-    colorPrint "Done"
-    udocker setup --execmode=F4 pso
-}
-
 usage() {
   test $# = 0 || echo "$@"
   echo "Usage: $0 PROCESS_NUMBER [DEFAULT=$PROCESS_NUMBER]"
@@ -54,7 +45,6 @@ usage() {
   echo Runs the MPI program on the cluster
   echo Options:
   echo "  -h, --help                    Print this help"
-  echo "  -u, --update                  Update container"
   echo
   exit 1
 }
@@ -63,7 +53,6 @@ args=
 while [ $# != 0 ]; do
   case $1 in
     -h|--help) usage ;;
-    -u|--update) update_container ; exit 0 ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;
   esac
