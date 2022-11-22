@@ -17,6 +17,10 @@
         glib
         llvmPackages_13.openmp
       ];
+      reportDeps = with pkgs; [
+        pandoc
+        texlive.combined.scheme-full
+      ];
       shellDeps = with pkgs; [
         python39
         python39Packages.numpy
@@ -26,6 +30,7 @@
         python39Packages.scipy
         sqlite-web
         doxygen
+        pandoc
       ];
       CPackage = pkgs.stdenv.mkDerivation {
         name = pname;
@@ -42,6 +47,20 @@
           cp -r bin $out
         '';
       };
+      report = pkgs.stdenv.mkDerivation rec {
+        name = "report";
+        src = ./.;
+        # builder = ./generate_report.sh;
+        nativeBuildInputs = reportDeps;
+        PATH = pkgs.lib.makeBinPath nativeBuildInputs;
+        buildPhase = ''
+          ./generate_report.sh
+        '';
+        installPhase = ''
+          mkdir -p $out
+          cp report.pdf $out
+        '';
+      };
 
       dockerImage = pkgs.dockerTools.buildImage {
         name = pname;
@@ -51,9 +70,11 @@
           # Entrypoint = [ "/bin/mpirun" ];
         };
       };
+
     in
     {
       packages."${system}" = {
+        report = report;
         CPackages = CPackage;
         docker = dockerImage;
         default = CPackage;

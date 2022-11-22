@@ -1,5 +1,5 @@
 # Particle Swarm Optimization OpenMPI
-/ParticleSwarmOptimization-openMPI/ provides an basic implementation of [PSO](https://en.wikipedia.org/wiki/Particle_swarm_optimization) with support for cluster computation through [OpenMPI](https://www.open-mpi.org/), moreover it uses [OpenMP](https://www.openmp.org/) for thread parallelization.
+*ParticleSwarmOptimization-openMPI* provides an basic implementation of [PSO](https://en.wikipedia.org/wiki/Particle_swarm_optimization) with support for cluster computation through [OpenMPI](https://www.open-mpi.org/), moreover it uses [OpenMP](https://www.openmp.org/) for thread parallelization.
 
 ## How to use
 ### Build
@@ -19,9 +19,9 @@ OpeMPI library is used to convey information across processes running on differe
 
 The process that produces the message sends the message using a gather function because all particles must know the positions of other individuals of the population at every step. In the following picture it is presented a simple schema of the communication.
 
-![Communication schema](./images/communication_schema.png)
+![Communication schema](./images/communication_schema.png){ width=250px }
 
 ## Process
 A process can have the task of computing the algorithm for one or more particles, it is divided in several threads that optimize the execution time of the process.
 
-![Execution schema](./images/execution_schema.png)
+![Execution schema](./images/execution_schema.png){ width=250px }

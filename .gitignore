@@ -149,3 +149,5 @@ images/.$hpc-memory-design.drawio.bkp
 /docs/
 benchmark/gif
 *.mp4
+*.pdf
+!pandoc-template/logo.pdf
