@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # in order to delete all started jobs
-# qstat -u $USER | awk -F' ' '{print $1}' | awk -F '.' '{print $1}' | xargs qdel {}
+# qstat -u $USER | tail -n +6 | awk -F' ' '{print $1}' | awk -F '.' '{print $1}' | xargs qdel {}
 PROCESSES="1 2 4 8 16 32 64"
 THREADS="1 2 4 8 16 32 64"
 SELECT="1 2 3 4 5"
@@ -34,7 +34,7 @@ for node in $SELECT; do
 		echo "Job $COUNTER/$TOTAL"
 		if [[ $(echo "$COUNTER%40" | bc) == 0 ]]; then
 		    echo $COUNTER
-		    qsub -hold_jid "pso-*"
+		    qsub -hold_jid "pso-*" uname
 		fi
 	    done
 	done
