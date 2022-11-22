@@ -113,7 +113,7 @@ void processRoutine(const int processesNumber, const int threadsNumber,
   startTime = MPI_Wtime();
   // OMP settings
   omp_set_num_threads(threadsNumber);
-  omp_set_max_active_levels(0);
+  omp_set_max_active_levels(2);
 
   Database db;
   bool useDB = strcmp(databasePath, "") == 0 || pid != 0 ? false : true;

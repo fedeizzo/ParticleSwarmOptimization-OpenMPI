@@ -19,7 +19,7 @@ usage() {
 
 update_cluster_container() {
     colorPrint "Deleting old containers"
-    udocker ps | tail -n+2 | awk -F' ' '{print $1}' | xargs udocker rm {}
+    udocker ps | tail -n+2 | awk -F' ' '{print $1}' | xargs udocker rm
     colorPrint "Pulling latest image"
     udocker pull fedeizzo/pso:latest
     colorPrint "Creating container from latest image, this operation may take a while"
