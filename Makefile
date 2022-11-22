@@ -92,7 +92,7 @@ cluster-pull:
 	@./scripts/build.sh --cluster
 
 cluster-clear:
-	@qstat -u $USER | tail -n +6 | awk -F' ' '{print $1}' | awk -F '.' '{print $1}' | xargs qdel {}
+	@qstat -u $USER | tail -n +6 | awk -F' ' '{print $1}' | awk -F '.' '{print $1}' | xargs qdel
 
 docker-build:
 	@./scripts/build.sh $(DOCKER_TAG)
