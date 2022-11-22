@@ -32,7 +32,7 @@ for node in $SELECT; do
 		    ./scripts/run.sh
 		COUNTER=$((COUNTER + 1))
 		echo "Job $COUNTER/$TOTAL"
-		while [[ $(qstat -u $USER | tail -n +6 | wc -l) > 15 ]]; do
+		while [ $(qstat -u $USER | tail -n +6 | wc -l) -ge 15 ]; do
 		    sleep 10
 		done
 	    done
