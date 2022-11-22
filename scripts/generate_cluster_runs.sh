@@ -32,10 +32,9 @@ for node in $SELECT; do
 		    ./scripts/run.sh
 		COUNTER=$((COUNTER + 1))
 		echo "Job $COUNTER/$TOTAL"
-		if [[ $(echo "$COUNTER%40" | bc) == 0 ]]; then
-		    echo $COUNTER
-		    qsub -hold_jid "pso-*" uname
-		fi
+		while [[ $(qstat -u $USER | tail -n +6 | wc -l) < 15 ]]; do
+		    sleep 10
+		done
 	    done
 	done
     done
