@@ -7,11 +7,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Generate report
-        uses: actions/checkout@v3
-        uses: cachix/install-nix-action@v18
-        uses: DenverCoder1/doxygen-github-pages-action@v1.1.0
-        run: nix build .#report
+      - uses: actions/checkout@v3
+      - uses: cachix/install-nix-action@v18
+      - run: nix build .#report
       - name: Release report
         uses: fnkr/github-action-ghr@v1
         with:
