@@ -29,7 +29,7 @@ for node in $SELECT; do
 		    -l select=$node:ncpus=$p:mem=2gb \
 		    -l place=$place \
 		    -v PROCESS_NUMBER=$p,NUMBER_OF_THREADS=$t \
-		    ./run.sh
+		    ./scripts/run.sh
 		COUNTER=$((COUNTER + 1))
 		echo "Job $COUNTER/$TOTAL"
 		if [[ $(echo "$COUNTER%40" | bc) == 0 ]]; then
