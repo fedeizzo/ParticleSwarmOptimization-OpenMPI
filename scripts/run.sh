@@ -3,7 +3,7 @@
 # Directives to PBS
 
 #PBS -l select=1:ncpus=5:mem=1mb
-#PBS -l walltime=0:05:00
+#PBS -l walltime=2:00:00
 #PBS -q short_cpuQ
 #PBS -o run_output.txt
 #PBS -e run_error.txt
@@ -19,9 +19,16 @@
 # If number of processes is not specified, then declare it
 if [ -z $PROCESS_NUMBER ]; then
   PROCESS_NUMBER=5
+fi
+if [ -z $CONFIG_PATH ]; then
   CONFIG_PATH="$HOME/ParticleSwarmOptimization-OpenMPI/pso-data.ini"
+fi
+if [ -z $NUMBER_OF_THREADS ]; then
   NUMBER_OF_THREADS=1
 fi
+
+echo $CONFIG_PATH $PROCESS_NUMBER $NUMBER_OF_THREADS
+exit 1
 
 colorPrint() {
   echo -e "$(tput setaf 6)$1$(tput sgr0)"

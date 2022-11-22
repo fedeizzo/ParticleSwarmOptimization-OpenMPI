@@ -19,7 +19,14 @@
       ];
       reportDeps = with pkgs; [
         pandoc
-        texlive.combined.scheme-full
+        (texlive.combine {
+          inherit (texlive)
+            scheme-small
+            adjustbox babel-german background bidi collectbox csquotes everypage filehook
+            footmisc footnotebackref framed fvextra letltxmacro ly1 mdframed mweights
+            needspace pagecolor sourcecodepro sourcesanspro titling ucharcat ulem
+            unicode-math upquote xecjk xurl zref;
+        })
       ];
       shellDeps = with pkgs; [
         python39
@@ -54,7 +61,7 @@
         nativeBuildInputs = reportDeps;
         PATH = pkgs.lib.makeBinPath nativeBuildInputs;
         buildPhase = ''
-          ./generate_report.sh
+          ./scripts/generate_report.sh
         '';
         installPhase = ''
           mkdir -p $out

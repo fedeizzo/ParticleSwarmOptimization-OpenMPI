@@ -108,6 +108,9 @@ void processRoutine(const int processesNumber, const int threadsNumber,
                     const int pid, const int startingId,
                     const int *processToNumberOfParticles, PSOData psoData,
                     const char *databasePath) {
+  double startTime, endTime;
+  MPI_Barrier(MPI_COMM_WORLD);
+  startTime = MPI_Wtime();
   // OMP settings
   omp_set_num_threads(threadsNumber);
   omp_set_max_active_levels(0);
@@ -184,6 +187,9 @@ void processRoutine(const int processesNumber, const int threadsNumber,
                       ? bestFitness
                       : particles[i]->personalBest->fitness;
   printf("Best fitness for process %d %f\n", pid, bestFitness);
+  MPI_Barrier(MPI_COMM_WORLD);
+  endTime = MPI_Wtime();
+  printf("Execution time for process %d %f\n", pid, endTime - startTime);
 
 /* #pragma omp parallel for */
   for (int i = 0; i < processParticlesNumber; i++) {
