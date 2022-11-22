@@ -91,6 +91,9 @@ cluster-run:
 cluster-pull:
 	@./scripts/build.sh --cluster
 
+cluster-clear:
+	@qstat -u $USER | tail -n +6 | awk -F' ' '{print $1}' | awk -F '.' '{print $1}' | xargs qdel {}
+
 docker-build:
 	@./scripts/build.sh $(DOCKER_TAG)
 
@@ -99,14 +102,15 @@ open-doc:
 
 help: 
 	@$(ECHO) "$(BLUE)Makefile help\n \
-	* build        : compiles the program and creates the object files and the executable files\n \
-	* clean        : removes all the object and binary files\n \
-	* doc          : generates the code documentation in HTML\n \
-	* report       : generates pdf report\n \
-	* cluster-run  : launches multiple qsub runs\n \
-	* cluster-pull : pulls latest udocker container\n \
-	* docker-build : builds latest docker container\n \
-	* open-doc     : compiles and then opens the HTML documentation\n \
-	* all          : clean and then compiles$(NONE)";
+	* build         : compiles the program and creates the object files and the executable files\n \
+	* clean         : removes all the object and binary files\n \
+	* doc           : generates the code documentation in HTML\n \
+	* report        : generates pdf report\n \
+	* cluster-run   : launches multiple qsub runs\n \
+	* cluster-pull  : pulls latest udocker container\n \
+	* cluster-clear : deletes all submitted jobs\n \
+	* docker-build  : builds latest docker container\n \
+	* open-doc      : compiles and then opens the HTML documentation\n \
+	* all           : clean and then compiles$(NONE)";
 
 -include $(OBJ:.o=.d) # The dash is used to silence errors if the files don't exist yet
