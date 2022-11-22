@@ -25,11 +25,19 @@ var NAVTREE =
   [ "PSO - OpenMPI, OpenMP", "index.html", [
     [ "Particle Swarm Optimization OpenMPI", "index.html", [
       [ "How to use", "index.html#autotoc_md1", [
-        [ "Build", "index.html#autotoc_md2", null ],
-        [ "Run", "index.html#autotoc_md3", null ]
+        [ "Build", "index.html#autotoc_md2", [
+          [ "Binary", "index.html#autotoc_md3", null ],
+          [ "Docker", "index.html#autotoc_md4", null ],
+          [ "Udocker", "index.html#autotoc_md5", null ]
+        ] ],
+        [ "Run", "index.html#autotoc_md6", [
+          [ "Local", "index.html#autotoc_md7", null ],
+          [ "Cluster (through PBS)", "index.html#autotoc_md8", null ]
+        ] ],
+        [ "Report", "index.html#autotoc_md9", null ]
       ] ],
-      [ "OpeMPI", "index.html#autotoc_md4", null ],
-      [ "Process", "index.html#autotoc_md5", null ]
+      [ "OpenMPI", "index.html#autotoc_md10", null ],
+      [ "Process", "index.html#autotoc_md11", null ]
     ] ],
     [ "LICENSE", "md_LICENSE.html", null ],
     [ "Classes", "annotated.html", [

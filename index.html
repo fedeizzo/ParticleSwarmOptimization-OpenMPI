@@ -93,21 +93,39 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 How to use</h1>
 <h2><a class="anchor" id="autotoc_md2"></a>
 Build</h2>
+<h3><a class="anchor" id="autotoc_md3"></a>
+Binary</h3>
 <div class="fragment"><div class="line">make</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md3"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md4"></a>
+Docker</h3>
+<div class="fragment"><div class="line">make docker-build</div>
+</div><!-- fragment --><p>with optional argument <code>DOCKER_TAG</code></p>
+<div class="fragment"><div class="line">make DOCKER_TAG=mytag docker-build</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md5"></a>
+Udocker</h3>
+<div class="fragment"><div class="line">make cluster-pull</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md6"></a>
 Run</h2>
+<h3><a class="anchor" id="autotoc_md7"></a>
+Local</h3>
 <div class="fragment"><div class="line">./bin/particle-swarm-optimization pso-data.ini</div>
 </div><!-- fragment --><p>for optional arguments plese execute <code>./bin/particle-swarm-optimization --help</code>.</p>
-<h1><a class="anchor" id="autotoc_md4"></a>
-OpeMPI</h1>
-<p>OpeMPI library is used to convey information across processes running on different nodes of a cluster. The basic information unit is composed as a broadcast message shared over the whole network, in this way all particles of Particle Swarm Optimization (PSO) are able to know all information associated to other members of the swarm.</p>
+<h3><a class="anchor" id="autotoc_md8"></a>
+Cluster (through PBS)</h3>
+<p>Number of runs should be specified directly inside <a href="./scripts/generate_cluster_runs.sh">this script</a> </p><div class="fragment"><div class="line">make cluster-run</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md9"></a>
+Report</h2>
+<div class="fragment"><div class="line">make report</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md10"></a>
+OpenMPI</h1>
+<p>OpenMPI library is used to convey information across processes running on different nodes of a cluster. The basic information unit is composed as a broadcast message shared over the whole network, in this way all particles of Particle Swarm Optimization (PSO) are able to know all information associated to other members of the swarm.</p>
 <p>The process that produces the message sends the message using a gather function because all particles must know the positions of other individuals of the population at every step. In the following picture it is presented a simple schema of the communication.</p>
 <div class="image">
 <img src="communication_schema.png" alt=""/>
 <div class="caption">
 Communication schema</div></div>
 <p>    { width=250px }</p>
-<h1><a class="anchor" id="autotoc_md5"></a>
+<h1><a class="anchor" id="autotoc_md11"></a>
 Process</h1>
 <p>A process can have the task of computing the algorithm for one or more particles, it is divided in several threads that optimize the execution time of the process.</p>
 <div class="image">
