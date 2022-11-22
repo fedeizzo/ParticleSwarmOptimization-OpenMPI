@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-helpMessage=
+colorPrint() {
+  echo -e "$(tput setaf 6)$1$(tput sgr0)"
+}
+
+errorPrint() {
+  echo -e "$(tput setaf 1)$1$(tput sgr0)"
+}
 
 usage() {
   echo "usage $0: [--cluster] [container-tag]"
@@ -12,6 +18,8 @@ usage() {
 }
 
 update_cluster_container() {
+    colorPrint "Deleting old containers"
+    udocker ps | tail -n+2 | awk -F' ' '{print $1}' | xargs udocker rm {}
     colorPrint "Pulling latest image"
     udocker pull fedeizzo/pso:latest
     colorPrint "Creating container from latest image, this operation may take a while"
@@ -21,7 +29,7 @@ update_cluster_container() {
 }
 
 if [[ $1 == "-h" || $1 == "--help" || $1 == "help" ]]; then
-    echo $helpMessage
+    usage
     exit 0
 fi
 
