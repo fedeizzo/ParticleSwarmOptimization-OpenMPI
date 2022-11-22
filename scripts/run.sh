@@ -27,9 +27,6 @@ if [ -z $NUMBER_OF_THREADS ]; then
   NUMBER_OF_THREADS=1
 fi
 
-echo $CONFIG_PATH $PROCESS_NUMBER $NUMBER_OF_THREADS
-exit 1
-
 colorPrint() {
   echo -e "$(tput setaf 6)$1$(tput sgr0)"
 }
