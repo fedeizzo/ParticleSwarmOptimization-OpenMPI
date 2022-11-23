@@ -1,6 +1,8 @@
 # Particle Swarm Optimization OpenMPI
 *ParticleSwarmOptimization-openMPI* provides an basic implementation of [PSO](https://en.wikipedia.org/wiki/Particle_swarm_optimization) with support for cluster computation through [OpenMPI](https://www.open-mpi.org/), moreover it uses [OpenMP](https://www.openmp.org/) for thread parallelization.
 
+<a href="report.pdf" target="_blank"><b>PDF report can be found here</b></a>
+
 ## How to use
 ### Build
 #### Binary
