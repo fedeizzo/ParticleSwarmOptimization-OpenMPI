@@ -13,8 +13,8 @@ jobs:
       - uses: cachix/install-nix-action@v18
       - run: nix build .#report && cp result/report.pdf ./report.pdf
       - name: Install Doxygen
-            run: sudo apt-get install doxygen graphviz -y
-            shell: bash
+        run: sudo apt-get install doxygen graphviz -y
+        shell: bash
       - name: Generate Doxygen Documentation
         run: make doc
         shell: bash
