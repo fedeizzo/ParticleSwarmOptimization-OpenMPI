@@ -23,7 +23,7 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "PSO - OpenMPI, OpenMP", "index.html", [
-    [ "Particle Swarm Optimization OpenMPI", "index.html", [
+    [ "Particle Swarm Optimization OpenMPI", "index.html#autotoc_md0", [
       [ "Build", "index.html#autotoc_md1", [
         [ "Binary", "index.html#autotoc_md2", null ],
         [ "Docker", "index.html#autotoc_md3", null ],

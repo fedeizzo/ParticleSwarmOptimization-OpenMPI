@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PSO - OpenMPI, OpenMP: Particle Swarm Optimization OpenMPI</title>
+<title>PSO - OpenMPI, OpenMP: Main Page</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -85,10 +85,13 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">Particle Swarm Optimization OpenMPI </div>  </div>
+<div class="title">PSO - OpenMPI, OpenMP Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><b>Table of Contents</b></p>
+<div class="textblock"><p><object type="image/svg+xml" data="https://github.com/fedeizzo/ParticleSwarmOptimization-OpenMPI/actions/workflows/docs.yaml/badge.svg" style="pointer-events: none;">Documentation</object> <object type="image/svg+xml" data="https://github.com/fedeizzo/ParticleSwarmOptimization-OpenMPI/actions/workflows/docker-image.yaml/badge.svg" style="pointer-events: none;">Docker build</object></p>
+<h1><a class="anchor" id="autotoc_md0"></a>
+Particle Swarm Optimization OpenMPI</h1>
+<p><b>Table of Contents</b></p>
 <ul>
 <li><a href="#particle-swarm-optimization-openmpi">Particle Swarm Optimization OpenMPI</a><ul>
 <li><a href="#build">Build</a><ul>
@@ -110,40 +113,40 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 <p><em>ParticleSwarmOptimization-openMPI</em> provides an basic implementation of <a href="https://en.wikipedia.org/wiki/Particle_swarm_optimization">PSO</a> with support for cluster computation through <a href="https://www.open-mpi.org/">OpenMPI</a>, moreover it uses <a href="https://www.openmp.org/">OpenMP</a> for thread parallelization.</p>
 <p><a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/report.pdf" target="_blank"><b>PDF report can be found here</b></a></p>
-<h1><a class="anchor" id="autotoc_md1"></a>
-Build</h1>
-<h2><a class="anchor" id="autotoc_md2"></a>
-Binary</h2>
+<h2><a class="anchor" id="autotoc_md1"></a>
+Build</h2>
+<h3><a class="anchor" id="autotoc_md2"></a>
+Binary</h3>
 <div class="fragment"><div class="line">make</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md3"></a>
-Docker</h2>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md3"></a>
+Docker</h3>
 <div class="fragment"><div class="line">make docker-build</div>
 </div><!-- fragment --><p>with optional argument <code>DOCKER_TAG</code></p>
 <div class="fragment"><div class="line">make DOCKER_TAG=mytag docker-build</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md4"></a>
-Nix</h2>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md4"></a>
+Nix</h3>
 <div class="fragment"><div class="line">nix build .</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md5"></a>
-Udocker</h2>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md5"></a>
+Udocker</h3>
 <div class="fragment"><div class="line">make cluster-pull</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md6"></a>
-Run</h1>
-<h2><a class="anchor" id="autotoc_md7"></a>
-Local</h2>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md6"></a>
+Run</h2>
+<h3><a class="anchor" id="autotoc_md7"></a>
+Local</h3>
 <div class="fragment"><div class="line">./bin/particle-swarm-optimization pso-data.ini</div>
 </div><!-- fragment --><p>or</p>
 <div class="fragment"><div class="line">mpirun -n &lt;processesNumber ./bin/particle-swarm-optimization -u pso-data.ini</div>
 </div><!-- fragment --><p>for optional arguments please execute <code>./bin/particle-swarm-optimization --help</code>.</p>
-<h2><a class="anchor" id="autotoc_md8"></a>
-Cluster (through PBS)</h2>
+<h3><a class="anchor" id="autotoc_md8"></a>
+Cluster (through PBS)</h3>
 <p>Number of runs should be specified directly inside <a href="./scripts/generate_cluster_runs.sh">this script</a> </p><div class="fragment"><div class="line">make cluster-run</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md9"></a>
-Report</h1>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md9"></a>
+Report</h2>
 <div class="fragment"><div class="line">make report</div>
 </div><!-- fragment --><p>or</p>
 <div class="fragment"><div class="line">nix build .#report</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md10"></a>
-Dependencies</h1>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md10"></a>
+Dependencies</h2>
 <p>If you have installed <a href="https://nixos.org">nix package manager</a> </p><div class="fragment"><div class="line">nix shell</div>
 </div><!-- fragment --><p>otherwise dependencies are described below.</p>
 <p>Build:</p>
