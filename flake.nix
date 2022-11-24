@@ -38,6 +38,7 @@
         python39Packages.scipy
         sqlite-web
         doxygen
+        check
       ];
       CPackage = pkgs.stdenv.mkDerivation {
         name = pname;

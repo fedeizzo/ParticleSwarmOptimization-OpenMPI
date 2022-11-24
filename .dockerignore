@@ -1,5 +1,6 @@
 *
 !./src
+!./tests
 !./Makefile
 !./include
 !./pso-data.ini

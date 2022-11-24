@@ -1,3 +1,6 @@
+![Documentation](https://github.com/fedeizzo/ParticleSwarmOptimization-OpenMPI/actions/workflows/docs.yaml/badge.svg)
+![Docker build](https://github.com/fedeizzo/ParticleSwarmOptimization-OpenMPI/actions/workflows/docker-image.yaml/badge.svg)
+
 # Particle Swarm Optimization OpenMPI
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
