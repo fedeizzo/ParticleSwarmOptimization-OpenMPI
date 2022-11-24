@@ -35,11 +35,14 @@ var NAVTREE =
           [ "Cluster (through PBS)", "index.html#autotoc_md8", null ]
         ] ],
         [ "Report", "index.html#autotoc_md9", null ]
-      ] ],
-      [ "OpenMPI", "index.html#autotoc_md10", null ],
-      [ "Process", "index.html#autotoc_md11", null ]
+      ] ]
     ] ],
     [ "LICENSE", "md_LICENSE.html", null ],
+    [ "Abastract", "md_report_00-abstract.html", null ],
+    [ "Introduction", "md_report_01-introduction.html", [
+      [ "OpenMPI", "md_report_01-introduction.html#autotoc_md12", null ],
+      [ "Process", "md_report_01-introduction.html#autotoc_md13", null ]
+    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
