@@ -24,24 +24,24 @@ var NAVTREE =
 [
   [ "PSO - OpenMPI, OpenMP", "index.html", [
     [ "Particle Swarm Optimization OpenMPI", "index.html", [
-      [ "How to use", "index.html#autotoc_md1", [
-        [ "Build", "index.html#autotoc_md2", [
-          [ "Binary", "index.html#autotoc_md3", null ],
-          [ "Docker", "index.html#autotoc_md4", null ],
-          [ "Udocker", "index.html#autotoc_md5", null ]
-        ] ],
-        [ "Run", "index.html#autotoc_md6", [
-          [ "Local", "index.html#autotoc_md7", null ],
-          [ "Cluster (through PBS)", "index.html#autotoc_md8", null ]
-        ] ],
-        [ "Report", "index.html#autotoc_md9", null ]
-      ] ]
+      [ "Build", "index.html#autotoc_md1", [
+        [ "Binary", "index.html#autotoc_md2", null ],
+        [ "Docker", "index.html#autotoc_md3", null ],
+        [ "Nix", "index.html#autotoc_md4", null ],
+        [ "Udocker", "index.html#autotoc_md5", null ]
+      ] ],
+      [ "Run", "index.html#autotoc_md6", [
+        [ "Local", "index.html#autotoc_md7", null ],
+        [ "Cluster (through PBS)", "index.html#autotoc_md8", null ]
+      ] ],
+      [ "Report", "index.html#autotoc_md9", null ],
+      [ "Dependencies", "index.html#autotoc_md10", null ]
     ] ],
     [ "LICENSE", "md_LICENSE.html", null ],
-    [ "Abastract", "md_report_00-abstract.html", null ],
+    [ "Abstract", "md_report_00-abstract.html", null ],
     [ "Introduction", "md_report_01-introduction.html", [
-      [ "OpenMPI", "md_report_01-introduction.html#autotoc_md12", null ],
-      [ "Process", "md_report_01-introduction.html#autotoc_md13", null ]
+      [ "OpenMPI", "md_report_01-introduction.html#autotoc_md13", null ],
+      [ "Process", "md_report_01-introduction.html#autotoc_md14", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],

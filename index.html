@@ -88,36 +88,116 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="title">Particle Swarm Optimization OpenMPI </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><em>ParticleSwarmOptimization-openMPI</em> provides an basic implementation of <a href="https://en.wikipedia.org/wiki/Particle_swarm_optimization">PSO</a> with support for cluster computation through <a href="https://www.open-mpi.org/">OpenMPI</a>, moreover it uses <a href="https://www.openmp.org/">OpenMP</a> for thread parallelization.</p>
+<div class="textblock"><p><b>Table of Contents</b></p>
+<ul>
+<li><a href="#particle-swarm-optimization-openmpi">Particle Swarm Optimization OpenMPI</a><ul>
+<li><a href="#build">Build</a><ul>
+<li><a href="#binary">Binary</a></li>
+<li><a href="#docker">Docker</a></li>
+<li><a href="#nix">Nix</a></li>
+<li><a href="#udocker">Udocker</a></li>
+</ul>
+</li>
+<li><a href="#run">Run</a><ul>
+<li><a href="#local">Local</a></li>
+<li><a href="#cluster-through-pbs">Cluster (through PBS)</a></li>
+</ul>
+</li>
+<li><a href="#report">Report</a></li>
+<li><a href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+</ul>
+<p><em>ParticleSwarmOptimization-openMPI</em> provides an basic implementation of <a href="https://en.wikipedia.org/wiki/Particle_swarm_optimization">PSO</a> with support for cluster computation through <a href="https://www.open-mpi.org/">OpenMPI</a>, moreover it uses <a href="https://www.openmp.org/">OpenMP</a> for thread parallelization.</p>
 <p><a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/report.pdf" target="_blank"><b>PDF report can be found here</b></a></p>
 <h1><a class="anchor" id="autotoc_md1"></a>
-How to use</h1>
+Build</h1>
 <h2><a class="anchor" id="autotoc_md2"></a>
-Build</h2>
-<h3><a class="anchor" id="autotoc_md3"></a>
-Binary</h3>
+Binary</h2>
 <div class="fragment"><div class="line">make</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md4"></a>
-Docker</h3>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md3"></a>
+Docker</h2>
 <div class="fragment"><div class="line">make docker-build</div>
 </div><!-- fragment --><p>with optional argument <code>DOCKER_TAG</code></p>
 <div class="fragment"><div class="line">make DOCKER_TAG=mytag docker-build</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md5"></a>
-Udocker</h3>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md4"></a>
+Nix</h2>
+<div class="fragment"><div class="line">nix build .</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md5"></a>
+Udocker</h2>
 <div class="fragment"><div class="line">make cluster-pull</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md6"></a>
-Run</h2>
-<h3><a class="anchor" id="autotoc_md7"></a>
-Local</h3>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md6"></a>
+Run</h1>
+<h2><a class="anchor" id="autotoc_md7"></a>
+Local</h2>
 <div class="fragment"><div class="line">./bin/particle-swarm-optimization pso-data.ini</div>
-</div><!-- fragment --><p>for optional arguments plese execute <code>./bin/particle-swarm-optimization --help</code>.</p>
-<h3><a class="anchor" id="autotoc_md8"></a>
-Cluster (through PBS)</h3>
+</div><!-- fragment --><p>or</p>
+<div class="fragment"><div class="line">mpirun -n &lt;processesNumber ./bin/particle-swarm-optimization -u pso-data.ini</div>
+</div><!-- fragment --><p>for optional arguments please execute <code>./bin/particle-swarm-optimization --help</code>.</p>
+<h2><a class="anchor" id="autotoc_md8"></a>
+Cluster (through PBS)</h2>
 <p>Number of runs should be specified directly inside <a href="./scripts/generate_cluster_runs.sh">this script</a> </p><div class="fragment"><div class="line">make cluster-run</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md9"></a>
-Report</h2>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md9"></a>
+Report</h1>
 <div class="fragment"><div class="line">make report</div>
-</div><!-- fragment --> </div></div><!-- PageDoc -->
+</div><!-- fragment --><p>or</p>
+<div class="fragment"><div class="line">nix build .#report</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md10"></a>
+Dependencies</h1>
+<p>If you have installed <a href="https://nixos.org">nix package manager</a> </p><div class="fragment"><div class="line">nix shell</div>
+</div><!-- fragment --><p>otherwise dependencies are described below.</p>
+<p>Build:</p>
+<ul>
+<li>OpenMPI</li>
+<li>sqlite C library</li>
+<li>make</li>
+<li>pkg-config</li>
+<li>OpenMP</li>
+</ul>
+<p>Python dependencies for jupyter analysis:</p>
+<ul>
+<li>numpy</li>
+<li>jupyterlab or jupyter notebook</li>
+<li>pandas</li>
+<li>matplotlib</li>
+</ul>
+<p>Documentation and report generation:</p>
+<ul>
+<li>pandoc</li>
+<li>doxygen</li>
+<li>latex with following packages:<ul>
+<li>adjustbox</li>
+<li>babel-german</li>
+<li>background</li>
+<li>bidi</li>
+<li>collectbox</li>
+<li>csquotes</li>
+<li>everypage</li>
+<li>filehook</li>
+<li>footmisc</li>
+<li>footnotebackref</li>
+<li>framed</li>
+<li>fvextra</li>
+<li>letltxmacro</li>
+<li>ly1</li>
+<li>mdframed</li>
+<li>mweights</li>
+<li>needspace</li>
+<li>pagecolor</li>
+<li>sourcecodepro</li>
+<li>sourcesanspro</li>
+<li>titling</li>
+<li>ucharcat</li>
+<li>ulem</li>
+<li>unicode-math</li>
+<li>upquote</li>
+<li>xecjk</li>
+<li>xurl</li>
+<li>zref </li>
+</ul>
+</li>
+</ul>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
