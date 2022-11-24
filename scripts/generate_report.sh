@@ -1,5 +1,5 @@
 #!/bin/sh
-pandoc README.md \
+pandoc report/*.md \
        -o report.pdf \
        --from markdown \
        --template ./pandoc-template/eisvogel.latex \
