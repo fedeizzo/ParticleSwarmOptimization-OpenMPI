@@ -8,10 +8,10 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
       runtimeDeps = with pkgs; [
-        mpi
-        sqlite
       ];
       buildDeps = with pkgs; [
+        mpi
+        sqlite
         gnumake
         pkg-config
         glib
@@ -43,23 +43,21 @@
         name = pname;
         src = ./.;
 
-        buildInputs = runtimeDeps;
-        depsBuildBuild = buildDeps;
+        buildInputs = buildDeps;
+
         buildPhase = ''
           make CC=mpicc build
         '';
 
         installPhase = ''
           mkdir -p $out
-          cp -r bin $out
+          cp -r bin/particle-swarm-optimization $out
         '';
       };
       report = pkgs.stdenv.mkDerivation rec {
         name = "report";
         src = ./.;
-        # builder = ./generate_report.sh;
-        nativeBuildInputs = reportDeps;
-        PATH = pkgs.lib.makeBinPath nativeBuildInputs;
+        buildInputs = reportDeps;
         buildPhase = ''
           make report
         '';
@@ -69,21 +67,11 @@
         '';
       };
 
-      dockerImage = pkgs.dockerTools.buildImage {
-        name = pname;
-        contents = CPackage;
-        fromImageName = "scratch";
-        config = {
-          # Entrypoint = [ "/bin/mpirun" ];
-        };
-      };
-
     in
     {
       packages."${system}" = {
         report = report;
-        CPackages = CPackage;
-        docker = dockerImage;
+        particle-swarm-optimization = CPackage;
         default = CPackage;
       };
       devShell."${system}" = pkgs.mkShell {

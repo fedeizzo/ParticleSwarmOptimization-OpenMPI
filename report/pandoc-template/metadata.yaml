@@ -1,8 +1,11 @@
-title: "Particle Swarm Optimization: OpenMPI approach"
+title: "Particle Swarm Optimization: a parallelized approach"
 author: [Bortolotti Samuele, Izzo Federico]
 date: "2022-11-22"
 keywords: [ParticleSwarmOptimization, PSO, OpenMPI, OpenMP, C, Bio-Inspired, HPC, Parallelization]
 titlepage: true
-titlepage-logo: "./pandoc-template/logo.pdf"
+titlepage-rule-color: "4c566a"
+titlepage-rule-height: 2
+logo: "./pandoc-template/logo.pdf"
+logo-width: 40mm
 toc: true
 toc-own-page: true
