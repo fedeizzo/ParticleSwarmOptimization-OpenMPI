@@ -40,8 +40,40 @@ var NAVTREE =
     [ "LICENSE", "md_LICENSE.html", null ],
     [ "Abstract", "md_report_00-abstract.html", null ],
     [ "Introduction", "md_report_01-introduction.html", [
-      [ "OpenMPI", "md_report_01-introduction.html#autotoc_md13", null ],
-      [ "Process", "md_report_01-introduction.html#autotoc_md14", null ]
+      [ "Particle Swarm Optimization", "md_report_01-introduction.html#autotoc_md13", [
+        [ "Generalities", "md_report_01-introduction.html#autotoc_md14", null ],
+        [ "Parametrization", "md_report_01-introduction.html#autotoc_md15", null ],
+        [ "Continuous Optimization", "md_report_01-introduction.html#autotoc_md16", null ]
+      ] ],
+      [ "OpenMPI", "md_report_01-introduction.html#autotoc_md17", null ],
+      [ "OpenMP", "md_report_01-introduction.html#autotoc_md18", null ],
+      [ "Project generalities", "md_report_01-introduction.html#autotoc_md19", [
+        [ "Libraries", "md_report_01-introduction.html#autotoc_md20", null ],
+        [ "Build", "md_report_01-introduction.html#autotoc_md21", [
+          [ "Compile", "md_report_01-introduction.html#autotoc_md22", null ]
+        ] ],
+        [ "Execute", "md_report_01-introduction.html#autotoc_md23", null ]
+      ] ]
+    ] ],
+    [ "Problem Analysis", "md_report_02-problem-analysis.html", [
+      [ "Serial version of the algorithm", "md_report_02-problem-analysis.html#autotoc_md25", [
+        [ "Serial algorithm optimization", "md_report_02-problem-analysis.html#autotoc_md26", [
+          [ "Exchange particles' information", "md_report_02-problem-analysis.html#autotoc_md27", null ],
+          [ "Sorting algorithm", "md_report_02-problem-analysis.html#autotoc_md28", null ]
+        ] ]
+      ] ],
+      [ "Parallel version of the algorithm", "md_report_02-problem-analysis.html#autotoc_md29", [
+        [ "Architecture", "md_report_02-problem-analysis.html#autotoc_md30", null ],
+        [ "Communication pattern", "md_report_02-problem-analysis.html#autotoc_md31", null ],
+        [ "Message", "md_report_02-problem-analysis.html#autotoc_md32", null ],
+        [ "Logs", "md_report_02-problem-analysis.html#autotoc_md33", null ],
+        [ "Output and SQLite", "md_report_02-problem-analysis.html#autotoc_md34", null ]
+      ] ]
+    ] ],
+    [ "Benchmarking", "md_report_03-Benchmarking.html", null ],
+    [ "Conclusion", "md_report_04-Conclusion.html", [
+      [ "Is parallelization always a good choice?", "md_report_04-Conclusion.html#autotoc_md37", null ],
+      [ "Thread allocation pattern", "md_report_04-Conclusion.html#autotoc_md38", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
