@@ -9,3 +9,7 @@ logo: "./pandoc-template/logo.pdf"
 logo-width: 40mm
 toc: true
 toc-own-page: true
+header-includes: |
+  \usepackage{algorithm}
+  \usepackage{algpseudocode}
+  \renewcommand{\algorithmicforall}{\textbf{for each}}

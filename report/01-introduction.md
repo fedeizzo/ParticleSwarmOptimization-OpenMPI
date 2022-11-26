@@ -42,13 +42,13 @@ Once the algorithm has been parametrized, a swarm of particles is initialized wi
 
 At each step, each particle updates first its velocity:
 
-$$v' = w \cdot v + \phi_1 U_1 \cdot (y-x) + \phi_2 U_2 \cdot \cdot ((z-x)$$
+$$v' = w \cdot v + \phi_1 U_1 \cdot (y-x) + \phi_2 U_2 \cdot (z-x)$$
 
 where:
 - $x$ and $v$ are the particle current position and velocity, respectively;
 - $y$ and $z$ are the personal and social/global best position, respectively;
 - $w$ is the inertia (weighs the current velocity)$\phi_1$, $\phi_2$ are acceleration coefficients/learning rates (cognitive and social, respectively);
-$U_1$ and $U_2$ are uniform random numbers in $\[0,1\]$.
+$U_1$ and $U_2$ are uniform random numbers in $[0,1]$.
 
 Finally, each particle updates its position:
 
@@ -59,13 +59,13 @@ and in case of improvement, update $y$ (and eventually $z$).
 The loop is iterated until a given stop condition is met.
 
 The pseudocode of the algorithm is shown below:
- 
-\begin{algorithm}
+
+\begin{algorithm}[H]
 \caption{Initialize}
 \begin{algorithmic}[1]
-\Procedure{Initialize}{$S$, $D$, $f$, $v$, $x$, $x_{min}$, $x_{max}$, $v_{max}$}
-\ForEach {particle $i \in \mathcal S$}
-\ForEach {dimension $d \in \mathcal D$}
+\Procedure{Initialize}{$\mathcal{S}$, $\mathcal{D}$, $f$, $v$, $x$, $x_{min}$, $x_{max}$, $v_{max}$}
+\ForAll {particle $i \in \mathcal S$}
+\ForAll {dimension $d \in \mathcal D$}
 \State $x_{i, d} \gets Rnd(x_{min}, x_{max})$ \Comment{Initialize the particles' positions}
 \State $v_{i, d} \gets Rnd(-v_{max}/3, v_{max}/3)$ \Comment{Initialize the particles' velocity}
 \EndFor
@@ -77,35 +77,33 @@ The pseudocode of the algorithm is shown below:
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Particle Swarm Optimization (Nearest Neighbors)}
 \begin{algorithmic}[1]
-\Function{PSO}{$S$, $D$,  $MAX\_IT$, $n$, $f$, $v$, $x$, $x_{min}$, $x_{max}$, $v_{max}$}
+\Function{PSO}{$\mathcal{S}$, $\mathcal{D}$,  $MAX\_IT$, $n$, $f$, $v$, $x$, $x_{min}$, $x_{max}$, $v_{max}$}
 
-\State \Call{Initialize}{$S$, $D$, $f$, $v$, $x$, $x_{min}$, $x_{max}$, $v_{max}$} 
+\State \Call{Initialize}{$\mathcal{S}$, $\mathcal{D}$, $f$, $v$, $x$, $x_{min}$, $x_{max}$, $v_{max}$} 
 \Comment{Initialize all the particles}
 
 \State $it = 0$
 \Repeat
-\ForEach {particle $i \in \mathcal{S}$}
+\ForAll {particle $i \in \mathcal{S}$}
 \If{$f(x_{i}) < f(pb_{i})$}
     \State $pb_{i} \gets x_{i}$ 
 \Comment{Update the particles' best position}
 \EndIf
 \EndFor
-\\
-\State $S' = $ \Call{Copy}{S} \Comment{Copy the particle's vector}
-\ForEach {particle $i \in \mathcal S$}
-\State S' = \Call{Sort}{S', i} \Comment{Sort the particles w.r.t. $i$th particle}
-\ForEach {particle $j \in \mathcal{S'}$}
+\State $\mathcal{S'} = $ \Call{Copy}{$\mathcal{S}$} \Comment{Copy the particle's vector}
+\ForAll {particle $i \in \mathcal S$}
+\State $\mathcal{S'}$ = \Call{Sort}{S', i} \Comment{Sort the particles w.r.t. $i$th particle}
+\ForAll {particle $j \in \mathcal{S'}$}
 \If{$f(x_j) < f(gb_{i})$}
     \State $gb_i \gets x_j$
 \EndIf
 \EndFor
 \EndFor
-\\
-\ForEach {particle $i \in \mathcal S$}
-\ForEach {dimension $d \in \mathcal D$}
+\ForAll {particle $i \in \mathcal S$}
+\ForAll {dimension $d \in \mathcal D$}
     \State $v_{i, d} = v_{i, d} + C_1 \cdot Rnd(0, 1) \cdot [pb_{i, d} - x_{i, d}] + C_2 \cdot Rnd(0, 1) \cdot [gb_{d} - x_{i, d}]$
     \State $x_{i, d} = x_{i, d} + v_{i, d}$ \Comment{Update the velocity and positions}
 \EndFor
@@ -176,11 +174,18 @@ make test
 
 The artifact is located in the `bin` directory and it is called `test`.
 
+Along with the executable files, there are also scripts used in order to run the program within the University cluster. Each job in the cluster is handled by *PBS (Portable Bash Script)* which submits them to the scheduler. By means of a script, it is possible to tell the scheduler what resources the job requires in order to complete (e.g. number of processors, amount of memory, time to complete etc.) and the application the user wants to run.
+
+The `run.sh` file in the `scripts` folder of the repository allows the user to submit the application to the cluster. The script has three parameters: number of processes, path of the ini file containing the program configuration and the number of threads. Once submitted with the `qsub` command, the script generates a number of docker containers equal to the number of specified processes thanks to the `mpiexec` binary. Each container runs the application in a shared network, therefore each process is able to communicate with each other. The details of the program deployment is discussed in the section dedicated to DevOps.
+
+The `generate_cluster_run.sh` file, contained in the `scripts` folder, is employed in order to generate specific runs in order to benchmark the application. In details, the shell file considers several combinations of processes, threads, nodes and places. More details are provided in the section dedicated to the application benchmark.
+
 ### Execute
 The executable file can be invoked with or without `OpenMP` and with or without `OpenMPI`. However, to fully exploit `OpenMPI`, it is recommended to execute the program `mpiexec` to spawn multiple processes of the multi-process application.
 
-The executable file requires several arguments. Here there is an excerpt of the program output when the `--help` flag is called.
+The executable file requires several arguments. Below there is an excerpt of the program output when the `--help` flag is called.
 
+```
 A Cooperating parallelized solution for Genetic Algorithm. A tool that takes a set of continuous or discrete variables and an optimization
 problem designed to work with them. The goal is to find the optimal solution by
 exploiting Genetic Algorithms and the computational power offered by the cluster
@@ -191,3 +196,11 @@ exploiting Genetic Algorithms and the computational power offered by the cluster
   -?, --help                 Give this help list
       --usage                Give a short usage message
   -V, --version              Print program version
+```
+
+In order to run, the application requires three parameters, two which are optional, while one is mandatory.
+
+The compulsory parameter is the configuration file, which needs to be provided in an `INI file`. This file, takes care of all the parameters which are needed by the Particle Swarm Optimization algorithm to run and which have been fully discussed during the introduction to the problem.
+The repository provides a standard `INI` file, called `pso-data.ini`, which can be modified in order to configure algorithm so as to solve the target problem.
+
+It is possible to specify the number of threads the program is allowed to spawn with the `-m` flag, and whether to employ `MPI` primitives or not with the `-u` flag.
