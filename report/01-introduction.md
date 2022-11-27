@@ -1,3 +1,4 @@
+\newpage
 # Introduction
 
 ## Particle Swarm Optimization
@@ -45,6 +46,7 @@ At each step, each particle updates first its velocity:
 $$v' = w \cdot v + \phi_1 U_1 \cdot (y-x) + \phi_2 U_2 \cdot (z-x)$$
 
 where:
+
 - $x$ and $v$ are the particle current position and velocity, respectively;
 - $y$ and $z$ are the personal and social/global best position, respectively;
 - $w$ is the inertia (weighs the current velocity)$\phi_1$, $\phi_2$ are acceleration coefficients/learning rates (cognitive and social, respectively);
@@ -52,7 +54,7 @@ $U_1$ and $U_2$ are uniform random numbers in $[0,1]$.
 
 Finally, each particle updates its position:
 
-$x' = x+v'$
+$$x' = x+v'$$
 
 and in case of improvement, update $y$ (and eventually $z$).
 
@@ -140,7 +142,7 @@ Along with the compulsory libraries, the following libraries were exploited:
 - [sqlite](https://www.sqlite.org/index.html): SQLite is a C-language library that provides a SQL database engine that is tiny, quick, self-contained, high-reliability, and full-featured. The choice of `sqlite` was made in order to save particles' information at each iteration in an simple and fast way, avoiding dealing with race conditions.
 
 - [argp](https://www.gnu.org/software/libc/manual/html_node/Argp.html): `argp` is a parsing interface for unix-style argument vectors.
-The argp features include, as defined in the GNU coding standards, automatically producing output in response to the '--help' and '--version' options and the possibility for programmers to explicitly define the input of the script. This library was employed in order to allow the user to explore the possible configurations made available by the software.
+The argp features include, as defined in the GNU coding standards, automatically producing output in response to the `--help` and `--version` options and the possibility for programmers to explicitly define the input of the script. This library was employed in order to allow the user to explore the possible configurations made available by the software.
 
 - [check](https://libcheck.github.io/check/): `check` is a unit testing framework written in C. It has a straightforward interface for defining unit tests helping the developer to build robust software. This library was included in the application in order to perform unit-testing on the structure we have created. This choice implication are a more robust software.
 

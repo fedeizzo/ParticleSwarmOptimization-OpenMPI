@@ -1001,7 +1001,12 @@ $endif$
 $else$
 {
 $if(colorlinks)$
-\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=$if(toccolor)$$toccolor$$else$blue$endif$
+    filecolor=magenta,      
+    urlcolor=magenta,
+    }
 $endif$
 \setcounter{tocdepth}{$toc-depth$}
 \tableofcontents
