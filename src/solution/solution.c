@@ -21,15 +21,3 @@ Solution cloneSolution(Solution solution) {
   new->dimension = solution->dimension;
   return new;
 }
-
-void printSolution(Solution solution) {
-  printf("\tPos: [");
-  for (int i = 0; i < solution->dimension; i++) {
-    if (i == solution->dimension - 1) {
-      printf("%f]\n", solution->pos[i]);
-    } else {
-      printf("%f, ", solution->pos[i]);
-    }
-  }
-  printf("\n\tFitness value: %f\n", solution->fitness);
-}

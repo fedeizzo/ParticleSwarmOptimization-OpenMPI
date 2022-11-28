@@ -62,33 +62,4 @@ void initalizeBroacastMessage(BroadcastMessage message, const int process_id,
  * @param[in] message the message to destroy
  */
 void destroyBroadcastMessage(BroadcastMessage message);
-
-/**
- * @brief Includes a solution within a broadcast message
- * @details Make a deep copy of a solution within the solution_t contained in the broadcast message
- * @param[inout] message message in which the deep copy is done
- * @param[in] solution solution deep copied
- */
-void includeSolution(solution_t *message, Solution solution);
-
-/**
- * @brief Clones the passed message
- * @param[in] message message to clone
- * @return returns the cloned message
- */
-BroadcastMessage cloneMessage(BroadcastMessage message);
-
-/**
- * @brief Clones the passed message
- * @param[in] message message to clone
- * @return returns the cloned message
- */
-BroadcastMessage cloneMessageStructToPointer(broadcastMessage_t msg);
-
-/**
- * @brief Clones the passed message
- * @param[in] message message to clone
- * @return returns the cloned message
- */
-broadcastMessage_t cloneMessageStructToStruct(broadcastMessage_t msg);
 #endif

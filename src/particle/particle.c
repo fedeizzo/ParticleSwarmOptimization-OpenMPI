@@ -9,16 +9,6 @@
 void randomArrayInitialization(double *array, int n, double min, double max);
 void updateFitness(Particle particle, double (*fitnessFunction)(double *, int));
 
-void printParticle(void *data) {
-  Particle particle = (Particle)data;
-  printf("Current %d:\n", particle->id);
-  printSolution(particle->current);
-  printf("Personal best %d:\n", particle->id);
-  printSolution(particle->personalBest);
-  printf("Social best %d:\n", particle->id);
-  printSolution(particle->socialBest);
-}
-
 void randomArrayInitialization(double *array, int n, double min, double max) {
   for (int i = 0; i < n; i++)
     array[i] = randfrom(min, max);

@@ -42,10 +42,4 @@ void destroySolution(Solution solution);
  * @return returns the new crated solution
  */
 Solution cloneSolution(Solution solution);
-
-/**
- * @brief Prints the passed solution
- * @param[in] solution solution to print
- */
-void printSolution(Solution solution);
 #endif
