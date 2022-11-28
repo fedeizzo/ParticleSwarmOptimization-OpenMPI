@@ -21,10 +21,8 @@ There are different structures of neighborhood which can be considered, and they
 
 The most relevant types of neighborhood are: 
 
-- *Global*: the best individual in the neighborhood is also the *global* best in the entire swarm.
-
-- *Distance-based*: based on a proximity metric (e.g. euclidean distance) 
-
+- *Global*: the best individual in the neighborhood is also the *global* best in the entire swarm;
+- *Distance-based*: based on a proximity metric (e.g. euclidean distance);
 - *List-based*: based on a predetermined topology arranging the solution indexes according to some order or structure, and a given neighborhood size.
 
 ![Different neighborhood structures in PSO](./images/particle_neighborhood.png)
@@ -49,8 +47,9 @@ where:
 
 - $x$ and $v$ are the particle current position and velocity, respectively;
 - $y$ and $z$ are the personal and social/global best position, respectively;
-- $w$ is the inertia (weighs the current velocity)$\phi_1$, $\phi_2$ are acceleration coefficients/learning rates (cognitive and social, respectively);
-$U_1$ and $U_2$ are uniform random numbers in $[0,1]$.
+- $w$ is the inertia (weighs the current velocity);
+- $\phi_1$, $\phi_2$ are acceleration coefficients/learning rates (cognitive and social, respectively);
+- $U_1$ and $U_2$ are uniform random numbers in $[0,1]$.
 
 Finally, each particle updates its position:
 
@@ -117,14 +116,14 @@ The pseudocode of the algorithm is shown below:
 \end{algorithmic}
 \end{algorithm}
 
-## OpenMPI
+## OpenMPI (TODO: write about MPI and not about the project structure)
 OpenMPI library is used to convey information across processes running on different nodes of a cluster. The basic information unit is composed as a broadcast message shared over the whole network, in this way all particles of Particle Swarm Optimization (PSO) are able to know all information associated to other members of the swarm.
 
 The process that produces the message sends the message using a gather function because all particles must know the positions of other individuals of the population at every step. In the following picture it is presented a simple schema of the communication.
 
 ![Communication schema](./images/communication_schema.png){ width=250px }
 
-## OpenMP
+## OpenMP (TODO: write about OpenMP and not about the project schema)
 A process can have the task of computing the algorithm for one or more particles, it is divided in several threads that optimize the execution time of the process.
 
 ![Execution schema](./images/execution_schema.png){ width=250px }
@@ -153,11 +152,11 @@ GNU Make is a tool which manages the creation of executables and other non-sourc
 
 Thanks to the definitions of rules, Make enables the user to build and install packages without knowing the details on how that is done. 
 
-Moreover, thanks to wildcards, it is easy to automatize the application building process. Indeed, it first allow to assemble each `C` source file in order to create the object files. Then, all of the object files are linked together, along with other libraries, in order to produce the final executable file. If the building rule is called multiple times, Make is smart enough to understand whether an object file needs to be recreated or no, making use of the already assembled objects, thus speeding up the building process.
+Moreover, thanks to wildcards, it is easy to automatize the application building process. Indeed, it first allow to assemble each `C` source file in order to create the object files. Then, all of the object files are linked together, along with other libraries, in order to produce the final executable file. If the building rule is called multiple times, Make is smart enough to understand whether an object file needs to be recreated or not, making use of the already assembled objects, thus speeding up the building process.
 
 Furthermore, Make can do much more than compiling software, for instance, the project contains rules which allow to build and open the code documentation written by the means of [Doxygen](https://doxygen.nl/).
 
-In order to get the right flag for linking the needed external, the project employs [pkg-config](https://people.freedesktop.org/~dbn/pkg-config-guide.html). This package collects metadata about the installed libraries on the system and easily provides it to the user.
+In order to get the right flag for linking the needed external, the project employs [pkg-config](https://people.freedesktop.org/~dbn/pkg-config-guide.html). This package collects metadata about the installed libraries on the system and easily provides it to the user. Hence, `pkg-config` takes care of where a library is located regardless of the distribution simplifying the application building process.
 
 #### Compile
 To compile the project, it is possible to call the Makefile by typing:

@@ -99,7 +99,7 @@ Its purpose is to inform the receiver process about the particles' position and 
 On the other hand, solution is another structured datatype, which has been defined in order to carry a specific particle information.
 This structured datatype contains the problem dimensionality, the fitness value of the candidate solution and the vector depicting the current particle position within the fitness landscape.
 
-So as to create a variable of the previously mentioned message data type, we have defined a proper function called `define_datatype_broadcast_message`. This function, in turn, calls the function required to defined a message carrying the a solution type variable and a timestamp type variable.
+So as to create a variable of the previously mentioned message data type, we have defined a proper function called define_datatype_broadcast_message. This function, in turn, calls the function required to defined a message carrying the a solution type variable and a timestamp type variable.
 
 The stratification above has simplified the MPI_Datatype definition process. 
 
@@ -154,7 +154,7 @@ The complexity then decreases as follows:
 2. $\mathcal{O}((n/q)^2 \log (n/q))$ for the sorting operation;
 2. $\mathcal{O}((n/q)m)$ for the particles' variables update.
 
-Despite this results, being positive, we have to consider the time needed for each process to exchange their particle to each process. However, most HPC systems use *InfiniBand* interconnection, an high throughput, low latency connection among nodes in the cluster, therefore we claim that the advantage in terms of computational complexity remains legitimate since, in this scenario, the network has little impact on the application performance.
+Despite this results being positive, we have to consider the time needed for each process to exchange their particle to each process. However, most HPC systems use *InfiniBand* interconnection, an high throughput, low latency connection among nodes in the cluster, therefore we claim that the advantage in terms of computational complexity remains legitimate since, in this scenario, the network has little impact on the application performance.
 
 A visual proof of this statement is deeply discussed in the benchmarking section of the report.
 
@@ -172,3 +172,8 @@ TODO qua vanno i logs
 Moreover, all the logs have been formatted in order to comply to a common standard. In this way, during the benchmarking phase, it was possible to extract and manage logs information.
 
 ### Output and SQLite
+The final output of the program are is best particles fitness value found by every process in the system. 
+
+In a real case scenario, one would be more interested in the candidate solution found by the application rather than in the fitness value. However, the fitness function is a suitable value to analyze in order to have a clear understanding on whether the model is improving its solution or not. Moreover, the particles position at every iteration can be stored within the SQLite database. 
+
+In this way, it is possible to recover the path the program has followed in order to build the final solution, and eventually choosing the most suitable point for the user application.
