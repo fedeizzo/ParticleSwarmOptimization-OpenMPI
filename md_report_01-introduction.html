@@ -108,8 +108,8 @@ Generalities</h3>
 <p>There are different structures of neighborhood which can be considered, and they usually depend on the type of optimization problem one has to face.</p>
 <p>The most relevant types of neighborhood are:</p>
 <ul>
-<li><em>Global</em>: the best individual in the neighborhood is also the <em>global</em> best in the entire swarm.</li>
-<li><em>Distance-based</em>: based on a proximity metric (e.g. euclidean distance)</li>
+<li><em>Global</em>: the best individual in the neighborhood is also the <em>global</em> best in the entire swarm;</li>
+<li><em>Distance-based</em>: based on a proximity metric (e.g. euclidean distance);</li>
 <li><em>List-based</em>: based on a predetermined topology arranging the solution indexes according to some order or structure, and a given neighborhood size.</li>
 </ul>
 <div class="image">
@@ -134,7 +134,9 @@ Continuous Optimization</h3>
 <ul>
 <li>$x$ and $v$ are the particle current position and velocity, respectively;</li>
 <li>$y$ and $z$ are the personal and social/global best position, respectively;</li>
-<li>$w$ is the inertia (weighs the current velocity)$\phi_1$, $\phi_2$ are acceleration coefficients/learning rates (cognitive and social, respectively); $U_1$ and $U_2$ are uniform random numbers in $[0,1]$.</li>
+<li>$w$ is the inertia (weighs the current velocity);</li>
+<li>$\phi_1$, $\phi_2$ are acceleration coefficients/learning rates (cognitive and social, respectively);</li>
+<li>$U_1$ and $U_2$ are uniform random numbers in $[0,1]$.</li>
 </ul>
 <p>Finally, each particle updates its position:</p>
 <p>$$x' = x+v'$$</p>
@@ -147,7 +149,7 @@ Continuous Optimization</h3>
 <p>\State \Call{Initialize}{$\mathcal{S}$, $\mathcal{D}$, $f$, $v$, $x$, $x_{min}$, $x_{max}$, $v_{max}$} \Comment{Initialize all the particles}</p>
 <p>\State $it = 0$ \Repeat \ForAll {particle $i \in \mathcal{S}$} \If{$f(x_{i}) &lt; f(pb_{i})$} \State $pb_{i} \gets x_{i}$ \Comment{Update the particles' best position} \EndIf \EndFor \State $\mathcal{S'} = $ \Call{Copy}{$\mathcal{S}$} \Comment{Copy the particle's vector} \ForAll {particle $i \in \mathcal S$} \State $\mathcal{S'}$ = \Call{Sort}{S', i} \Comment{Sort the particles w.r.t. $i$th particle} \ForAll {particle $j \in \mathcal{S'}$} \If{$f(x_j) &lt; f(gb_{i})$} \State $gb_i \gets x_j$ \EndIf \EndFor \EndFor \ForAll {particle $i \in \mathcal S$} \ForAll {dimension $d \in \mathcal D$} \State $v_{i, d} = v_{i, d} + C_1 \cdot Rnd(0, 1) \cdot [pb_{i, d} - x_{i, d}] + C_2 \cdot Rnd(0, 1) \cdot [gb_{d} - x_{i, d}]$ \State $x_{i, d} = x_{i, d} + v_{i, d}$ \Comment{Update the velocity and positions} \EndFor \EndFor \State $it \gets it + 1$ \Comment{Advance iteration} \Until{it $&lt;$ MAX_ITERATIONS} \State \Return x \EndFunction \end{algorithmic} \end{algorithm}</p>
 <h2><a class="anchor" id="autotoc_md17"></a>
-OpenMPI</h2>
+OpenMPI (TODO: write about MPI and not about the project structure)</h2>
 <p>OpenMPI library is used to convey information across processes running on different nodes of a cluster. The basic information unit is composed as a broadcast message shared over the whole network, in this way all particles of Particle Swarm Optimization (PSO) are able to know all information associated to other members of the swarm.</p>
 <p>The process that produces the message sends the message using a gather function because all particles must know the positions of other individuals of the population at every step. In the following picture it is presented a simple schema of the communication.</p>
 <div class="image">
@@ -155,7 +157,7 @@ OpenMPI</h2>
 <div class="caption">
 Communication schema</div></div>
    <h2><a class="anchor" id="autotoc_md18"></a>
-OpenMP</h2>
+OpenMP (TODO: write about OpenMP and not about the project schema)</h2>
 <p>A process can have the task of computing the algorithm for one or more particles, it is divided in several threads that optimize the execution time of the process.</p>
 <div class="image">
 <img src="execution_schema.png" alt=""/>
@@ -178,9 +180,9 @@ Build</h3>
 <p>In order to build the executable file of our project, as well as the binary file needed to run the project unit test, we have employed <a href="https://www.gnu.org/software/make/">GNU Make</a>.</p>
 <p>GNU Make is a tool which manages the creation of executables and other non-source files from a program's source files. Make learns how to create your software using a file called the <code>Makefile</code>, which lists each non-source file and how to compute it from other files.</p>
 <p>Thanks to the definitions of rules, Make enables the user to build and install packages without knowing the details on how that is done.</p>
-<p>Moreover, thanks to wildcards, it is easy to automatize the application building process. Indeed, it first allow to assemble each <code>C</code> source file in order to create the object files. Then, all of the object files are linked together, along with other libraries, in order to produce the final executable file. If the building rule is called multiple times, Make is smart enough to understand whether an object file needs to be recreated or no, making use of the already assembled objects, thus speeding up the building process.</p>
+<p>Moreover, thanks to wildcards, it is easy to automatize the application building process. Indeed, it first allow to assemble each <code>C</code> source file in order to create the object files. Then, all of the object files are linked together, along with other libraries, in order to produce the final executable file. If the building rule is called multiple times, Make is smart enough to understand whether an object file needs to be recreated or not, making use of the already assembled objects, thus speeding up the building process.</p>
 <p>Furthermore, Make can do much more than compiling software, for instance, the project contains rules which allow to build and open the code documentation written by the means of <a href="https://doxygen.nl/">Doxygen</a>.</p>
-<p>In order to get the right flag for linking the needed external, the project employs <a href="https://people.freedesktop.org/~dbn/pkg-config-guide.html">pkg-config</a>. This package collects metadata about the installed libraries on the system and easily provides it to the user.</p>
+<p>In order to get the right flag for linking the needed external, the project employs <a href="https://people.freedesktop.org/~dbn/pkg-config-guide.html">pkg-config</a>. This package collects metadata about the installed libraries on the system and easily provides it to the user. Hence, <code>pkg-config</code> takes care of where a library is located regardless of the distribution simplifying the application building process.</p>
 <h4><a class="anchor" id="autotoc_md22"></a>
 Compile</h4>
 <p>To compile the project, it is possible to call the Makefile by typing:</p>

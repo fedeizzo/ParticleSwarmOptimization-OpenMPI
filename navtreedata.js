@@ -46,8 +46,8 @@ var NAVTREE =
           [ "Parametrization", "md_report_01-introduction.html#autotoc_md15", null ],
           [ "Continuous Optimization", "md_report_01-introduction.html#autotoc_md16", null ]
         ] ],
-        [ "OpenMPI", "md_report_01-introduction.html#autotoc_md17", null ],
-        [ "OpenMP", "md_report_01-introduction.html#autotoc_md18", null ],
+        [ "OpenMPI (TODO: write about MPI and not about the project structure)", "md_report_01-introduction.html#autotoc_md17", null ],
+        [ "OpenMP (TODO: write about OpenMP and not about the project schema)", "md_report_01-introduction.html#autotoc_md18", null ],
         [ "Project generalities", "md_report_01-introduction.html#autotoc_md19", [
           [ "Libraries", "md_report_01-introduction.html#autotoc_md20", null ],
           [ "Build", "md_report_01-introduction.html#autotoc_md21", [
@@ -78,25 +78,27 @@ var NAVTREE =
       ] ]
     ] ],
     [ "03-Benchmarking", "md_report_03-Benchmarking.html", [
-      [ "Benchmarking", "md_report_03-Benchmarking.html#autotoc_md38", null ]
+      [ "Benchmarking", "md_report_03-Benchmarking.html#autotoc_md38", [
+        [ "Problem configuration", "md_report_03-Benchmarking.html#autotoc_md39", null ]
+      ] ]
     ] ],
     [ "04-Conclusion", "md_report_04-Conclusion.html", [
-      [ "Conclusion", "md_report_04-Conclusion.html#autotoc_md39", [
-        [ "Is parallelization always a good choice?", "md_report_04-Conclusion.html#autotoc_md40", null ],
-        [ "Thread allocation pattern", "md_report_04-Conclusion.html#autotoc_md41", null ]
+      [ "Conclusion", "md_report_04-Conclusion.html#autotoc_md40", [
+        [ "Is parallelization always a good choice?", "md_report_04-Conclusion.html#autotoc_md41", null ],
+        [ "Thread allocation pattern", "md_report_04-Conclusion.html#autotoc_md42", null ]
       ] ]
     ] ],
     [ "05-DevOps", "md_report_05-DevOps.html", [
-      [ "DevOps", "md_report_05-DevOps.html#autotoc_md42", [
-        [ "Nix", "md_report_05-DevOps.html#autotoc_md43", null ],
-        [ "Docker", "md_report_05-DevOps.html#autotoc_md44", null ],
-        [ "GitHub actions", "md_report_05-DevOps.html#autotoc_md45", [
-          [ "Container creation", "md_report_05-DevOps.html#autotoc_md46", null ],
-          [ "Documentation compilation", "md_report_05-DevOps.html#autotoc_md47", null ]
+      [ "DevOps", "md_report_05-DevOps.html#autotoc_md43", [
+        [ "Nix", "md_report_05-DevOps.html#autotoc_md44", null ],
+        [ "Docker", "md_report_05-DevOps.html#autotoc_md45", null ],
+        [ "GitHub actions", "md_report_05-DevOps.html#autotoc_md46", [
+          [ "Container creation", "md_report_05-DevOps.html#autotoc_md47", null ],
+          [ "Documentation compilation", "md_report_05-DevOps.html#autotoc_md48", null ]
         ] ],
-        [ "Udocker", "md_report_05-DevOps.html#autotoc_md48", [
-          [ "Build phase", "md_report_05-DevOps.html#autotoc_md49", null ],
-          [ "OpenMPI communication", "md_report_05-DevOps.html#autotoc_md50", null ]
+        [ "Udocker", "md_report_05-DevOps.html#autotoc_md49", [
+          [ "Build phase", "md_report_05-DevOps.html#autotoc_md50", null ],
+          [ "OpenMPI communication", "md_report_05-DevOps.html#autotoc_md51", null ]
         ] ]
       ] ]
     ] ],
