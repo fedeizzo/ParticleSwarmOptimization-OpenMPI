@@ -5,7 +5,7 @@
 DOCKER_TAG :=
 
 # LIBRARIES
-LIBRARIES         := sqlite3
+LIBRARIES         := sqlite3 check
 LINKING_LIBRARIES :=
 
 # COMPILER
