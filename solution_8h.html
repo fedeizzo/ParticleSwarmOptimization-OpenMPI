@@ -126,9 +126,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a5a24f2a7fb61764a4592167bbf2cfa14"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structsolution__t.html">Solution</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="solution_8h.html#a5a24f2a7fb61764a4592167bbf2cfa14">cloneSolution</a> (<a class="el" href="structsolution__t.html">Solution</a> solution)</td></tr>
 <tr class="memdesc:a5a24f2a7fb61764a4592167bbf2cfa14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clones the passed solution allocating a new one on the heap.  <a href="solution_8h.html#a5a24f2a7fb61764a4592167bbf2cfa14">More...</a><br /></td></tr>
 <tr class="separator:a5a24f2a7fb61764a4592167bbf2cfa14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b9df0e59eb62ad19a4fa2517484d915"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="solution_8h.html#a9b9df0e59eb62ad19a4fa2517484d915">printSolution</a> (<a class="el" href="structsolution__t.html">Solution</a> solution)</td></tr>
-<tr class="memdesc:a9b9df0e59eb62ad19a4fa2517484d915"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints the passed solution.  <a href="solution_8h.html#a9b9df0e59eb62ad19a4fa2517484d915">More...</a><br /></td></tr>
-<tr class="separator:a9b9df0e59eb62ad19a4fa2517484d915"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Solution definition. </p>
@@ -218,43 +215,6 @@ Functions</h2></td></tr>
 <p>Creates a new solution. </p>
 <dl class="section return"><dt>Returns</dt><dd>returns the crated solution </dd></dl>
 
-</div>
-</div>
-<a id="a9b9df0e59eb62ad19a4fa2517484d915"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b9df0e59eb62ad19a4fa2517484d915">&#9670;&nbsp;</a></span>printSolution()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void printSolution </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structsolution__t.html">Solution</a>&#160;</td>
-          <td class="paramname"><em>solution</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Prints the passed solution. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">solution</td><td>solution to print </td></tr>
-  </table>
-  </dd>
-</dl>
-<div class="fragment"><div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                                      {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  printf(<span class="stringliteral">&quot;\tPos: [&quot;</span>);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; solution-&gt;<a class="code" href="structsolution__t.html#ae5d00140a640db91da86729f8eb59a6e">dimension</a>; i++) {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keywordflow">if</span> (i == solution-&gt;<a class="code" href="structsolution__t.html#ae5d00140a640db91da86729f8eb59a6e">dimension</a> - 1) {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;      printf(<span class="stringliteral">&quot;%f]\n&quot;</span>, solution-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i]);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;      printf(<span class="stringliteral">&quot;%f, &quot;</span>, solution-&gt;<a class="code" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i]);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    }</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  }</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  printf(<span class="stringliteral">&quot;\n\tFitness value: %f\n&quot;</span>, solution-&gt;<a class="code" href="structsolution__t.html#ad6d8a7a10e69350738a3d4f5d21e1670">fitness</a>);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div>
-</div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->
