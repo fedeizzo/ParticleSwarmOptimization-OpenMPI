@@ -10,10 +10,16 @@ keywords: [ParticleSwarmOptimization, PSO, OpenMPI, OpenMP, C, Bio-Inspired, HPC
 numbersections: yes
 lang: en
 babel-lang: english
+header-includes: |
+  \usepackage{algorithm}
+  \usepackage{algpseudocode}
+  \renewcommand{\algorithmicforall}{\textbf{for each}}
 abstract: |
-  This is the abstract.
+  [*Particle Swarm Optimization*](https://doi.org/10.1109/ICNN.1995.488968) is an optimization algorithm for nonlinear function based on birds swarm. It falls back into the sub-field of *Bio-Inspired Artificial Intelligence* and it was designed from a simplified social model inspired by the nature.
 
-  It consists of two paragraphs.
+  A key concept associated with PSO is the role of genetic algorithms and evolution, the functioning is based on several iterations that aim to identify the best possible position represented as a point in a landscape.
 
+  The goal of this project is to design a parallelized implementation capable of exploring the solution space in a faster way. This is done though the usage of two main libraries for *High Performance Computing (HPC)*: *OpenMPI* and *OpenMP*.
+
+  The effectiveness of the proposed solution is tested using the HPC cluster of the University of Trento among other implementations found online.
 ...
-
