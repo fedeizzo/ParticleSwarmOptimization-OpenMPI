@@ -56,3 +56,8 @@ The pulled image created by GitHub and hosted on DockerHub can be used to create
 ![Container pull worflow](./images/container_pull.png){ width=450px }
 
 ### OpenMPI communication
+Normally the OpenMPI communication between different processes is not compatible with sandbox systems like udocker, some additional steps are required to do that:
+
+* the OpenMPI version installed inside the container must match the version used by the host;
+* the executed container must share environment variables with the host, in particular the one that points to the dynamic library of OpenMPI.
+* the executed container must share the host authentication and network.

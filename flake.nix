@@ -27,7 +27,7 @@
             footmisc footnotebackref framed fvextra letltxmacro ly1 mdframed mweights
             needspace pagecolor sourcecodepro sourcesanspro titling ucharcat ulem
             unicode-math upquote xecjk xurl zref algorithms algpseudocodex algorithmicx
-            hyperref;
+            hyperref ieeetran supertabular;
         })
       ];
       shellDeps = with pkgs; [

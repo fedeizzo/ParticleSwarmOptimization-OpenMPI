@@ -8,7 +8,12 @@ $$\vec{x} \; \textnormal{argmin} f(x_1, x_2, \dots, x_n) = \displaystyle\sum_{i 
 
 ![sphere function](./images/sphere_function.jpg){ width=250px }
 
-- `wave function`: TODO
+- `wave function`: unimodal function suitable for single objective optimization. The function does not admit a single optimum, however the fitness increases as long as $x$ approaches to $-\infty$. The wave function is defined as follows:
+
+$$ f(x,y) = x^3 + y^2 $$
+
+![Wave function](./images/wave_function.png){ width=400px }
+
 - `Easom function`: ultimodal function suitable for single objective optimization. The single optimum is located in $\vec{x} = \vec{\pi}$. The Easom function is defined as:
 
 $$f(x) = -\cos(x_1)\cos(x_2)\exp(-(x_1 - \pi)^2 - (x_2 - \pi)^2)$$

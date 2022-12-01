@@ -1,0 +1,19 @@
+---
+title: "Particle Swarm Optimization: a parallelized approach"
+# author: [Bortolotti Samuele, Izzo Federico]
+author:
+  - name: Bortolotti Samuele, Izzo Federico
+    affiliation: University of Trento
+    location: Trento, Italy
+    email: samuele.bortolotti@studenti.unitn.it, federico.izzo@studenti.unitn.it
+keywords: [ParticleSwarmOptimization, PSO, OpenMPI, OpenMP, C, Bio-Inspired, HPC, Parallelization]
+numbersections: yes
+lang: en
+babel-lang: english
+abstract: |
+  This is the abstract.
+
+  It consists of two paragraphs.
+
+...
+

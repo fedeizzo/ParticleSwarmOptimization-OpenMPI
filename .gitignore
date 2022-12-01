@@ -151,6 +151,7 @@ benchmark/gif
 *.mp4
 *.pdf
 log
+log_samu
 !report/pandoc-template/logo.pdf
 *bkp
 *dtmp
