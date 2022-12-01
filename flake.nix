@@ -68,11 +68,24 @@
           cp report.pdf $out
         '';
       };
+      shortReport = pkgs.stdenv.mkDerivation rec {
+        name = "report";
+        src = ./.;
+        buildInputs = reportDeps;
+        buildPhase = ''
+          make REPORT_TYPE=short report
+        '';
+        installPhase = ''
+          mkdir -p $out
+          cp short-report.pdf $out
+        '';
+      };
 
     in
     {
       packages."${system}" = {
         report = report;
+        shortReport = shortReport;
         particle-swarm-optimization = CPackage;
         default = CPackage;
       };

@@ -1,6 +1,9 @@
 # NOTE, for the pkg-config you might require to add yours in the path variable 
 # export PKG_CONFIG_PATH="/usr/lib64/pkgconfig:$PKG_CONFIG_PATH"
 
+# REPORT
+REPORT_TYPE := long
+
 # DOCKER
 DOCKER_TAG :=
 
@@ -98,7 +101,7 @@ doc:
 	@$(DOXYGEN) $(DOXYFILE) $(DOXYGEN_CONF)
 
 report:
-	@./scripts/generate_report.sh
+	@./scripts/generate_report.sh --$(REPORT_TYPE)
 
 cluster-run:
 	@./scripts/generate_cluster_runs.sh
