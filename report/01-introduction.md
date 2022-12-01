@@ -116,19 +116,15 @@ The pseudocode of the algorithm is shown below:
 \end{algorithmic}
 \end{algorithm}
 
-## OpenMPI (TODO: write about MPI and not about the project structure)
-OpenMPI library is used to convey information across processes running on different nodes of a cluster. The basic information unit is composed as a broadcast message shared over the whole network, in this way all particles of Particle Swarm Optimization (PSO) are able to know all information associated to other members of the swarm.
+## MPI
+The MPI (Message Passing Interface) library is used to convey information across processes running on different nodes of a cluster.
 
-The process that produces the message sends the message using a gather function because all particles must know the positions of other individuals of the population at every step. In the following picture it is presented a simple schema of the communication.
+In the scenario described by the application, the basic information unit is composed as a broadcast message shared over the whole network, in this way all particles of Particle Swarm Optimization (PSO) are able to know all information associated to other members of the swarm.
 
-![Communication schema](./images/communication_schema.png){ width=250px }
+## OpenMP
+OpenMP is an API which supports multi-platform shared memory programming.
 
-## OpenMP (TODO: write about OpenMP and not about the project schema)
-A process can have the task of computing the algorithm for one or more particles, it is divided in several threads that optimize the execution time of the process.
-
-![Execution schema](./images/execution_schema.png){ width=250px }
-
-OpenMP is an application programming interface (API) which supports multi-platform shared memory multiprocessing programming.
+In the program scenario, a process is delegated to handle the computing regarding one or more particles. The process job is divided in several threads which optimize the execution time of the process.
 
 ## Project generalities
 

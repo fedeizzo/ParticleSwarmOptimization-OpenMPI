@@ -1,5 +1,4 @@
 \newpage
-\newpage
 # Benchmarking
 After implementing the algorithm, we wanted to understand how our parallelization impacts the performance of the algorithm.
 
