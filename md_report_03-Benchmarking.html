@@ -118,9 +118,46 @@ Problem configuration</h2>
 <div class="line">fitness = sphere</div>
 <div class="line">distance = euclidean</div>
 <div class="line">fitnessGoal = minimum</div>
-</div><!-- fragment --><p>In order to have high-quality and trustworthy results to examine, as indicated in the repository structure, we created a script that allowed us to send thousands of tasks to the University's HPC cluster over the course of many days. The script keeps a limit on the user current submitted job in order to do not monopolize the cluster and comply with the cluster policies. Precisely, we have set a $15$ process limit and every $10$ seconds the script checks whether the user has $15$ or more running processes in the cluster. If it is the case, then the script waits, otherwise it submits a new job to the scheduler.</p>
-<p>The total number of tests we have ran in total is around around 960.</p>
-<p>Since it takes 50 minutes on average for each run, we had to stretch out the submission of jobs across many days (two weeks). </p>
+</div><!-- fragment --><p>The amount of particles and the neighboord population are unreasonable for any known problem but they were chosen to show clearly the advantages brought by a multi process solution.</p>
+<h2><a class="anchor" id="autotoc_md40"></a>
+Cluster jobs</h2>
+<p>In order to have high-quality and trustworthy results to examine, as indicated in the repository structure, we created a script that allowed us to send thousands of tasks to the University's HPC cluster over the course of many days. The script keeps a limit on the user current submitted job in order to do not monopolize the cluster and comply with the cluster policies. Precisely, we have set a $15$ process limit and every $10$ seconds the script checks whether the user has $15$ or more running processes in the cluster. If it is the case, then the script waits, otherwise it submits a new job to the scheduler.</p>
+<p>The total number of tests we have ran in total is around around 960, in particular we tried every possible combinations of different parameters:</p>
+<ul>
+<li>processes: chosen between <code>[1 2 4 8 16 32 64]</code></li>
+<li>threads: chosen between <code>[1 2 4 8 16 32 64]</code></li>
+<li>select: chosen between <code>[1 2 3 4 5]</code></li>
+<li>places: chosen between <code>[pack scatter pack:excl scatter:excl]</code> TODO: spiegare select and places</li>
+</ul>
+<p>select equivale al numero di chunk (un chunk un insieme core/socket non necessariamente sulla stessa macchina). ncpus e' il numero di core che voglio per ogni chunk. pack mette tutti i chunk sulla stessa macchina, scatter li divide su macchine diverse SEMPRE mentre le versioni excl riservano gli interi ?nodi/chunk? alla tua creazione</p>
+<p>We decided to increase the processes and threads number by power of 2 because the most complex algorithm (following the asymptotic notation) should be $\mathcal{O}(nlogn)$ (TODO verificare questa complessita')</p>
+<p>Since it takes 50 minutes on average for each run, we had to stretch out the submission of jobs across many days (two weeks).</p>
+<h2><a class="anchor" id="autotoc_md41"></a>
+Results</h2>
+<p>During the execution of the bencmarking phase two problems occured:</p>
+<ul>
+<li>one student saturates the available space in the home of the cluster and for this reason some of our runs were not able to write results on disk at the end of the execution;</li>
+<li>we decided to sumbit all jobs to the short job queue of the cluster, and some jobs failed for <em>time exceed</em> error or missing resources.</li>
+</ul>
+<p>All configurations were launched by both of them in order to validate results and reduce possible noise. In Table 1 it is presented the amount of jobs and the associated fail rate (it is shown only the amount of cores for presentation reasons)</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Processes number </th><th class="markdownTableHeadNone">Total </th><th class="markdownTableHeadNone">Failed </th><th class="markdownTableHeadNone">Fail rate  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">1 </td><td class="markdownTableBodyNone">110 </td><td class="markdownTableBodyNone">18 </td><td class="markdownTableBodyNone">16.36  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">2 </td><td class="markdownTableBodyNone">109 </td><td class="markdownTableBodyNone">51 </td><td class="markdownTableBodyNone">46.79  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">4 </td><td class="markdownTableBodyNone">104 </td><td class="markdownTableBodyNone">52 </td><td class="markdownTableBodyNone">50.00  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">8 </td><td class="markdownTableBodyNone">105 </td><td class="markdownTableBodyNone">59 </td><td class="markdownTableBodyNone">56.19  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">16 </td><td class="markdownTableBodyNone">105 </td><td class="markdownTableBodyNone">64 </td><td class="markdownTableBodyNone">60.95  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">32 </td><td class="markdownTableBodyNone">91 </td><td class="markdownTableBodyNone">63 </td><td class="markdownTableBodyNone">69.23  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">64 </td><td class="markdownTableBodyNone">56 </td><td class="markdownTableBodyNone">43 </td><td class="markdownTableBodyNone">76.79  </td></tr>
+</table>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

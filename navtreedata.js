@@ -79,28 +79,37 @@ var NAVTREE =
     ] ],
     [ "03-Benchmarking", "md_report_03-Benchmarking.html", [
       [ "Benchmarking", "md_report_03-Benchmarking.html#autotoc_md38", [
-        [ "Problem configuration", "md_report_03-Benchmarking.html#autotoc_md39", null ]
+        [ "Problem configuration", "md_report_03-Benchmarking.html#autotoc_md39", null ],
+        [ "Cluster jobs", "md_report_03-Benchmarking.html#autotoc_md40", null ],
+        [ "Results", "md_report_03-Benchmarking.html#autotoc_md41", null ]
       ] ]
     ] ],
     [ "04-Conclusion", "md_report_04-Conclusion.html", [
-      [ "Conclusion", "md_report_04-Conclusion.html#autotoc_md40", [
-        [ "Is parallelization always a good choice?", "md_report_04-Conclusion.html#autotoc_md41", null ],
-        [ "Thread allocation pattern", "md_report_04-Conclusion.html#autotoc_md42", null ]
+      [ "Conclusion", "md_report_04-Conclusion.html#autotoc_md42", [
+        [ "Is parallelization always a good choice?", "md_report_04-Conclusion.html#autotoc_md43", null ],
+        [ "Thread allocation pattern", "md_report_04-Conclusion.html#autotoc_md44", null ]
       ] ]
     ] ],
     [ "05-DevOps", "md_report_05-DevOps.html", [
-      [ "DevOps", "md_report_05-DevOps.html#autotoc_md43", [
-        [ "Nix", "md_report_05-DevOps.html#autotoc_md44", null ],
-        [ "Docker", "md_report_05-DevOps.html#autotoc_md45", null ],
-        [ "GitHub actions", "md_report_05-DevOps.html#autotoc_md46", [
-          [ "Container creation", "md_report_05-DevOps.html#autotoc_md47", null ],
-          [ "Documentation compilation", "md_report_05-DevOps.html#autotoc_md48", null ]
+      [ "DevOps", "md_report_05-DevOps.html#autotoc_md45", [
+        [ "Nix", "md_report_05-DevOps.html#autotoc_md46", null ],
+        [ "Docker", "md_report_05-DevOps.html#autotoc_md47", null ],
+        [ "GitHub actions", "md_report_05-DevOps.html#autotoc_md48", [
+          [ "Container creation", "md_report_05-DevOps.html#autotoc_md49", null ],
+          [ "Documentation compilation", "md_report_05-DevOps.html#autotoc_md50", null ]
         ] ],
-        [ "Udocker", "md_report_05-DevOps.html#autotoc_md49", [
-          [ "Build phase", "md_report_05-DevOps.html#autotoc_md50", null ],
-          [ "OpenMPI communication", "md_report_05-DevOps.html#autotoc_md51", null ]
+        [ "Udocker", "md_report_05-DevOps.html#autotoc_md51", [
+          [ "Build phase", "md_report_05-DevOps.html#autotoc_md52", null ],
+          [ "OpenMPI communication", "md_report_05-DevOps.html#autotoc_md53", null ]
         ] ]
       ] ]
+    ] ],
+    [ "Introduction", "md_report_short-report.html", [
+      [ "Method", "md_report_short-report.html#autotoc_md55", null ],
+      [ "Footnotes", "md_report_short-report.html#autotoc_md56", null ],
+      [ "Cites", "md_report_short-report.html#autotoc_md57", null ],
+      [ "Conclusion", "md_report_short-report.html#autotoc_md58", null ],
+      [ "References", "md_report_short-report.html#autotoc_md59", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -123,7 +132,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"annotated.html"
+"annotated.html",
+"structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
