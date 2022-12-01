@@ -46,8 +46,8 @@ var NAVTREE =
           [ "Parametrization", "md_report_01-introduction.html#autotoc_md15", null ],
           [ "Continuous Optimization", "md_report_01-introduction.html#autotoc_md16", null ]
         ] ],
-        [ "OpenMPI (TODO: write about MPI and not about the project structure)", "md_report_01-introduction.html#autotoc_md17", null ],
-        [ "OpenMP (TODO: write about OpenMP and not about the project schema)", "md_report_01-introduction.html#autotoc_md18", null ],
+        [ "MPI", "md_report_01-introduction.html#autotoc_md17", null ],
+        [ "OpenMP", "md_report_01-introduction.html#autotoc_md18", null ],
         [ "Project generalities", "md_report_01-introduction.html#autotoc_md19", [
           [ "Libraries", "md_report_01-introduction.html#autotoc_md20", null ],
           [ "Build", "md_report_01-introduction.html#autotoc_md21", [
