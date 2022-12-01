@@ -105,11 +105,13 @@ var NAVTREE =
       ] ]
     ] ],
     [ "Introduction", "md_report_short-report.html", [
-      [ "Method", "md_report_short-report.html#autotoc_md55", null ],
-      [ "Footnotes", "md_report_short-report.html#autotoc_md56", null ],
-      [ "Cites", "md_report_short-report.html#autotoc_md57", null ],
-      [ "Conclusion", "md_report_short-report.html#autotoc_md58", null ],
-      [ "References", "md_report_short-report.html#autotoc_md59", null ]
+      [ "Parametrization", "md_report_short-report.html#autotoc_md55", null ],
+      [ "Continuous Optimization", "md_report_short-report.html#autotoc_md56", null ],
+      [ "Method", "md_report_short-report.html#autotoc_md57", null ],
+      [ "Footnotes", "md_report_short-report.html#autotoc_md58", null ],
+      [ "Cites", "md_report_short-report.html#autotoc_md59", null ],
+      [ "Conclusion", "md_report_short-report.html#autotoc_md60", null ],
+      [ "References", "md_report_short-report.html#autotoc_md61", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -133,7 +135,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a"
+"structpso__data__t.html#aeddb3cc59c733815ef3739270b600f80"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
