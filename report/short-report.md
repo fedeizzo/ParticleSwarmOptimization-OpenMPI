@@ -1,6 +1,7 @@
 # Introduction
 *Particle Swarm Optimization* focuses on main definitions: the notion of *particle* and the one of *particle perception*.
 A particle can be seen as an entity which is characterized by:
+
 - a position $x$ depicting the *candidate solution* for our optimization problem;
 - a velocity component $v$, which is used in order to *perturb* the particle;
 - a performance measure $f(x)$, also called *fitness* value, which quantify the quality of the candidate solution.
@@ -13,6 +14,7 @@ This project implements a version of PSO considering *distance-based* neighborho
 
 ## Parametrization
 In order to assess a solution for an optimization problem, PSO requires the following parameters ot be set:
+
 - *Swarm size*: typically 20 particles for problems with dimensionality 2-200;
 - *Neighborhood size*: typically 3 to 5, otherwise global neighborhood;
 - *Velocity update factors*.
@@ -23,6 +25,7 @@ Once the algorithm has been parametrized, a swarm of particles is initialized wi
 At each step, each particle updates first its velocity: 
 $$v' = w \cdot v + \phi_1 U_1 \cdot (y-x) + \phi_2 U_2 \cdot (z-x)$$
 where:
+
 - $x$ and $v$ are the particle current position and velocity, respectively;
 - $y$ and $z$ are the personal and social/global best position, respectively;
 - $w$ is the inertia (weighs the current velocity);

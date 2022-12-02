@@ -95,7 +95,7 @@ In order to subdivide the work and to carry out the final computation, the archi
 
 *All-to-all* parallel pattern is characterized by the exchange of individual messages from every process to any other processor. In this way, the program effectively uses all the processes in order to carry out the computation, as the coordination operations are handled by MPI.
 
-TODO
+![Communication schema.](./images/communication_schema.png)
 
 ### Message
 To send a message between different processes we created a custom MPI data type called broadcastMessage_t.
