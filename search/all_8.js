@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['log_5fevent_44',['log_Event',['../structlog__Event.html',1,'']]],
-  ['license_45',['LICENSE',['../md_LICENSE.html',1,'']]]
+  ['message_2eh_0',['message.h',['../message_8h.html',1,'']]],
+  ['mpi_5fprocess_1',['mpi_process',['../structbroadcastMessage__t.html#a504ca44fd1a5131cb8b79e1907bdf6a0',1,'broadcastMessage_t']]]
 ];

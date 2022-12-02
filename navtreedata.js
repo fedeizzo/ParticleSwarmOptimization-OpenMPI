@@ -1,24 +1,26 @@
 /*
-@licstart  The following is the entire license notice for the
-JavaScript code in this file.
+ @licstart  The following is the entire license notice for the JavaScript code in this file.
 
-Copyright (C) 1997-2019 by Dimitri van Heesch
+ The MIT License (MIT)
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of version 2 of the GNU General Public License as published by
-the Free Software Foundation
+ Copyright (C) 1997-2020 by Dimitri van Heesch
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ and associated documentation files (the "Software"), to deal in the Software without restriction,
+ including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
 
-You should have received a copy of the GNU General Public License along
-with this program; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ The above copyright notice and this permission notice shall be included in all copies or
+ substantial portions of the Software.
 
-@licend  The above is the entire license notice
-for the JavaScript code in this file
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+ @licend  The above is the entire license notice for the JavaScript code in this file
 */
 var NAVTREE =
 [
@@ -38,80 +40,70 @@ var NAVTREE =
       [ "Dependencies", "index.html#autotoc_md10", null ]
     ] ],
     [ "LICENSE", "md_LICENSE.html", null ],
-    [ "Abstract", "md_report_00-abstract.html", null ],
-    [ "01-introduction", "md_report_01-introduction.html", [
-      [ "Introduction", "md_report_01-introduction.html#autotoc_md12", [
-        [ "Particle Swarm Optimization", "md_report_01-introduction.html#autotoc_md13", [
-          [ "Generalities", "md_report_01-introduction.html#autotoc_md14", null ],
-          [ "Parametrization", "md_report_01-introduction.html#autotoc_md15", null ],
-          [ "Continuous Optimization", "md_report_01-introduction.html#autotoc_md16", null ]
+    [ "Abstract", "md_report_00_abstract.html", null ],
+    [ "Introduction", "md_report_01_introduction.html", [
+      [ "Particle Swarm Optimization", "md_report_01_introduction.html#autotoc_md13", [
+        [ "Generalities", "md_report_01_introduction.html#autotoc_md14", null ],
+        [ "Parametrization", "md_report_01_introduction.html#autotoc_md15", null ],
+        [ "Continuous Optimization", "md_report_01_introduction.html#autotoc_md16", null ]
+      ] ],
+      [ "MPI", "md_report_01_introduction.html#autotoc_md17", null ],
+      [ "OpenMP", "md_report_01_introduction.html#autotoc_md18", null ],
+      [ "Project generalities", "md_report_01_introduction.html#autotoc_md19", [
+        [ "Libraries", "md_report_01_introduction.html#autotoc_md20", null ],
+        [ "Build", "md_report_01_introduction.html#autotoc_md21", [
+          [ "Compile", "md_report_01_introduction.html#autotoc_md22", null ]
         ] ],
-        [ "MPI", "md_report_01-introduction.html#autotoc_md17", null ],
-        [ "OpenMP", "md_report_01-introduction.html#autotoc_md18", null ],
-        [ "Project generalities", "md_report_01-introduction.html#autotoc_md19", [
-          [ "Libraries", "md_report_01-introduction.html#autotoc_md20", null ],
-          [ "Build", "md_report_01-introduction.html#autotoc_md21", [
-            [ "Compile", "md_report_01-introduction.html#autotoc_md22", null ]
-          ] ],
-          [ "Execute", "md_report_01-introduction.html#autotoc_md23", null ]
+        [ "Execute", "md_report_01_introduction.html#autotoc_md23", null ]
+      ] ]
+    ] ],
+    [ "Problem Analysis", "md_report_02_problem_analysis.html", [
+      [ "Program configuration", "md_report_02_problem_analysis.html#autotoc_md25", null ],
+      [ "Serial version of the algorithm", "md_report_02_problem_analysis.html#autotoc_md26", [
+        [ "Serial algorithm optimization", "md_report_02_problem_analysis.html#autotoc_md27", [
+          [ "Particles' initialization", "md_report_02_problem_analysis.html#autotoc_md28", null ],
+          [ "Exchange particles' information", "md_report_02_problem_analysis.html#autotoc_md29", null ],
+          [ "Sorting algorithm", "md_report_02_problem_analysis.html#autotoc_md30", null ],
+          [ "Velocity and position update", "md_report_02_problem_analysis.html#autotoc_md31", null ]
         ] ]
+      ] ],
+      [ "Parallel version of the algorithm", "md_report_02_problem_analysis.html#autotoc_md32", [
+        [ "Architecture", "md_report_02_problem_analysis.html#autotoc_md33", null ],
+        [ "Message", "md_report_02_problem_analysis.html#autotoc_md34", null ],
+        [ "Communication pattern", "md_report_02_problem_analysis.html#autotoc_md35", null ],
+        [ "Logs", "md_report_02_problem_analysis.html#autotoc_md36", null ],
+        [ "Output and SQLite", "md_report_02_problem_analysis.html#autotoc_md37", null ]
       ] ]
     ] ],
-    [ "02-problem-analysis", "md_report_02-problem-analysis.html", [
-      [ "Problem Analysis", "md_report_02-problem-analysis.html#autotoc_md24", [
-        [ "Program configuration", "md_report_02-problem-analysis.html#autotoc_md25", null ],
-        [ "Serial version of the algorithm", "md_report_02-problem-analysis.html#autotoc_md26", [
-          [ "Serial algorithm optimization", "md_report_02-problem-analysis.html#autotoc_md27", [
-            [ "Particles' initialization", "md_report_02-problem-analysis.html#autotoc_md28", null ],
-            [ "Exchange particles' information", "md_report_02-problem-analysis.html#autotoc_md29", null ],
-            [ "Sorting algorithm", "md_report_02-problem-analysis.html#autotoc_md30", null ],
-            [ "Velocity and position update", "md_report_02-problem-analysis.html#autotoc_md31", null ]
-          ] ]
-        ] ],
-        [ "Parallel version of the algorithm", "md_report_02-problem-analysis.html#autotoc_md32", [
-          [ "Architecture", "md_report_02-problem-analysis.html#autotoc_md33", null ],
-          [ "Message", "md_report_02-problem-analysis.html#autotoc_md34", null ],
-          [ "Communication pattern", "md_report_02-problem-analysis.html#autotoc_md35", null ],
-          [ "Logs", "md_report_02-problem-analysis.html#autotoc_md36", null ],
-          [ "Output and SQLite", "md_report_02-problem-analysis.html#autotoc_md37", null ]
-        ] ]
+    [ "Benchmarking", "md_report_03_Benchmarking.html", [
+      [ "Problem configuration", "md_report_03_Benchmarking.html#autotoc_md39", null ],
+      [ "Cluster jobs", "md_report_03_Benchmarking.html#autotoc_md40", null ],
+      [ "Results", "md_report_03_Benchmarking.html#autotoc_md41", null ]
+    ] ],
+    [ "DevOps", "md_report_04_DevOps.html", [
+      [ "Nix", "md_report_04_DevOps.html#autotoc_md43", null ],
+      [ "Docker", "md_report_04_DevOps.html#autotoc_md44", null ],
+      [ "GitHub actions", "md_report_04_DevOps.html#autotoc_md45", [
+        [ "Container creation", "md_report_04_DevOps.html#autotoc_md46", null ],
+        [ "Documentation compilation", "md_report_04_DevOps.html#autotoc_md47", null ]
+      ] ],
+      [ "Udocker", "md_report_04_DevOps.html#autotoc_md48", [
+        [ "Build phase", "md_report_04_DevOps.html#autotoc_md49", null ],
+        [ "OpenMPI communication", "md_report_04_DevOps.html#autotoc_md50", null ]
       ] ]
     ] ],
-    [ "03-Benchmarking", "md_report_03-Benchmarking.html", [
-      [ "Benchmarking", "md_report_03-Benchmarking.html#autotoc_md38", [
-        [ "Problem configuration", "md_report_03-Benchmarking.html#autotoc_md39", null ],
-        [ "Cluster jobs", "md_report_03-Benchmarking.html#autotoc_md40", null ],
-        [ "Results", "md_report_03-Benchmarking.html#autotoc_md41", null ]
-      ] ]
+    [ "Conclusion", "md_report_05_Conclusion.html", [
+      [ "Is parallelization always a good choice?", "md_report_05_Conclusion.html#autotoc_md52", null ],
+      [ "Thread allocation pattern", "md_report_05_Conclusion.html#autotoc_md53", null ]
     ] ],
-    [ "04-DevOps", "md_report_04-DevOps.html", [
-      [ "DevOps", "md_report_04-DevOps.html#autotoc_md42", [
-        [ "Nix", "md_report_04-DevOps.html#autotoc_md43", null ],
-        [ "Docker", "md_report_04-DevOps.html#autotoc_md44", null ],
-        [ "GitHub actions", "md_report_04-DevOps.html#autotoc_md45", [
-          [ "Container creation", "md_report_04-DevOps.html#autotoc_md46", null ],
-          [ "Documentation compilation", "md_report_04-DevOps.html#autotoc_md47", null ]
-        ] ],
-        [ "Udocker", "md_report_04-DevOps.html#autotoc_md48", [
-          [ "Build phase", "md_report_04-DevOps.html#autotoc_md49", null ],
-          [ "OpenMPI communication", "md_report_04-DevOps.html#autotoc_md50", null ]
-        ] ]
-      ] ]
-    ] ],
-    [ "05-Conclusion", "md_report_05-Conclusion.html", [
-      [ "Conclusion", "md_report_05-Conclusion.html#autotoc_md51", [
-        [ "Is parallelization always a good choice?", "md_report_05-Conclusion.html#autotoc_md52", null ],
-        [ "Thread allocation pattern", "md_report_05-Conclusion.html#autotoc_md53", null ]
-      ] ]
-    ] ],
-    [ "Introduction", "md_report_short-report.html", [
-      [ "Parametrization", "md_report_short-report.html#autotoc_md55", null ],
-      [ "Continuous Optimization", "md_report_short-report.html#autotoc_md56", null ],
-      [ "Method", "md_report_short-report.html#autotoc_md57", null ],
-      [ "Footnotes", "md_report_short-report.html#autotoc_md58", null ],
-      [ "Cites", "md_report_short-report.html#autotoc_md59", null ],
-      [ "Conclusion", "md_report_short-report.html#autotoc_md60", null ],
-      [ "References", "md_report_short-report.html#autotoc_md61", null ]
+    [ "Introduction", "md_report_short_report.html", [
+      [ "Parametrization", "md_report_short_report.html#autotoc_md55", null ],
+      [ "Continuous Optimization", "md_report_short_report.html#autotoc_md56", null ],
+      [ "Method", "md_report_short_report.html#autotoc_md57", null ],
+      [ "Footnotes", "md_report_short_report.html#autotoc_md58", null ],
+      [ "Cites", "md_report_short_report.html#autotoc_md59", null ],
+      [ "Conclusion", "md_report_short_report.html#autotoc_md60", null ],
+      [ "References", "md_report_short_report.html#autotoc_md61", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -134,8 +126,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"annotated.html",
-"structpso__data__t.html#aeddb3cc59c733815ef3739270b600f80"
+"annotated.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
