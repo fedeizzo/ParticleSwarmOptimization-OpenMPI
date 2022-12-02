@@ -27,8 +27,9 @@
             adjustbox babel-german background bidi collectbox csquotes everypage filehook
             footmisc footnotebackref framed fvextra letltxmacro ly1 mdframed mweights
             needspace pagecolor sourcecodepro sourcesanspro titling ucharcat ulem
-            unicode-math upquote xecjk xurl zref algorithms algpseudocodex algorithmicx
-            hyperref ieeetran supertabular;
+            unicode-math upquote xecjk xurl zref algorithms algorithm2e ifoddpage
+            algpseudocodex algorithmicx hyperref ieeetran supertabular standalone preview
+            relsize;
         })
       ];
       shellDeps = with pkgs; [
@@ -81,18 +82,32 @@
           cp short-report.pdf $out
         '';
       };
+      doxygen-awesome = pkgs.fetchFromGitHub {
+        owner = "jothepro";
+        repo = "doxygen-awesome-css";
+        rev = "a3c119b4797be2039761ec1fa0731f038e3026f6";
+        sha256 = "sha256-kslmiwgezjPz7EuMBt3c12bAzGYLjIE1otetw2ccNzE=";
+      };
       documentation = pkgs.stdenv.mkDerivation rec {
         name = "documentation";
         src = ./.;
         buildInputs = reportDeps;
         buildPhase = ''
+          mkdir doxygen-awesome-css
+          cp -r ${doxygen-awesome}/* doxygen-awesome-css/
+          cd report
           find . -name '*.md' | xargs sed -i 's/{ width=.*px }//g'
           find . -name '*.md' | xargs sed -i 's/\\newpage//g'
+          cd ..
           make doc
           touch docs/html/.nojekyll
+          make report
+          make REPORT_TYPE=short report
         '';
         installPhase = ''
           mkdir -p $out
+          cp report.pdf $out/
+          cp short-report.pdf $out/
           cp -a docs/html/* $out/
         '';
       };
