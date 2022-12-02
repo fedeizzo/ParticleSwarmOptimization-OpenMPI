@@ -84,24 +84,24 @@ var NAVTREE =
         [ "Results", "md_report_03-Benchmarking.html#autotoc_md41", null ]
       ] ]
     ] ],
-    [ "04-Conclusion", "md_report_04-Conclusion.html", [
-      [ "Conclusion", "md_report_04-Conclusion.html#autotoc_md42", [
-        [ "Is parallelization always a good choice?", "md_report_04-Conclusion.html#autotoc_md43", null ],
-        [ "Thread allocation pattern", "md_report_04-Conclusion.html#autotoc_md44", null ]
+    [ "04-DevOps", "md_report_04-DevOps.html", [
+      [ "DevOps", "md_report_04-DevOps.html#autotoc_md42", [
+        [ "Nix", "md_report_04-DevOps.html#autotoc_md43", null ],
+        [ "Docker", "md_report_04-DevOps.html#autotoc_md44", null ],
+        [ "GitHub actions", "md_report_04-DevOps.html#autotoc_md45", [
+          [ "Container creation", "md_report_04-DevOps.html#autotoc_md46", null ],
+          [ "Documentation compilation", "md_report_04-DevOps.html#autotoc_md47", null ]
+        ] ],
+        [ "Udocker", "md_report_04-DevOps.html#autotoc_md48", [
+          [ "Build phase", "md_report_04-DevOps.html#autotoc_md49", null ],
+          [ "OpenMPI communication", "md_report_04-DevOps.html#autotoc_md50", null ]
+        ] ]
       ] ]
     ] ],
-    [ "05-DevOps", "md_report_05-DevOps.html", [
-      [ "DevOps", "md_report_05-DevOps.html#autotoc_md45", [
-        [ "Nix", "md_report_05-DevOps.html#autotoc_md46", null ],
-        [ "Docker", "md_report_05-DevOps.html#autotoc_md47", null ],
-        [ "GitHub actions", "md_report_05-DevOps.html#autotoc_md48", [
-          [ "Container creation", "md_report_05-DevOps.html#autotoc_md49", null ],
-          [ "Documentation compilation", "md_report_05-DevOps.html#autotoc_md50", null ]
-        ] ],
-        [ "Udocker", "md_report_05-DevOps.html#autotoc_md51", [
-          [ "Build phase", "md_report_05-DevOps.html#autotoc_md52", null ],
-          [ "OpenMPI communication", "md_report_05-DevOps.html#autotoc_md53", null ]
-        ] ]
+    [ "05-Conclusion", "md_report_05-Conclusion.html", [
+      [ "Conclusion", "md_report_05-Conclusion.html#autotoc_md51", [
+        [ "Is parallelization always a good choice?", "md_report_05-Conclusion.html#autotoc_md52", null ],
+        [ "Thread allocation pattern", "md_report_05-Conclusion.html#autotoc_md53", null ]
       ] ]
     ] ],
     [ "Introduction", "md_report_short-report.html", [

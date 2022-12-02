@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PSO - OpenMPI, OpenMP: 05-DevOps</title>
+<title>PSO - OpenMPI, OpenMP: 04-DevOps</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -65,7 +65,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('md_report_05-DevOps.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('md_report_04-DevOps.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -85,14 +85,14 @@ $(document).ready(function(){initNavTree('md_report_05-DevOps.html',''); initRes
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">05-DevOps </div>  </div>
+<div class="title">04-DevOps </div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p>\newpage </p>
-<h1><a class="anchor" id="autotoc_md45"></a>
+<h1><a class="anchor" id="autotoc_md42"></a>
 DevOps</h1>
 <p>In order to automate the build process of documentation, executable, and report a <em>Continuous Integration</em> workflow was designed.</p>
-<h2><a class="anchor" id="autotoc_md46"></a>
+<h2><a class="anchor" id="autotoc_md43"></a>
 Nix</h2>
 <p>The first step of the workflow is composed of a package manager called <a href="https://nixos.org/"><em>Nix</em></a>. It is designed to create environments ensuring reproducibility across different machines.</p>
 <p>The behavior of nix commands is described inside the <code>flake.nix</code> file, it also contains all the dependencies required for the execution of each possible scenario. To enforce the reproducibility in the future all required packages are fixed inside the <code>flake.lock</code> file.</p>
@@ -103,23 +103,23 @@ Nix</h2>
 <li><code>nix build .</code>: same as <code>nix build .#particle-swarm-optimization</code>.</li>
 </ul>
 <p>There exists also a development entrypoint that can be called using the command <code>nix shell</code>, it provides a new shell containing all dependencies required for build, testing, and report.</p>
-<h2><a class="anchor" id="autotoc_md47"></a>
+<h2><a class="anchor" id="autotoc_md44"></a>
 Docker</h2>
 <p>The reproducibility during execution of the final binary is provide by <em>containers</em>. A container is sand box that contains all runtime dependencies required by the executable placed within it.</p>
 <p>A manager for the life-cycle of containers is required, we opted for <em>Docker</em>, a state-of-the-art software used in many environments. It builds an image from the descriptor file <code>Dockerfile</code> placed in the root of the project, then from the image it is possible to create several containers that are independent of each other.</p>
 <p>The main problem encountered was the root permission required by docker for the build operation. This prevented us to use it inside the cluster. To overcome this requirement we had to setup other technologies described in the following sections.</p>
-<h2><a class="anchor" id="autotoc_md48"></a>
+<h2><a class="anchor" id="autotoc_md45"></a>
 GitHub actions</h2>
 <p>A <em>GitHub action</em> is a list of commands executed when a specific event is triggered within a repository. It is possible to define multiple actions (also on different files) inside the <code>.github/workflows</code> directory.</p>
 <p>We defined two workflows, one for the container creation and the other for the documentation compilation. They are triggered on each commit.</p>
-<h3><a class="anchor" id="autotoc_md49"></a>
+<h3><a class="anchor" id="autotoc_md46"></a>
 Container creation</h3>
 <p>The container creation workflow uses the <code>Dockerfile</code> to build up a docker image (as explained in <a href="#Docker">Section 6.2</a>) that is then pushed to a <em>container registry</em> called <em>DockerHub</em>. The process also includes an automation that executes unit tests, if only one them is marked as failed then the whole process is interrupted to avoid runtime errors in production.</p>
 <div class="image">
 <img src="container_creation.png" alt=""/>
 <div class="caption">
 Container creation workflow</div></div>
-   <h3><a class="anchor" id="autotoc_md50"></a>
+   <h3><a class="anchor" id="autotoc_md47"></a>
 Documentation compilation</h3>
 <p>The documentation is compiled in two formats:</p>
 <ul>
@@ -127,7 +127,7 @@ Documentation compilation</h3>
 <li><b>pdf</b>: this report.</li>
 </ul>
 <p>Both formats are generated using a github action and the html website is hosted on <em>GitHub Pages</em> at <a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/">this link</a>.</p>
-<h2><a class="anchor" id="autotoc_md51"></a>
+<h2><a class="anchor" id="autotoc_md48"></a>
 Udocker</h2>
 <p>The final step of the workflow is represented by <a href="https://indigo-dc.github.io/udocker/"><em>Udocker</em></a>, it is a container manager like Docker but it does not require root permission for the execution phase.</p>
 <p>During the usage inside the cluster we encountered two main problems:</p>
@@ -135,7 +135,7 @@ Udocker</h2>
 <li>the build phase;</li>
 <li>the OpenMPI communication between independent sandboxes.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md52"></a>
+<h3><a class="anchor" id="autotoc_md49"></a>
 Build phase</h3>
 <p>Unfortunately <em>udocker</em> does not offer primitives for containers building, it only provides one intake operation that is a pull from a container registry. For this reason we created the workflow described in <a href="#Container creation">Section 6.3.1</a>.</p>
 <p>The pulled image created by GitHub and hosted on DockerHub can be used to create a container within the cluster. The sandbox is executed using a special environment thanks to <em>Fakechroot</em>.</p>
@@ -143,7 +143,7 @@ Build phase</h3>
 <img src="container_pull.png" alt=""/>
 <div class="caption">
 Container pull worflow</div></div>
-   <h3><a class="anchor" id="autotoc_md53"></a>
+   <h3><a class="anchor" id="autotoc_md50"></a>
 OpenMPI communication</h3>
 <p>Normally the OpenMPI communication between different processes is not compatible with sandbox systems like udocker, some additional steps are required to do that:</p>
 <ul>

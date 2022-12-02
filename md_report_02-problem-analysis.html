@@ -187,8 +187,11 @@ Parallel version of the algorithm</h2>
 Architecture</h3>
 <p>In order to subdivide the work and to carry out the final computation, the architecture proposed by the report focuses on the <em>all-to-all</em> parallel computational pattern.</p>
 <p><em>All-to-all</em> parallel pattern is characterized by the exchange of individual messages from every process to any other processor. In this way, the program effectively uses all the processes in order to carry out the computation, as the coordination operations are handled by MPI.</p>
-<p>TODO</p>
-<h3><a class="anchor" id="autotoc_md34"></a>
+<div class="image">
+<img src="communication_schema.png" alt=""/>
+<div class="caption">
+Communication schema.</div></div>
+   <h3><a class="anchor" id="autotoc_md34"></a>
 Message</h3>
 <p>To send a message between different processes we created a custom MPI data type called <a class="el" href="structbroadcastMessage__t.html">broadcastMessage_t</a>. Its purpose is to inform the receiver process about the particles' position and fitness of the sender. The structure is composed by a timestamp, which is needed for logging purposes on the sqlite, the current iteration of the algorithm, the identifier of the particle, the sender rank and the current solution.</p>
 <p>On the other hand, solution is another structured datatype, which has been defined in order to carry a specific particle information. This structured datatype contains the problem dimensionality, the fitness value of the candidate solution and the vector depicting the current particle position within the fitness landscape.</p>

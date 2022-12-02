@@ -88,7 +88,8 @@ $(document).ready(function(){initNavTree('md_report_short-report.html',''); init
 <div class="title">Introduction </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><em>Particle Swarm Optimization</em> focuses on main definitions: the notion of <em>particle</em> and the one of <em>particle perception</em>. A particle can be seen as an entity which is characterized by:</p><ul>
+<div class="textblock"><p><em>Particle Swarm Optimization</em> focuses on main definitions: the notion of <em>particle</em> and the one of <em>particle perception</em>. A particle can be seen as an entity which is characterized by:</p>
+<ul>
 <li>a position $x$ depicting the <em>candidate solution</em> for our optimization problem;</li>
 <li>a velocity component $v$, which is used in order to <em>perturb</em> the particle;</li>
 <li>a performance measure $f(x)$, also called <em>fitness</em> value, which quantify the quality of the candidate solution.</li>
@@ -98,7 +99,8 @@ $(document).ready(function(){initNavTree('md_report_short-report.html',''); init
 <p>This project implements a version of PSO considering <em>distance-based</em> neighborhood in a nearest neighbor fashion. In details, each particle has a fixed number of neighbors, which depend dynamically on the particle position on the landscape. The program offers the user the possibility to modify the number of particles to consider within a particle neighborhood.</p>
 <h1><a class="anchor" id="autotoc_md55"></a>
 Parametrization</h1>
-<p>In order to assess a solution for an optimization problem, PSO requires the following parameters ot be set:</p><ul>
+<p>In order to assess a solution for an optimization problem, PSO requires the following parameters ot be set:</p>
+<ul>
 <li><em>Swarm size</em>: typically 20 particles for problems with dimensionality 2-200;</li>
 <li><em>Neighborhood size</em>: typically 3 to 5, otherwise global neighborhood;</li>
 <li><em>Velocity update factors</em>.</li>
@@ -106,7 +108,8 @@ Parametrization</h1>
 <h1><a class="anchor" id="autotoc_md56"></a>
 Continuous Optimization</h1>
 <p>Once the algorithm has been parametrized, a swarm of particles is initialized with random positions and velocity.</p>
-<p>At each step, each particle updates first its velocity: $$v' = w \cdot v + \phi_1 U_1 \cdot (y-x) + \phi_2 U_2 \cdot (z-x)$$ where:</p><ul>
+<p>At each step, each particle updates first its velocity: $$v' = w \cdot v + \phi_1 U_1 \cdot (y-x) + \phi_2 U_2 \cdot (z-x)$$ where:</p>
+<ul>
 <li>$x$ and $v$ are the particle current position and velocity, respectively;</li>
 <li>$y$ and $z$ are the personal and social/global best position, respectively;</li>
 <li>$w$ is the inertia (weighs the current velocity);</li>
