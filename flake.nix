@@ -89,6 +89,7 @@
           find . -name '*.md' | xargs sed -i 's/{ width=.*px }//g'
           find . -name '*.md' | xargs sed -i 's/\\newpage//g'
           make doc
+          touch docs/html/.nojekyll
         '';
         installPhase = ''
           mkdir -p $out
