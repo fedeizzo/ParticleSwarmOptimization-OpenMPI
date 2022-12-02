@@ -18,6 +18,7 @@
         llvmPackages_13.openmp
       ];
       reportDeps = with pkgs; [
+        doxygen
         gnumake
         pandoc
         (texlive.combine {
@@ -80,13 +81,27 @@
           cp short-report.pdf $out
         '';
       };
-
+      documentation = pkgs.stdenv.mkDerivation rec {
+        name = "documentation";
+        src = ./.;
+        buildInputs = reportDeps;
+        buildPhase = ''
+          find . -name '*.md' | xargs sed -i 's/{ width=.*px }//g'
+          find . -name '*.md' | xargs sed -i 's/\\newpage//g'
+          make doc
+        '';
+        installPhase = ''
+          mkdir -p $out
+          cp -a docs/html/* $out/
+        '';
+      };
     in
     {
       packages."${system}" = {
         report = report;
         shortReport = shortReport;
         particle-swarm-optimization = CPackage;
+        documentation = documentation;
         default = CPackage;
       };
       devShell."${system}" = pkgs.mkShell {

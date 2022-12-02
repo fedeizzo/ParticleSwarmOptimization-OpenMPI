@@ -4,7 +4,7 @@ As explained during the introductory part, the main focus of the PSO algorithm i
 
 - `sphere function`: unimodal function suitable for single objective optimization. The single optimum is located in $\vec{x} = \vec{0}$. The sphere function is defined as follows:
 
-$$\vec{x} \; \textnormal{argmin} f(x_1, x_2, \dots, x_n) = \displaystyle\sum_{i = 1}^{n} x_{i}^2$$
+$$\vec{x} \; \text{argmin} f(x_1, x_2, \dots, x_n) = \displaystyle\sum_{i = 1}^{n} x_{i}^2$$
 
 ![sphere function](./images/sphere_function.jpg){ width=250px }
 

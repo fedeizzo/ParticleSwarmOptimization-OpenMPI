@@ -13,15 +13,7 @@ jobs:
       - uses: cachix/install-nix-action@v18
       - run: nix build .#report && cp result/report.pdf ./report.pdf
       - run: nix build .#shortReport && cp result/short-report.pdf ./short-report.pdf
-      - name: Install Doxygen
-        run: sudo apt-get install doxygen graphviz -y
-        shell: bash
-      - name: Remove incompatible markdown elements
-        run: find . -name '*.md' | xargs sed -i 's/{ width=.*px }//g'
-        shell: bash
-      - name: Generate Doxygen Documentation
-        run: make doc
-        shell: bash
+      - run: nix build .#documentation
       - name: Create .nojekyll (ensures pages with underscores work on gh pages)
         run: touch docs/html/.nojekyll
         shell: bash
