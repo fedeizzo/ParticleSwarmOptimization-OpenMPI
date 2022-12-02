@@ -93,7 +93,7 @@
         src = ./.;
         buildInputs = reportDeps;
         buildPhase = ''
-          mkdir doxygen-awesome-css
+          mkdir -p doxygen-awesome-css
           cp -r ${doxygen-awesome}/* doxygen-awesome-css/
           cd report
           find . -name '*.md' | xargs sed -i 's/{ width=.*px }//g'
