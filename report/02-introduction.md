@@ -126,7 +126,7 @@ OpenMP is an API which supports multi-platform shared memory programming.
 
 In the program scenario, a process is delegated to handle the computing regarding one or more particles. The process job is divided in several threads which optimize the execution time of the process.
 
-## State-of-the art anaysis
+## State-of-the art analysis
 The first serial implementation of PSO was published in 1995 by Kennedy and Eberhat [@KennedyEberhart], after that many variations of it were proposed. In our opinion they can be divided into three main categories of pubblications:
 
 1. the ones that aim to change the behavior of the algorithm introducing new features;
