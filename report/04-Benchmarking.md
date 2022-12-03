@@ -72,3 +72,10 @@ All configurations were launched by both of them in order to validate results an
 | 16               | 105   | 64     | 60.95     |
 | 32               | 91    | 63     | 69.23     |
 | 64               | 56    | 43     | 76.79     |
+
+![Thread and time exceed failures correlation](./images/time_threads_correlation.pdf){ width=250px }{#fig:time-thread-correlation}
+
+![Thread and time exceed failures correlation](./images/threads_performance.pdf){ width=250px }{#fig:threads-performance}
+
+![Thread and time exceed failures correlation](./images/processes_performance.pdf){ width=250px }{#fig:processes-performance}
+

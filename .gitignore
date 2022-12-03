@@ -155,3 +155,4 @@ log_samu
 !report/pandoc-template/logo.pdf
 *bkp
 *dtmp
+!report/images/*.pdf
