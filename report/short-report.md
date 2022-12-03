@@ -71,6 +71,8 @@ The pseudocode of the algorithm is shown below:
 \end{algorithmic}
 \end{algorithm}
 
+## State-of-the-art analysis
+
 # Method
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
@@ -96,7 +98,7 @@ id est laborum.
 # Cites
 
 Zotero + Better BibTex. All cites are on the file bibliography.bib. This is
-a cite[@djangoproject_models_2016].
+a cite.
 
 # Conclusion
 

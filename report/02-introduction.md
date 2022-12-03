@@ -1,5 +1,5 @@
 \newpage
-# Introduction
+# Introduction {#sec:introduction}
 
 ## Particle Swarm Optimization
 In order to deeply understand the reasons behind the report design choices, it is fundamental to understand comprehensively *Particle Swarm Optimization*.
@@ -17,7 +17,7 @@ The entire set of particles is referred as *swarm*.
 
 Under the expression *particle perception*, we define how each particle communicate with each other. In practice, a particle needs to perceive the positions along with the associated performance measures of the *neighboring particles*. Thanks to this communication pattern, each particle remembers the position $z$ associated to the best performance of all the particles within the neighborhood, as well as its own position where it obtained the best performance so far $y$.
 
-There are different structures of neighborhood which can be considered, and they usually depend on the type of optimization problem one has to face.
+There are different structures of neighborhood which can be considered (figure {@fig:pso-topologies}), and they usually depend on the type of optimization problem one has to face.
 
 The most relevant types of neighborhood are: 
 
@@ -25,7 +25,7 @@ The most relevant types of neighborhood are:
 - *Distance-based*: based on a proximity metric (e.g. euclidean distance);
 - *List-based*: based on a predetermined topology arranging the solution indexes according to some order or structure, and a given neighborhood size.
 
-![Different neighborhood structures in PSO](./images/particle_neighborhood.png)
+![Different neighborhood structures in PSO](./images/particle_neighborhood.png){#fig:pso-topologies}
 
 This project implements a version of PSO considering *distance-based* neighborhood in a nearest neighbor fashion. In details, each particle has a fixed number of neighbors, which depend dynamically on the particle position on the landscape. The program offers the user the possibility to modify the number of particles to consider within a particle neighborhood.
 
@@ -39,9 +39,9 @@ In order to assess a solution for an optimization problem, PSO requires the foll
 ### Continuous Optimization
 Once the algorithm has been parametrized, a swarm of particles is initialized with random positions and velocity.
 
-At each step, each particle updates first its velocity:
+At each step, each particle updates first its velocity (equation {@eq:pso-update-velocity}):
 
-$$v' = w \cdot v + \phi_1 U_1 \cdot (y-x) + \phi_2 U_2 \cdot (z-x)$$
+$$v' = w \cdot v + \phi_1 U_1 \cdot (y-x) + \phi_2 U_2 \cdot (z-x)$$ {#eq:pso-update-velocity}
 
 where:
 
@@ -51,9 +51,9 @@ where:
 - $\phi_1$, $\phi_2$ are acceleration coefficients/learning rates (cognitive and social, respectively);
 - $U_1$ and $U_2$ are uniform random numbers in $[0,1]$.
 
-Finally, each particle updates its position:
+Finally, each particle updates its position (equation {@eq:pso-update-position}):
 
-$$x' = x+v'$$
+$$x' = x+v'$$ {#eq:pso-update-position}
 
 and in case of improvement, update $y$ (and eventually $z$).
 
@@ -125,6 +125,36 @@ In the scenario described by the application, the basic information unit is comp
 OpenMP is an API which supports multi-platform shared memory programming.
 
 In the program scenario, a process is delegated to handle the computing regarding one or more particles. The process job is divided in several threads which optimize the execution time of the process.
+
+## State-of-the art anaysis
+The first serial implementation of PSO was published in 1995 by Kennedy and Eberhat [@KennedyEberhart], after that many variations of it were proposed. In our opinion they can be divided into three main categories of pubblications:
+
+1. the ones that aim to change the behavior of the algorithm introducing new features;
+2. the ones that aim to solve a real world problem using PSO as main algorithm.
+3. the ones that aim to optimize the runtime exectution speed.
+
+In our study we need to exclude the second category because a comparison on those solutions is strictly problem dependent. The first category can be used as case of study for our benchmarking phase but some annotations must be done on the implementation, for example the topology used within the neighboord selection highly influences the final performance of the algorithm. Finally the third category is our perfect competitor, but also in this case there may be some differences derived from the type of PSO version implemented.
+
+In the following table is presenet a list of implementations taken under consideration for the benchmarking phase.
+
+| Authors                                                  | Year | Type                      | Source code                                                     | Notes             |
+|----------------------------------------------------------|------|---------------------------|-----------------------------------------------------------------|-------------------|
+| Kennedy, Eberhart [@KennedyEberhart]                     | 1995 | Serial                    | No                                                              |                   |
+| toddguant                                                | 2019 | Serial                    | [Yes](https://github.com/toddgaunt/cpso)                        | 1                 |
+| sousouho                                                 | 2019 | Serial                    | [Yes](https://github.com/sousouhou/succinctPSO)                 | 1                 |
+| kkentzo                                                  | 2020 | Serial                    | [Yes](https://github.com/kkentzo/pso)                           | 1                 |
+| fisherling                                               | 2020 | Serial                    | [Yes](https://github.com/fischerling/pso)                       | 1                 |
+| Moraes, Mitre [@MoraesMitre]                             | 2014 | Parallel OpenMPI          | No                                                              |                   |
+| Nedja, Moraes, Rogerio, Marcedo Mourelle [@NedJahMoraes] | 2017 | Parallel OpenMPI/MP       | No                                                              |                   |
+| abhi4578                                                 | 2019 | Parallel OpenMPI/MP, CUDA | [Yes](https://github.com/abhi4578/Parallelization-of-PSO)       | 1 (da verificare) |
+| LaSEEB                                                   | 2020 | Parallel OpenMP           | [Yes](https://github.com/LaSEEB/openpso)                        | 2                 |
+| pg443                                                    | 2021 | Serial, Parallel OpenMP   | [Yes](https://github.com/pg443/Particle-Swarm-Optimizer-OpenMP) | 1                 |
+Table: SOTA wokrs.
+
+The notes are:
+
+1. only global neighboord implementation: this permits to save some execution time given the fact that no sort is required for the nearest neighbord computation;
+2. many neighboord implementations but without a distance based approach: same as global neighborhood.
 
 ## Project generalities
 

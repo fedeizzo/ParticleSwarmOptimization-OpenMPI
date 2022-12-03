@@ -9,6 +9,12 @@ if [[ $1 == "--long" ]]; then
 	--from markdown \
 	--template ./pandoc-template/eisvogel.latex \
 	--metadata-file ./pandoc-template/eisvogel-metadata.yaml \
+	--bibliography=./pandoc-template/bibliography.bib \
+	--csl=./pandoc-template/bibliography.csl \
+	--filter pandoc-fignos \
+	--filter pandoc-eqnos \
+	--filter pandoc-secnos \
+	--citeproc \
 	--listings \
 	--number-sections \
 	--highlight-style pygments
@@ -21,6 +27,10 @@ elif [[ $1 == "--short" ]]; then
 	--metadata-file ./pandoc-template/ieee-metadata.yaml \
 	--bibliography=./pandoc-template/bibliography.bib \
 	--csl=./pandoc-template/bibliography.csl \
+	--filter pandoc-fignos \
+	--filter pandoc-eqnos \
+	--filter pandoc-secnos \
+	--citeproc \
 	--listings \
 	--number-sections \
 	--highlight-style pygments

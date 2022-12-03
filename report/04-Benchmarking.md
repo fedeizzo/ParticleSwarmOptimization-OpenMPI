@@ -1,5 +1,5 @@
 \newpage
-# Benchmarking
+# Benchmarking {#sec:benchmarking}
 After implementing the algorithm, we wanted to understand how our parallelization impacts the performance of the algorithm.
 
 Hence, we devised a full analysis of our algorithm performance changing the number of threads, the number of processes and the pBS process allocation pattern, in order to understand how the running time would have been affected.

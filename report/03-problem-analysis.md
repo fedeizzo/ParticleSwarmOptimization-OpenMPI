@@ -4,40 +4,40 @@ As explained during the introductory part, the main focus of the PSO algorithm i
 
 - `sphere function`: unimodal function suitable for single objective optimization. The single optimum is located in $\vec{x} = \vec{0}$. The sphere function is defined as follows:
 
-$$\vec{x} \; \text{argmin} f(x_1, x_2, \dots, x_n) = \displaystyle\sum_{i = 1}^{n} x_{i}^2$$
+$$\vec{x} \; \text{argmin} f(x_1, x_2, \dots, x_n) = \displaystyle\sum_{i = 1}^{n} x_{i}^2$$ {#eq:sphere-function}
 
-![sphere function](./images/sphere_function.jpg){ width=250px }
+![sphere function](./images/sphere_function.jpg){ width=250px }{#fig:sphere-function}
 
 - `wave function`: unimodal function suitable for single objective optimization. The function does not admit a single optimum, however the fitness increases as long as $x$ approaches to $-\infty$. The wave function is defined as follows:
 
-$$ f(x,y) = x^3 + y^2 $$
+$$ f(x,y) = x^3 + y^2 $${#eq:wave-function}
 
-![Wave function](./images/wave_function.png){ width=400px }
+![Wave function](./images/wave_function.png){ width=400px }{#fig:wave-function}
 
 - `Easom function`: ultimodal function suitable for single objective optimization. The single optimum is located in $\vec{x} = \vec{\pi}$. The Easom function is defined as:
 
-$$f(x) = -\cos(x_1)\cos(x_2)\exp(-(x_1 - \pi)^2 - (x_2 - \pi)^2)$$
+$$f(x) = -\cos(x_1)\cos(x_2)\exp(-(x_1 - \pi)^2 - (x_2 - \pi)^2)$${#eq:easom-function}
 
-![Easom function](./images/easom_function.png){ width=250px }
+![Easom function](./images/easom_function.png){ width=250px }{#fig:easom-function}
 
 - `Ackley function`: unimodal function suitable for single objective optimization. The single optimum is located in $\vec{x} = \vec{0}$. The Ackley function is defined as:
 
-$$f(x) = -a \exp \left(-b \displaystyle\sqrt{\frac{1}{d}\displaystyle\sum_{i=1}^{d} x_i^2} \right) - \exp \left( \frac{1}{d} \displaystyle\sum_{i = 1}{d} \cos(cx_i) \right) + a + \exp(1)$$
+$$f(x) = -a \exp \left(-b \displaystyle\sqrt{\frac{1}{d}\displaystyle\sum_{i=1}^{d} x_i^2} \right) - \exp \left( \frac{1}{d} \displaystyle\sum_{i = 1}{d} \cos(cx_i) \right) + a + \exp(1)$$ {#eq:ackley-function}
 
-![Ackley function](./images/ackley_function.png){ width=250px }
+![Ackley function](./images/ackley_function.png){ width=250px }{#fig:ackley-function}
 
 - `Himmelblau function`: multimodal function suitable for single objective optimization. The function presents four identical minima: $f(\vec{x}) = f(3.0, 2.0) = f(-2.805118, 3.131312) = (-3.779319, -3.283186) = f(3.584428, -1.848126) = 0.0$
 The function is defined as:
 
-$$f(x, y) = (x^2 + y - 11)^2 + (x + y^2 - 7)^2$$
+$$f(x, y) = (x^2 + y - 11)^2 + (x + y^2 - 7)^2$$ {#eq:himmelblau-function}
 
-![Himmelblau function](./images/himmelblau_function.png){ width=250px }
+![Himmelblau function](./images/himmelblau_function.png){ width=250px }{#fig:himmelblau-function}
 
 - `Holder table function`: multimodal function suitable for single objective optimization. The function presents four identical minima: $f(\vec{x}) = f(8.05502, 9.66459) = f(8.05502, 9.66459) = (8.05502, 9.66459) = f(8.05502, 9.66459) = -19.2085$. The function is defined as:
 
-$$f(x) = -\left|\sin(x_1)\cos(x_2)\exp \left( 1 - \frac{\sqrt{x_1^2 + x_2^2}}{\pi}\right)\right|$$
+$$f(x) = -\left|\sin(x_1)\cos(x_2)\exp \left( 1 - \frac{\sqrt{x_1^2 + x_2^2}}{\pi}\right)\right|$$ {#eq:holder-table-function}
 
-![Holder table function](./images/holder_table_function.jpg){ width=250px }
+![Holder table function](./images/holder_table_function.jpg){ width=250px }{#fig:holder-table-function}
 
 For the sake of the explainability, the functions presented above shows the two-dimensional case. Of course, such functions can scale up to as many dimensions as one desires.
 
@@ -54,7 +54,7 @@ As can be seen from the PSO pseudocode shown in the introduction, the main steps
 4. update the particles position and velocity.
 
 ### Serial algorithm optimization
-As mentioned in the introduction section, the program provides the possibility to either run on a single thread or on multiple threads. The multithreading functionalities exploited by the application are offered by the OpenMP library.
+As mentioned in section {@sec:introduction}, the program provides the possibility to either run on a single thread or on multiple threads. The multithreading functionalities exploited by the application are offered by the OpenMP library.
 
 As a first approach, we have tried to use OpenMP directives in order to generate a thread for each loop iteration whenever it was possible.
 
@@ -73,14 +73,14 @@ Since only one process is involved, the initialization step is trivial, as it re
 In the serial version of the application, each particle is stored within an array data structure, therefore with a two-level nested loop, it is possible to make every particle contribution to each other. In this case, as each particle handles a different portion of the memory, a *pragma for* directive is included.
 
 #### Sorting algorithm
-Concerning the sorting algorithm, the program relies on *quicksort*. The main reason behind this choice is the amount of parallelization this algorithm can provide. Indeed, merge sort has a better worst-case performance $\mathcal{O}(n \log n)$ with respect to quicksort having $\mathcal{O}(n^2)$ but requires synchronization in order to merge the partial solutions which is not required in quicksort. Moreover, its average performance is $\mathcal{O}(n \log n)$ as for merge sort.
+Concerning the sorting algorithm, the program relies on *quicksort* (figure {@fig:quicksort-algorithm}). The main reason behind this choice is the amount of parallelization this algorithm can provide. Indeed, merge sort has a better worst-case performance $\mathcal{O}(n \log n)$ with respect to quicksort having $\mathcal{O}(n^2)$ but requires synchronization in order to merge the partial solutions which is not required in quicksort. Moreover, its average performance is $\mathcal{O}(n \log n)$ as for merge sort.
 
 The parallel quicksort main working loop can be described as follows. Before going into the implementation details, in the base settings we have a pool of threads provided by the OpenMP library which can be called whenever is needed, and an array of items that needs to be sorted. 
 
 Initially, one thread selects a pivot and moves the elements of the array which are smaller than the pivot value to the left and the elements which are bigger than the pivot value to the right.
 The resulting two portions of the array wait until there is a free thread ready to process it. 
-
-![Quicksort](./images/quicksort.jpeg){ width=250px }
+ 
+![Quicksort](./images/quicksort.jpeg){ width=250px }{#fig:quicksort-algorithm}
 
 #### Velocity and position update
 As for the initialization step, the process consists in a for loop which scans all the particles' data, and applies the formula according to the algorithm list in the introduction section.
@@ -91,11 +91,11 @@ In this section the report discuss how we have parallelized the algorithm in ord
 In practice, we have distributed the workload among $N$ different processes in the cluster using the *MPI* library and we have exploited multiprocessing via OpenMP for a couple of different shared-memory tasks.
 
 ### Architecture
-In order to subdivide the work and to carry out the final computation, the architecture proposed by the report focuses on the *all-to-all* parallel computational pattern.
+In order to subdivide the work and to carry out the final computation, the architecture proposed by the report focuses on the *all-to-all* parallel computational pattern (figure {@fig:communication-schema}).
 
 *All-to-all* parallel pattern is characterized by the exchange of individual messages from every process to any other processor. In this way, the program effectively uses all the processes in order to carry out the computation, as the coordination operations are handled by MPI.
 
-![Communication schema.](./images/communication_schema.png)
+![Communication schema.](./images/communication_schema.png){#fig:communication-schema}
 
 ### Message
 To send a message between different processes we created a custom MPI data type called broadcastMessage_t.
@@ -133,9 +133,9 @@ To carry out this operation, each process embeds its own particles in an array o
 
 In principle, at the beginning of the algorithm execution, the set of all the particles have been distributed across all processes. However, this operation has been carried out by each process alone without the need for a `MPI_Scatter` call.
 
-`MPI_Allgather` primitive is suitable for the problem since it is an *all-to-all* communication primitive and since it allow to reunite all the particles of each process into a single vector, which, at the end of the communication, will be equal for each process. A scheme illustrating the working behavior of the communication primitive employed is shown below:
+`MPI_Allgather` (figure {@fig:allgather}) primitive is suitable for the problem since it is an *all-to-all* communication primitive and since it allow to reunite all the particles of each process into a single vector, which, at the end of the communication, will be equal for each process. A scheme illustrating the working behavior of the communication primitive employed is shown below:
 
-![Allgather](./images/allgather.png){ width=250px }
+![Allgather](./images/allgather.png){ width=250px }{#fig:allgather}
 
 Once each process knows everything about the others, the application needs to consider the neighbor contributions in order to update the process particles' position and velocity.
 
@@ -161,7 +161,7 @@ The complexity then decreases as follows:
 
 Despite this results being positive, we have to consider the time needed for each process to exchange their particle to each process. However, most HPC systems use *InfiniBand* interconnection, an high throughput, low latency connection among nodes in the cluster, therefore we claim that the advantage in terms of computational complexity remains legitimate since, in this scenario, the network has little impact on the application performance.
 
-A visual proof of this statement is deeply discussed in the benchmarking section of the report.
+A visual proof of this statement is deeply discussed in section {@sec:benchmarking} of the report.
 
 All the previously described operations are executed for a specific number of times specified by the user.
 

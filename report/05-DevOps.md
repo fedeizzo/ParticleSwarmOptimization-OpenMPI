@@ -15,7 +15,7 @@ The build entry points offered by nix are:
 
 There exists also a development entrypoint that can be called using the command `nix shell`, it provides a new shell containing all dependencies required for build, testing, and report.
 
-## Docker
+## Docker {#sec:docker}
 The reproducibility during execution of the final binary is provide by *containers*. A container is sand box that contains all runtime dependencies required by the executable placed within it.
 
 A manager for the life-cycle of containers is required, we opted for *Docker*, a state-of-the-art software used in many environments. It builds an image from the descriptor file `Dockerfile` placed in the root of the project, then from the image it is possible to create several containers that are independent of each other.
@@ -27,10 +27,10 @@ A *GitHub action* is a list of commands executed when a specific event is trigge
 
 We defined two workflows, one for the container creation and the other for the documentation compilation. They are triggered on each commit.
 
-### Container creation
-The container creation workflow uses the `Dockerfile` to build up a docker image (as explained in [Section 6.2](#Docker)) that is then pushed to a *container registry* called *DockerHub*. The process also includes an automation that executes unit tests, if only one them is marked as failed then the whole process is interrupted to avoid runtime errors in production.
+### Container creation {#sec:container-creation}
+The container creation workflow uses the `Dockerfile` to build up a docker image (as explained in section {@sec:docker}) that is then pushed to a *container registry* called *DockerHub*, the process is shown in figure {@fig:container-creation}. The process also includes an automation that executes unit tests, if only one them is marked as failed then the whole process is interrupted to avoid runtime errors in production.
 
-![Container creation workflow](./images/container_creation.png){ width=450px }
+![Container creation workflow](./images/container_creation.png){ width=450px }{#fig:container-creation}
 
 ### Documentation compilation
 The documentation is compiled in two formats:
@@ -49,11 +49,11 @@ During the usage inside the cluster we encountered two main problems:
 * the OpenMPI communication between independent sandboxes.
 
 ### Build phase
-Unfortunately *udocker* does not offer primitives for containers building, it only provides one intake operation that is a pull from a container registry. For this reason we created the workflow described in [Section 6.3.1](#Container creation).
+Unfortunately *udocker* does not offer primitives for containers building, it only provides one intake operation that is a pull from a container registry. For this reason we created the workflow described in section {@sec:container-creation}.
 
-The pulled image created by GitHub and hosted on DockerHub can be used to create a container within the cluster. The sandbox is executed using a special environment thanks to *Fakechroot*.
+The pulled image created by GitHub and hosted on DockerHub can be used to create a container within the cluster. The sandbox is executed using a special environment thanks to *Fakechroot*. The whole process is shown in figure {@fig:container-pull}
 
-![Container pull worflow](./images/container_pull.png){ width=450px }
+![Container pull worflow](./images/container_pull.png){ width=450px }{#fig:container-pull}
 
 ### OpenMPI communication
 Normally the OpenMPI communication between different processes is not compatible with sandbox systems like udocker, some additional steps are required to do that:

@@ -21,6 +21,10 @@
         doxygen
         gnumake
         pandoc
+        pandoc-eqnos
+        pandoc-secnos
+        pandoc-fignos
+        pandoc-tablenos
         (texlive.combine {
           inherit (texlive)
             scheme-small

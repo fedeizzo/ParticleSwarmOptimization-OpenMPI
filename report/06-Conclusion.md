@@ -13,3 +13,6 @@ Benchmarking in the case of thread parallelization is a task which if far from b
 As an effective parallelization, we have started our project by parallelizing each for loop in the code. This has resulted in a waste of resource and a worsening of performances for small size problems. On the other hand, employing parallelization implies a significant performance boost for big dimensionality problems. 
 
 ## Thread allocation pattern
+
+\newpage
+# References
