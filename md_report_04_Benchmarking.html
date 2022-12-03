@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PSO - OpenMPI, OpenMP: Benchmarking</title>
+<title>PSO - OpenMPI, OpenMP: Benchmarking {#sec:benchmarking}</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -79,7 +79,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('md_report_03_Benchmarking.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('md_report_04_Benchmarking.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -98,12 +98,12 @@ $(document).ready(function(){initNavTree('md_report_03_Benchmarking.html',''); i
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">Benchmarking </div></div>
+  <div class="headertitle"><div class="title">Benchmarking {#sec:benchmarking} </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p >After implementing the algorithm, we wanted to understand how our parallelization impacts the performance of the algorithm.</p>
 <p >Hence, we devised a full analysis of our algorithm performance changing the number of threads, the number of processes and the pBS process allocation pattern, in order to understand how the running time would have been affected.</p>
-<h1><a class="anchor" id="autotoc_md39"></a>
+<h1><a class="anchor" id="autotoc_md40"></a>
 Problem configuration</h1>
 <p >In order to understand how our parallelization improved the running time, we devised a configuration file which is the same for every run, so as to have a common baseline.</p>
 <p >The configuration is listed below:</p>
@@ -129,7 +129,7 @@ Problem configuration</h1>
 <div class="line">distance = euclidean</div>
 <div class="line">fitnessGoal = minimum</div>
 </div><!-- fragment --><p >The amount of particles and the neighboord population are unreasonable for any known problem but they were chosen to show clearly the advantages brought by a multi process solution.</p>
-<h1><a class="anchor" id="autotoc_md40"></a>
+<h1><a class="anchor" id="autotoc_md41"></a>
 Cluster jobs</h1>
 <p >In order to have high-quality and trustworthy results to examine, as indicated in the repository structure, we created a script that allowed us to send thousands of tasks to the University's HPC cluster over the course of many days. The script keeps a limit on the user current submitted job in order to do not monopolize the cluster and comply with the cluster policies. Precisely, we have set a $15$ process limit and every $10$ seconds the script checks whether the user has $15$ or more running processes in the cluster. If it is the case, then the script waits, otherwise it submits a new job to the scheduler.</p>
 <p >The total number of tests we have ran in total is around around 960, in particular we tried every possible combinations of different parameters:</p>
@@ -142,7 +142,7 @@ Cluster jobs</h1>
 <p >select equivale al numero di chunk (un chunk un insieme core/socket non necessariamente sulla stessa macchina). ncpus e' il numero di core che voglio per ogni chunk. pack mette tutti i chunk sulla stessa macchina, scatter li divide su macchine diverse SEMPRE mentre le versioni excl riservano gli interi ?nodi/chunk? alla tua creazione</p>
 <p >We decided to increase the processes and threads number by power of 2 because the most complex algorithm (following the asymptotic notation) should be $\mathcal{O}(nlogn)$ (TODO verificare questa complessita')</p>
 <p >Since it takes 50 minutes on average for each run, we had to stretch out the submission of jobs across many days (two weeks).</p>
-<h1><a class="anchor" id="autotoc_md41"></a>
+<h1><a class="anchor" id="autotoc_md42"></a>
 Results</h1>
 <p >During the execution of the bencmarking phase two problems occured:</p>
 <ul>

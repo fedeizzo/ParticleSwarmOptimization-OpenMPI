@@ -79,7 +79,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('md_report_02_problem_analysis.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('md_report_03_problem_analysis.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -105,7 +105,7 @@ $(document).ready(function(){initNavTree('md_report_02_problem_analysis.html',''
 <ul>
 <li><code>sphere function</code>: unimodal function suitable for single objective optimization. The single optimum is located in $\vec{x} = \vec{0}$. The sphere function is defined as follows:</li>
 </ul>
-<p >$$\vec{x} \; \text{argmin} f(x_1, x_2, \dots, x_n) = \displaystyle\sum_{i = 1}^{n} x_{i}^2$$</p>
+<p >$$\vec{x} \; \text{argmin} f(x_1, x_2, \dots, x_n) = \displaystyle\sum_{i = 1}^{n} x_{i}^2$$ {#eq:sphere-function}</p>
 <div class="image">
 <img src="sphere_function.jpg" alt=""/>
 <div class="caption">
@@ -113,7 +113,7 @@ sphere function</div></div>
    <ul>
 <li><code>wave function</code>: unimodal function suitable for single objective optimization. The function does not admit a single optimum, however the fitness increases as long as $x$ approaches to $-\infty$. The wave function is defined as follows:</li>
 </ul>
-<p >$$ f(x,y) = x^3 + y^2 $$</p>
+<p >$$ f(x,y) = x^3 + y^2 $${#eq:wave-function}</p>
 <div class="image">
 <img src="wave_function.png" alt=""/>
 <div class="caption">
@@ -121,7 +121,7 @@ Wave function</div></div>
    <ul>
 <li><code>Easom function</code>: ultimodal function suitable for single objective optimization. The single optimum is located in $\vec{x} = \vec{\pi}$. The Easom function is defined as:</li>
 </ul>
-<p >$$f(x) = -\cos(x_1)\cos(x_2)\exp(-(x_1 - \pi)^2 - (x_2 - \pi)^2)$$</p>
+<p >$$f(x) = -\cos(x_1)\cos(x_2)\exp(-(x_1 - \pi)^2 - (x_2 - \pi)^2)$${#eq:easom-function}</p>
 <div class="image">
 <img src="easom_function.png" alt=""/>
 <div class="caption">
@@ -129,7 +129,7 @@ Easom function</div></div>
    <ul>
 <li><code>Ackley function</code>: unimodal function suitable for single objective optimization. The single optimum is located in $\vec{x} = \vec{0}$. The Ackley function is defined as:</li>
 </ul>
-<p >$$f(x) = -a \exp \left(-b \displaystyle\sqrt{\frac{1}{d}\displaystyle\sum_{i=1}^{d} x_i^2} \right) - \exp \left( \frac{1}{d} \displaystyle\sum_{i = 1}{d} \cos(cx_i) \right) + a + \exp(1)$$</p>
+<p >$$f(x) = -a \exp \left(-b \displaystyle\sqrt{\frac{1}{d}\displaystyle\sum_{i=1}^{d} x_i^2} \right) - \exp \left( \frac{1}{d} \displaystyle\sum_{i = 1}{d} \cos(cx_i) \right) + a + \exp(1)$$ {#eq:ackley-function}</p>
 <div class="image">
 <img src="ackley_function.png" alt=""/>
 <div class="caption">
@@ -137,7 +137,7 @@ Ackley function</div></div>
    <ul>
 <li><code>Himmelblau function</code>: multimodal function suitable for single objective optimization. The function presents four identical minima: $f(\vec{x}) = f(3.0, 2.0) = f(-2.805118, 3.131312) = (-3.779319, -3.283186) = f(3.584428, -1.848126) = 0.0$ The function is defined as:</li>
 </ul>
-<p >$$f(x, y) = (x^2 + y - 11)^2 + (x + y^2 - 7)^2$$</p>
+<p >$$f(x, y) = (x^2 + y - 11)^2 + (x + y^2 - 7)^2$$ {#eq:himmelblau-function}</p>
 <div class="image">
 <img src="himmelblau_function.png" alt=""/>
 <div class="caption">
@@ -145,16 +145,16 @@ Himmelblau function</div></div>
    <ul>
 <li><code>Holder table function</code>: multimodal function suitable for single objective optimization. The function presents four identical minima: $f(\vec{x}) = f(8.05502, 9.66459) = f(8.05502, 9.66459) = (8.05502, 9.66459) = f(8.05502, 9.66459) = -19.2085$. The function is defined as:</li>
 </ul>
-<p >$$f(x) = -\left|\sin(x_1)\cos(x_2)\exp \left( 1 - \frac{\sqrt{x_1^2 + x_2^2}}{\pi}\right)\right|$$</p>
+<p >$$f(x) = -\left|\sin(x_1)\cos(x_2)\exp \left( 1 - \frac{\sqrt{x_1^2 + x_2^2}}{\pi}\right)\right|$$ {#eq:holder-table-function}</p>
 <div class="image">
 <img src="holder_table_function.jpg" alt=""/>
 <div class="caption">
 Holder table function</div></div>
    <p >For the sake of the explainability, the functions presented above shows the two-dimensional case. Of course, such functions can scale up to as many dimensions as one desires.</p>
 <p >Moreover, our particle swarm optimization implementation can handle also other functions. Indeed, it is possible to define the proper single objective function to optimize in the <code><a class="el" href="problems_8h.html" title="List of problems definition.">problems.h</a></code> and <code>problems.c</code> files, specifying it in the configuration along with the <em>fitnessGoal</em>, namely, whether the function needs to be maximized or minimized.</p>
-<h1><a class="anchor" id="autotoc_md25"></a>
-Program configuration</h1>
 <h1><a class="anchor" id="autotoc_md26"></a>
+Program configuration</h1>
+<h1><a class="anchor" id="autotoc_md27"></a>
 Serial version of the algorithm</h1>
 <p >As can be seen from the PSO pseudocode shown in the introduction, the main steps the algorithm has to face are:</p>
 <ol type="1">
@@ -163,51 +163,51 @@ Serial version of the algorithm</h1>
 <li>sort the particles according to a distance measure (euclidean distance) in ascending order;</li>
 <li>update the particles position and velocity.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md27"></a>
+<h2><a class="anchor" id="autotoc_md28"></a>
 Serial algorithm optimization</h2>
-<p >As mentioned in the introduction section, the program provides the possibility to either run on a single thread or on multiple threads. The multithreading functionalities exploited by the application are offered by the OpenMP library.</p>
+<p >As mentioned in section {@sec:introduction}, the program provides the possibility to either run on a single thread or on multiple threads. The multithreading functionalities exploited by the application are offered by the OpenMP library.</p>
 <p >As a first approach, we have tried to use OpenMP directives in order to generate a thread for each loop iteration whenever it was possible.</p>
 <p >To prevent contaminating the spaces of other threads, the actions inside the <em>for</em> loop worked on distinct data structures and variables.</p>
 <p >For example, we inserted the relative OpenMP directive every time there was the need to loop though all the particles.</p>
 <p >However, OpenMP <em>fork-join</em> model requires a non negligible overhead so as to spawn multiple threads which are eventually joined into the master at the end of the OpenMP block. For relatively small problems, this operation was a time-consuming procedure which leads to a significant rise in execution time with respect to the single thread model. Moreover, during the experiments we have not been able to observe the threads advantage we were hoping for. We assume that the main reason behind this non-tangible advantage are the optimization provided by <code>gcc</code> during at compile time and the non.optimal thread allocation patterns performed on the cluster. Indeed, it is not rare to observe different threads being executed on the same computational unit, which clearly slows down the computation due to the overhead required by the context switching operation.</p>
 <p >In the final version of the application, we have included the OpenMP directives only in the portion of the code where we thought it was needed, even if the advantage in terms of time were not satisfactory compared to the single threaded application.</p>
-<h3><a class="anchor" id="autotoc_md28"></a>
+<h3><a class="anchor" id="autotoc_md29"></a>
 Particles' initialization</h3>
 <p >Since only one process is involved, the initialization step is trivial, as it requires to create a given number of particles sequentially, which are immediately stored within an array data structure.</p>
-<h3><a class="anchor" id="autotoc_md29"></a>
+<h3><a class="anchor" id="autotoc_md30"></a>
 Exchange particles' information</h3>
 <p >In the serial version of the application, each particle is stored within an array data structure, therefore with a two-level nested loop, it is possible to make every particle contribution to each other. In this case, as each particle handles a different portion of the memory, a <em>pragma for</em> directive is included.</p>
-<h3><a class="anchor" id="autotoc_md30"></a>
+<h3><a class="anchor" id="autotoc_md31"></a>
 Sorting algorithm</h3>
-<p >Concerning the sorting algorithm, the program relies on <em>quicksort</em>. The main reason behind this choice is the amount of parallelization this algorithm can provide. Indeed, merge sort has a better worst-case performance $\mathcal{O}(n \log n)$ with respect to quicksort having $\mathcal{O}(n^2)$ but requires synchronization in order to merge the partial solutions which is not required in quicksort. Moreover, its average performance is $\mathcal{O}(n \log n)$ as for merge sort.</p>
+<p >Concerning the sorting algorithm, the program relies on <em>quicksort</em> (figure {@fig:quicksort-algorithm}). The main reason behind this choice is the amount of parallelization this algorithm can provide. Indeed, merge sort has a better worst-case performance $\mathcal{O}(n \log n)$ with respect to quicksort having $\mathcal{O}(n^2)$ but requires synchronization in order to merge the partial solutions which is not required in quicksort. Moreover, its average performance is $\mathcal{O}(n \log n)$ as for merge sort.</p>
 <p >The parallel quicksort main working loop can be described as follows. Before going into the implementation details, in the base settings we have a pool of threads provided by the OpenMP library which can be called whenever is needed, and an array of items that needs to be sorted.</p>
 <p >Initially, one thread selects a pivot and moves the elements of the array which are smaller than the pivot value to the left and the elements which are bigger than the pivot value to the right. The resulting two portions of the array wait until there is a free thread ready to process it.</p>
 <div class="image">
 <img src="quicksort.jpeg" alt=""/>
 <div class="caption">
 Quicksort</div></div>
-   <h3><a class="anchor" id="autotoc_md31"></a>
+   <h3><a class="anchor" id="autotoc_md32"></a>
 Velocity and position update</h3>
 <p >As for the initialization step, the process consists in a for loop which scans all the particles' data, and applies the formula according to the algorithm list in the introduction section.</p>
-<h1><a class="anchor" id="autotoc_md32"></a>
+<h1><a class="anchor" id="autotoc_md33"></a>
 Parallel version of the algorithm</h1>
 <p >In this section the report discuss how we have parallelized the algorithm in order to speed up the performance.</p>
 <p >In practice, we have distributed the workload among $N$ different processes in the cluster using the <em>MPI</em> library and we have exploited multiprocessing via OpenMP for a couple of different shared-memory tasks.</p>
-<h2><a class="anchor" id="autotoc_md33"></a>
+<h2><a class="anchor" id="autotoc_md34"></a>
 Architecture</h2>
-<p >In order to subdivide the work and to carry out the final computation, the architecture proposed by the report focuses on the <em>all-to-all</em> parallel computational pattern.</p>
+<p >In order to subdivide the work and to carry out the final computation, the architecture proposed by the report focuses on the <em>all-to-all</em> parallel computational pattern (figure {@fig:communication-schema}).</p>
 <p ><em>All-to-all</em> parallel pattern is characterized by the exchange of individual messages from every process to any other processor. In this way, the program effectively uses all the processes in order to carry out the computation, as the coordination operations are handled by MPI.</p>
 <div class="image">
 <img src="communication_schema.png" alt=""/>
 <div class="caption">
 Communication schema.</div></div>
-   <h2><a class="anchor" id="autotoc_md34"></a>
+   <h2><a class="anchor" id="autotoc_md35"></a>
 Message</h2>
 <p >To send a message between different processes we created a custom MPI data type called <a class="el" href="structbroadcastMessage__t.html">broadcastMessage_t</a>. Its purpose is to inform the receiver process about the particles' position and fitness of the sender. The structure is composed by a timestamp, which is needed for logging purposes on the sqlite, the current iteration of the algorithm, the identifier of the particle, the sender rank and the current solution.</p>
 <p >On the other hand, solution is another structured datatype, which has been defined in order to carry a specific particle information. This structured datatype contains the problem dimensionality, the fitness value of the candidate solution and the vector depicting the current particle position within the fitness landscape.</p>
 <p >So as to create a variable of the previously mentioned message data type, we have defined a proper function called define_datatype_broadcast_message. This function, in turn, calls the function required to defined a message carrying the a solution type variable and a timestamp type variable.</p>
 <p >The stratification above has simplified the MPI_Datatype definition process.</p>
-<h2><a class="anchor" id="autotoc_md35"></a>
+<h2><a class="anchor" id="autotoc_md36"></a>
 Communication pattern</h2>
 <p >The communication between the different processes is synchronous.</p>
 <p >Firstly, each process takes charge of a given number of particles. In details, let $N$ be the number of particles the user has requested to program to manage and let $p$ be the number of processes available to <em>MPI</em>. Without the need of synchronization nor of message exchange, each process creates $N / p$ particles and the remaining $N % p$ ones are split among the remaining processes. This was possible by exploiting the number of processes and the process rank in the following way:</p>
@@ -223,7 +223,7 @@ Communication pattern</h2>
 <p >The most interesting part in the algorithm parallelization is the program segment related to the message exchange among multiple processes.</p>
 <p >To carry out this operation, each process embeds its own particles in an array of <code>define_datatype_broadcast_message</code>. Then, the particle information exchange happens with an <code>MPI_Allgather</code> communication primitive.</p>
 <p >In principle, at the beginning of the algorithm execution, the set of all the particles have been distributed across all processes. However, this operation has been carried out by each process alone without the need for a <code>MPI_Scatter</code> call.</p>
-<p ><code>MPI_Allgather</code> primitive is suitable for the problem since it is an <em>all-to-all</em> communication primitive and since it allow to reunite all the particles of each process into a single vector, which, at the end of the communication, will be equal for each process. A scheme illustrating the working behavior of the communication primitive employed is shown below:</p>
+<p ><code>MPI_Allgather</code> (figure {@fig:allgather}) primitive is suitable for the problem since it is an <em>all-to-all</em> communication primitive and since it allow to reunite all the particles of each process into a single vector, which, at the end of the communication, will be equal for each process. A scheme illustrating the working behavior of the communication primitive employed is shown below:</p>
 <div class="image">
 <img src="allgather.png" alt=""/>
 <div class="caption">
@@ -248,16 +248,16 @@ Allgather</div></div>
 <li>$\mathcal{O}((n/q)m)$ for the particles' variables update.</li>
 </ol>
 <p >Despite this results being positive, we have to consider the time needed for each process to exchange their particle to each process. However, most HPC systems use <em>InfiniBand</em> interconnection, an high throughput, low latency connection among nodes in the cluster, therefore we claim that the advantage in terms of computational complexity remains legitimate since, in this scenario, the network has little impact on the application performance.</p>
-<p >A visual proof of this statement is deeply discussed in the benchmarking section of the report.</p>
+<p >A visual proof of this statement is deeply discussed in section {@sec:benchmarking} of the report.</p>
 <p >All the previously described operations are executed for a specific number of times specified by the user.</p>
-<h2><a class="anchor" id="autotoc_md36"></a>
+<h2><a class="anchor" id="autotoc_md37"></a>
 Logs</h2>
 <p >In order to provide a more effective way of visualizing the program behavior, we have employed a thread-safe logging utility library.</p>
 <p >In this way, we were able to always know each process state. The logging library provides six different logging level: trace, debug, info, warn, error and fatal.</p>
 <p >An excerpt of the logging library output is shown below:</p>
 <p >TODO qua vanno i logs</p>
 <p >Moreover, all the logs have been formatted in order to comply to a common standard. In this way, during the benchmarking phase, it was possible to extract and manage logs information.</p>
-<h2><a class="anchor" id="autotoc_md37"></a>
+<h2><a class="anchor" id="autotoc_md38"></a>
 Output and SQLite</h2>
 <p >The final output of the program are is best particles fitness value found by every process in the system.</p>
 <p >In a real case scenario, one would be more interested in the candidate solution found by the application rather than in the fitness value. However, the fitness function is a suitable value to analyze in order to have a clear understanding on whether the model is improving its solution or not. Moreover, the particles position at every iteration can be stored within the SQLite database.</p>

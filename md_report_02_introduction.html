@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PSO - OpenMPI, OpenMP: Introduction</title>
+<title>PSO - OpenMPI, OpenMP: Introduction {#sec:introduction}</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -79,7 +79,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('md_report_01_introduction.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('md_report_02_introduction.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('md_report_01_introduction.html',''); i
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">Introduction </div></div>
+  <div class="headertitle"><div class="title">Introduction {#sec:introduction} </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="autotoc_md13"></a>
@@ -115,7 +115,7 @@ Generalities</h2>
 </ul>
 <p >The entire set of particles is referred as <em>swarm</em>.</p>
 <p >Under the expression <em>particle perception</em>, we define how each particle communicate with each other. In practice, a particle needs to perceive the positions along with the associated performance measures of the <em>neighboring particles</em>. Thanks to this communication pattern, each particle remembers the position $z$ associated to the best performance of all the particles within the neighborhood, as well as its own position where it obtained the best performance so far $y$.</p>
-<p >There are different structures of neighborhood which can be considered, and they usually depend on the type of optimization problem one has to face.</p>
+<p >There are different structures of neighborhood which can be considered (figure {@fig:pso-topologies}), and they usually depend on the type of optimization problem one has to face.</p>
 <p >The most relevant types of neighborhood are:</p>
 <ul>
 <li><em>Global</em>: the best individual in the neighborhood is also the <em>global</em> best in the entire swarm;</li>
@@ -138,8 +138,8 @@ Parametrization</h2>
 <h2><a class="anchor" id="autotoc_md16"></a>
 Continuous Optimization</h2>
 <p >Once the algorithm has been parametrized, a swarm of particles is initialized with random positions and velocity.</p>
-<p >At each step, each particle updates first its velocity:</p>
-<p >$$v' = w \cdot v + \phi_1 U_1 \cdot (y-x) + \phi_2 U_2 \cdot (z-x)$$</p>
+<p >At each step, each particle updates first its velocity (equation {@eq:pso-update-velocity}):</p>
+<p >$$v' = w \cdot v + \phi_1 U_1 \cdot (y-x) + \phi_2 U_2 \cdot (z-x)$$ {#eq:pso-update-velocity}</p>
 <p >where:</p>
 <ul>
 <li>$x$ and $v$ are the particle current position and velocity, respectively;</li>
@@ -148,8 +148,8 @@ Continuous Optimization</h2>
 <li>$\phi_1$, $\phi_2$ are acceleration coefficients/learning rates (cognitive and social, respectively);</li>
 <li>$U_1$ and $U_2$ are uniform random numbers in $[0,1]$.</li>
 </ul>
-<p >Finally, each particle updates its position:</p>
-<p >$$x' = x+v'$$</p>
+<p >Finally, each particle updates its position (equation {@eq:pso-update-position}):</p>
+<p >$$x' = x+v'$$ {#eq:pso-update-position}</p>
 <p >and in case of improvement, update $y$ (and eventually $z$).</p>
 <p >The loop is iterated until a given stop condition is met.</p>
 <p >The pseudocode of the algorithm is shown below:</p>
@@ -167,9 +167,49 @@ OpenMP</h1>
 <p >OpenMP is an API which supports multi-platform shared memory programming.</p>
 <p >In the program scenario, a process is delegated to handle the computing regarding one or more particles. The process job is divided in several threads which optimize the execution time of the process.</p>
 <h1><a class="anchor" id="autotoc_md19"></a>
+State-of-the art anaysis</h1>
+<p >The first serial implementation of PSO was published in 1995 by Kennedy and Eberhat [@KennedyEberhart], after that many variations of it were proposed. In our opinion they can be divided into three main categories of pubblications:</p>
+<ol type="1">
+<li>the ones that aim to change the behavior of the algorithm introducing new features;</li>
+<li>the ones that aim to solve a real world problem using PSO as main algorithm.</li>
+<li>the ones that aim to optimize the runtime exectution speed.</li>
+</ol>
+<p >In our study we need to exclude the second category because a comparison on those solutions is strictly problem dependent. The first category can be used as case of study for our benchmarking phase but some annotations must be done on the implementation, for example the topology used within the neighboord selection highly influences the final performance of the algorithm. Finally the third category is our perfect competitor, but also in this case there may be some differences derived from the type of PSO version implemented.</p>
+<p >In the following table is presenet a list of implementations taken under consideration for the benchmarking phase.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Authors   </th><th class="markdownTableHeadNone">Year   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Source code   </th><th class="markdownTableHeadNone">Notes    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Kennedy, Eberhart [@KennedyEberhart]   </td><td class="markdownTableBodyNone">1995   </td><td class="markdownTableBodyNone">Serial   </td><td class="markdownTableBodyNone">No   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">toddguant   </td><td class="markdownTableBodyNone">2019   </td><td class="markdownTableBodyNone">Serial   </td><td class="markdownTableBodyNone"><a href="https://github.com/toddgaunt/cpso">Yes</a>   </td><td class="markdownTableBodyNone">1    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">sousouho   </td><td class="markdownTableBodyNone">2019   </td><td class="markdownTableBodyNone">Serial   </td><td class="markdownTableBodyNone"><a href="https://github.com/sousouhou/succinctPSO">Yes</a>   </td><td class="markdownTableBodyNone">1    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">kkentzo   </td><td class="markdownTableBodyNone">2020   </td><td class="markdownTableBodyNone">Serial   </td><td class="markdownTableBodyNone"><a href="https://github.com/kkentzo/pso">Yes</a>   </td><td class="markdownTableBodyNone">1    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">fisherling   </td><td class="markdownTableBodyNone">2020   </td><td class="markdownTableBodyNone">Serial   </td><td class="markdownTableBodyNone"><a href="https://github.com/fischerling/pso">Yes</a>   </td><td class="markdownTableBodyNone">1    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Moraes, Mitre [@MoraesMitre]   </td><td class="markdownTableBodyNone">2014   </td><td class="markdownTableBodyNone">Parallel OpenMPI   </td><td class="markdownTableBodyNone">No   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Nedja, Moraes, Rogerio, Marcedo Mourelle [@NedJahMoraes]   </td><td class="markdownTableBodyNone">2017   </td><td class="markdownTableBodyNone">Parallel OpenMPI/MP   </td><td class="markdownTableBodyNone">No   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">abhi4578   </td><td class="markdownTableBodyNone">2019   </td><td class="markdownTableBodyNone">Parallel OpenMPI/MP, CUDA   </td><td class="markdownTableBodyNone"><a href="https://github.com/abhi4578/Parallelization-of-PSO">Yes</a>   </td><td class="markdownTableBodyNone">1 (da verificare)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">LaSEEB   </td><td class="markdownTableBodyNone">2020   </td><td class="markdownTableBodyNone">Parallel OpenMP   </td><td class="markdownTableBodyNone"><a href="https://github.com/LaSEEB/openpso">Yes</a>   </td><td class="markdownTableBodyNone">2    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">pg443   </td><td class="markdownTableBodyNone">2021   </td><td class="markdownTableBodyNone">Serial, Parallel OpenMP   </td><td class="markdownTableBodyNone"><a href="https://github.com/pg443/Particle-Swarm-Optimizer-OpenMP">Yes</a>   </td><td class="markdownTableBodyNone">1   </td></tr>
+</table>
+<p>Table: SOTA wokrs.</p>
+<p >The notes are:</p>
+<ol type="1">
+<li>only global neighboord implementation: this permits to save some execution time given the fact that no sort is required for the nearest neighbord computation;</li>
+<li>many neighboord implementations but without a distance based approach: same as global neighborhood.</li>
+</ol>
+<h1><a class="anchor" id="autotoc_md20"></a>
 Project generalities</h1>
 <p >In the following sections, the report address how to setup and run the program.</p>
-<h2><a class="anchor" id="autotoc_md20"></a>
+<h2><a class="anchor" id="autotoc_md21"></a>
 Libraries</h2>
 <p >The project requires few libraries in order to work properly. As it is mandatory for the course, <a href="https://www.openmp.org/">OpenMP</a> and <a href="https://www.open-mpi.org/">MPI</a> were employed. Along with the compulsory libraries, the following libraries were exploited:</p>
 <ul>
@@ -177,7 +217,7 @@ Libraries</h2>
 <li><a href="https://www.gnu.org/software/libc/manual/html_node/Argp.html">argp</a>: <code>argp</code> is a parsing interface for unix-style argument vectors. The argp features include, as defined in the GNU coding standards, automatically producing output in response to the <code>--help</code> and <code>--version</code> options and the possibility for programmers to explicitly define the input of the script. This library was employed in order to allow the user to explore the possible configurations made available by the software.</li>
 <li><a href="https://libcheck.github.io/check/">check</a>: <code>check</code> is a unit testing framework written in C. It has a straightforward interface for defining unit tests helping the developer to build robust software. This library was included in the application in order to perform unit-testing on the structure we have created. This choice implication are a more robust software.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md21"></a>
+<h2><a class="anchor" id="autotoc_md22"></a>
 Build</h2>
 <p >In order to build the executable file of our project, as well as the binary file needed to run the project unit test, we have employed <a href="https://www.gnu.org/software/make/">GNU Make</a>.</p>
 <p >GNU Make is a tool which manages the creation of executables and other non-source files from a program's source files. Make learns how to create your software using a file called the <code>Makefile</code>, which lists each non-source file and how to compute it from other files.</p>
@@ -185,7 +225,7 @@ Build</h2>
 <p >Moreover, thanks to wildcards, it is easy to automatize the application building process. Indeed, it first allow to assemble each <code>C</code> source file in order to create the object files. Then, all of the object files are linked together, along with other libraries, in order to produce the final executable file. If the building rule is called multiple times, Make is smart enough to understand whether an object file needs to be recreated or not, making use of the already assembled objects, thus speeding up the building process.</p>
 <p >Furthermore, Make can do much more than compiling software, for instance, the project contains rules which allow to build and open the code documentation written by the means of <a href="https://doxygen.nl/">Doxygen</a>.</p>
 <p >In order to get the right flag for linking the needed external, the project employs <a href="https://people.freedesktop.org/~dbn/pkg-config-guide.html">pkg-config</a>. This package collects metadata about the installed libraries on the system and easily provides it to the user. Hence, <code>pkg-config</code> takes care of where a library is located regardless of the distribution simplifying the application building process.</p>
-<h3><a class="anchor" id="autotoc_md22"></a>
+<h3><a class="anchor" id="autotoc_md23"></a>
 Compile</h3>
 <p >To compile the project, it is possible to call the Makefile by typing:</p>
 <div class="fragment"><div class="line">make build</div>
@@ -196,7 +236,7 @@ Compile</h3>
 <p >Along with the executable files, there are also scripts used in order to run the program within the University cluster. Each job in the cluster is handled by <em>PBS (Portable Bash Script)</em> which submits them to the scheduler. By means of a script, it is possible to tell the scheduler what resources the job requires in order to complete (e.g. number of processors, amount of memory, time to complete etc.) and the application the user wants to run.</p>
 <p >The <code>run.sh</code> file in the <code>scripts</code> folder of the repository allows the user to submit the application to the cluster. The script has three parameters: number of processes, path of the ini file containing the program configuration and the number of threads. Once submitted with the <code>qsub</code> command, the script generates a number of docker containers equal to the number of specified processes thanks to the <code>mpiexec</code> binary. Each container runs the application in a shared network, therefore each process is able to communicate with each other. The details of the program deployment is discussed in the section dedicated to DevOps.</p>
 <p >The <code>generate_cluster_run.sh</code> file, contained in the <code>scripts</code> folder, is employed in order to generate specific runs in order to benchmark the application. In details, the shell file considers several combinations of processes, threads, nodes and places. More details are provided in the section dedicated to the application benchmark.</p>
-<h2><a class="anchor" id="autotoc_md23"></a>
+<h2><a class="anchor" id="autotoc_md24"></a>
 Execute</h2>
 <p >The executable file can be invoked with or without <code>OpenMP</code> and with or without <code>OpenMPI</code>. However, to fully exploit <code>OpenMPI</code>, it is recommended to execute the program <code>mpiexec</code> to spawn multiple processes of the multi-process application.</p>
 <p >The executable file requires several arguments. Below there is an excerpt of the program output when the <code>--help</code> flag is called.</p>
