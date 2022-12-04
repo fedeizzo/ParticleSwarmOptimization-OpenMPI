@@ -127,15 +127,24 @@ OpenMP is an API which supports multi-platform shared memory programming.
 In the program scenario, a process is delegated to handle the computing regarding one or more particles. The process job is divided in several threads which optimize the execution time of the process.
 
 ## State-of-the art analysis {#sec:sota-analysis}
-The first serial implementation of PSO was published in 1995 by Kennedy and Eberhat [@KennedyEberhart], after that many variations of it were proposed. In our opinion they can be divided into three main categories of pubblications:
+The first serial implementation of PSO was published in 1995 by Kennedy and Eberhat [@KennedyEberhart]. After that, many variations of PSO were proposed in the literature. 
 
-1. the ones that aim to change the behavior of the algorithm introducing new features;
-2. the ones that aim to solve a real world problem using PSO as main algorithm.
-3. the ones that aim to optimize the runtime exectution speed.
+Based on what we have found, the approaches can be divided into three main categories:
 
-In our study we need to exclude the second category because a comparison on those solutions is strictly problem dependent. The first category can be used as case of study for our benchmarking phase but some annotations must be done on the implementation, for example the topology used within the neighboord selection highly influences the final performance of the algorithm. Finally the third category is our perfect competitor, but also in this case there may be some differences derived from the type of PSO version implemented.
+1. those one which aim to change the behavior of the algorithm introducing new features;
+2. those ones which aim to solve a real world problem using PSO as main algorithm.
+3. those ones which aim to optimize the runtime execution speed.
 
-In the following table is presenet a list of implementations taken under consideration for the benchmarking phase.
+In our study we have decided to exclude the second category since these solutions are strictly problem dependent, thus a comparison would produce meaningless results. 
+
+On the other hand, all those approaches which belong to first category can be employed as case of studies for our benchmarking phase. However, it is strictly required to change some implementation aspects by modifying directly the code. In some cases, this requires a deep understanding of others' code, most of the time a though job due to the absence of documentation. 
+
+For instance, the topology used within the neighborhood selection highly influences the final performance of the algorithm; as an effective representation we can think about the global neighborhood in comparison with the distance based one. In the first scenario, the global best solution is shared among each swarm unit, and it is given by the best value reached by each particle, hence a simple reduce without further computation will suffice. Instead, a distance based neighborhood requires to consider the best solutions within a certain range, which implies that all the swarm units needs to know all the others' positions, which inevitably imply a considerable increase in time complexity. 
+
+The third category is our perfect competitor, since we share the same objective.
+However, there may be cases where different PSO version have been implemented, which inevitably require some hands on.
+
+In the following table we list some of the implementations we have decided to consider during the benchmarking phase.
 
 | Authors                                                  | Year | Type                      | Source code                                                     | Notes             |
 |----------------------------------------------------------|------|---------------------------|-----------------------------------------------------------------|-------------------|
@@ -149,12 +158,14 @@ In the following table is presenet a list of implementations taken under conside
 | abhi4578 [@abhi4578]                                                 | 2019 | Parallel OpenMPI/MP, CUDA | [Yes](https://github.com/abhi4578/Parallelization-of-PSO)       | 1 (da verificare) |
 | LaSEEB [@LaSEEB]                                                  | 2020 | Parallel OpenMP           | [Yes](https://github.com/LaSEEB/openpso)                        | 2                 |
 | pg443 [@pg443]                                                   | 2021 | Serial, Parallel OpenMP   | [Yes](https://github.com/pg443/Particle-Swarm-Optimizer-OpenMP) | 1                 |
-Table: SOTA wokrs.
+Table: SOTA works.
 
-The notes are:
+The meaning of the indexes in the notes refer to:
 
-1. only global neighboord implementation: this permits to save some execution time given the fact that no sort is required for the nearest neighbord computation;
-2. many neighboord implementations but without a distance based approach: same as global neighborhood.
+1. provides only global neighborhood implementation available: the comparison would be untruthful as those implementations have a clear advantage in the execution time due to the favorable topology;
+2. provides PSO with different neighborhood versions but without a distance based approach: the implication are the same as for the point 1.
+
+According to the previous statements, we claim that we have implemented a PSO version which differ from the ones provided in the literature (as fas as we know) since it has a different notion of neighborhood, which makes it harder to parallelize.
 
 ## Project generalities
 
