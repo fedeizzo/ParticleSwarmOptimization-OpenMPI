@@ -4,6 +4,13 @@
    (LaTeX-add-bibitems
     "KennedyEberhart"
     "NedJahMoraes"
-    "MoraesMitre"))
+    "MoraesMitre"
+    "toddguant"
+    "sousouho"
+    "kkentzo"
+    "fisherling"
+    "abhi4578"
+    "LaSEEB"
+    "pg443"))
  '(or :bibtex :latex))
 

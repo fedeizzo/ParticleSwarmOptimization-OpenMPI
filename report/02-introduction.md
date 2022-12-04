@@ -126,7 +126,7 @@ OpenMP is an API which supports multi-platform shared memory programming.
 
 In the program scenario, a process is delegated to handle the computing regarding one or more particles. The process job is divided in several threads which optimize the execution time of the process.
 
-## State-of-the art analysis
+## State-of-the art analysis {#sec:sota-analysis}
 The first serial implementation of PSO was published in 1995 by Kennedy and Eberhat [@KennedyEberhart], after that many variations of it were proposed. In our opinion they can be divided into three main categories of pubblications:
 
 1. the ones that aim to change the behavior of the algorithm introducing new features;
@@ -140,15 +140,15 @@ In the following table is presenet a list of implementations taken under conside
 | Authors                                                  | Year | Type                      | Source code                                                     | Notes             |
 |----------------------------------------------------------|------|---------------------------|-----------------------------------------------------------------|-------------------|
 | Kennedy, Eberhart [@KennedyEberhart]                     | 1995 | Serial                    | No                                                              |                   |
-| toddguant                                                | 2019 | Serial                    | [Yes](https://github.com/toddgaunt/cpso)                        | 1                 |
-| sousouho                                                 | 2019 | Serial                    | [Yes](https://github.com/sousouhou/succinctPSO)                 | 1                 |
-| kkentzo                                                  | 2020 | Serial                    | [Yes](https://github.com/kkentzo/pso)                           | 1                 |
-| fisherling                                               | 2020 | Serial                    | [Yes](https://github.com/fischerling/pso)                       | 1                 |
+| toddguant [@toddguant]                                   | 2019 | Serial                    | [Yes](https://github.com/toddgaunt/cpso)                        | 1                 |
+| sousouho [@sousouho]                                     | 2019 | Serial                    | [Yes](https://github.com/sousouhou/succinctPSO)                 | 1                 |
+| kkentzo [@kkentzo]                                       | 2020 | Serial                    | [Yes](https://github.com/kkentzo/pso)                           | 1                 |
+| fisherling [@fisherling]                                 | 2020 | Serial                    | [Yes](https://github.com/fischerling/pso)                       | 1                 |
 | Moraes, Mitre [@MoraesMitre]                             | 2014 | Parallel OpenMPI          | No                                                              |                   |
 | Nedja, Moraes, Rogerio, Marcedo Mourelle [@NedJahMoraes] | 2017 | Parallel OpenMPI/MP       | No                                                              |                   |
-| abhi4578                                                 | 2019 | Parallel OpenMPI/MP, CUDA | [Yes](https://github.com/abhi4578/Parallelization-of-PSO)       | 1 (da verificare) |
-| LaSEEB                                                   | 2020 | Parallel OpenMP           | [Yes](https://github.com/LaSEEB/openpso)                        | 2                 |
-| pg443                                                    | 2021 | Serial, Parallel OpenMP   | [Yes](https://github.com/pg443/Particle-Swarm-Optimizer-OpenMP) | 1                 |
+| abhi4578 [@abhi4578]                                                 | 2019 | Parallel OpenMPI/MP, CUDA | [Yes](https://github.com/abhi4578/Parallelization-of-PSO)       | 1 (da verificare) |
+| LaSEEB [@LaSEEB]                                                  | 2020 | Parallel OpenMP           | [Yes](https://github.com/LaSEEB/openpso)                        | 2                 |
+| pg443 [@pg443]                                                   | 2021 | Serial, Parallel OpenMP   | [Yes](https://github.com/pg443/Particle-Swarm-Optimizer-OpenMP) | 1                 |
 Table: SOTA wokrs.
 
 The notes are:
