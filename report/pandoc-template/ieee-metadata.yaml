@@ -13,9 +13,11 @@ babel-lang: english
 header-includes: |
   \usepackage{algorithm}
   \usepackage{algpseudocode}
+  \usepackage{booktabs}
+  \usepackage{float}
   \renewcommand{\algorithmicforall}{\textbf{for each}}
 abstract: |
-  [*Particle Swarm Optimization*](https://doi.org/10.1109/ICNN.1995.488968) is an optimization algorithm for nonlinear function based on birds swarm. It falls back into the sub-field of *Bio-Inspired Artificial Intelligence* and it was designed from a simplified social model inspired by the nature.
+  [*Particle Swarm Optimization (PSO)*](https://doi.org/10.1109/ICNN.1995.488968) is an optimization algorithm for nonlinear function based on birds swarm. It falls back into the sub-field of *Bio-Inspired Artificial Intelligence* and it was designed from a simplified social model inspired by the nature.
 
   A key concept associated with PSO is the role of genetic algorithms and evolution, the functioning is based on several iterations that aim to identify the best possible position represented as a point in a landscape.
 

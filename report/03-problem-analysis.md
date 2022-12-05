@@ -1,6 +1,6 @@
 \newpage
 # Problem Analysis
-As explained during the introductory part, the main focus of the PSO algorithm is to find an approximate solution of a continuous optimization problem. Therefore, we have relied on some of the most relevant benchmark functions for continuous optimization. The experiments focuses mostly on six of them, which are listed below:
+As explained during the introductory part, the main focus of the PSO algorithm is to find an approximated solution of a continuous optimization problem. Therefore, we have relied on some of the most relevant benchmark functions for continuous optimization. The experiments done focus mostly on six of them, which are listed below:
 
 - `sphere function`: unimodal function suitable for single objective optimization. The single optimum is located in $\vec{x} = \vec{0}$. The sphere function is defined as follows:
 
@@ -8,7 +8,7 @@ $$\vec{x} \; \text{argmin} f(x_1, x_2, \dots, x_n) = \displaystyle\sum_{i = 1}^{
 
 ![sphere function](./images/sphere_function.jpg){ width=250px }{#fig:sphere-function}
 
-- `wave function`: unimodal function suitable for single objective optimization. The function does not admit a single optimum, however the fitness increases as long as $x$ approaches to $-\infty$. The wave function is defined as follows:
+- `wave function`: unimodal function suitable for single objective optimization. The function does not admit a single optimum, however the fitness decreases as long as $x$ approaches to $-\infty$. The wave function is defined as follows:
 
 $$ f(x,y) = x^3 + y^2 $${#eq:wave-function}
 
@@ -43,8 +43,6 @@ For the sake of the explainability, the functions presented above shows the two-
 
 Moreover, our particle swarm optimization implementation can handle also other functions. Indeed, it is possible to define the proper single objective function to optimize in the `problems.h` and `problems.c` files, specifying it in the configuration along with the *fitnessGoal*, namely, whether the function needs to be maximized or minimized.
 
-## Program configuration
-
 ## Serial version of the algorithm
 As can be seen from the PSO pseudocode shown in the introduction, the main steps the algorithm has to face are:
 
@@ -62,7 +60,7 @@ To prevent contaminating the spaces of other threads, the actions inside the *fo
 
 For example, we inserted the relative OpenMP directive every time there was the need to loop though all the particles.
 
-However, OpenMP *fork-join* model requires a non negligible overhead so as to spawn multiple threads which are eventually joined into the master at the end of the OpenMP block. For relatively small problems, this operation was a time-consuming procedure which leads to a significant rise in execution time with respect to the single thread model. Moreover, during the experiments we have not been able to observe the threads advantage we were hoping for. We assume that the main reason behind this non-tangible advantage are the optimization provided by `gcc` during at compile time and the non.optimal thread allocation patterns performed on the cluster. Indeed, it is not rare to observe different threads being executed on the same computational unit, which clearly slows down the computation due to the overhead required by the context switching operation.
+However, OpenMP *fork-join* model requires a non negligible overhead so as to spawn multiple threads which are eventually joined into the master at the end of the OpenMP block. For relatively small problems, this operation was a time-consuming procedure which leads to a significant rise in execution time with respect to the single thread model. Moreover, during the experiments we have not been able to observe the threads advantage we were hoping for. We assume that the main reason behind this non-tangible advantage are the optimization provided by `gcc` at compile time and the non-optimal thread allocation patterns performed on the cluster. Indeed, it is not rare to observe different threads being executed on the same computational unit, which clearly slows down the computation due to the overhead required by the context switching operation.
 
 In the final version of the application, we have included the OpenMP directives only in the portion of the code where we thought it was needed, even if the advantage in terms of time were not satisfactory compared to the single threaded application.
 
@@ -83,28 +81,38 @@ The resulting two portions of the array wait until there is a free thread ready 
 ![Quicksort](./images/quicksort.jpeg){ width=250px }{#fig:quicksort-algorithm}
 
 #### Velocity and position update
-As for the initialization step, the process consists in a for loop which scans all the particles' data, and applies the formula according to the algorithm list in the introduction section.
+As for the initialization step, the process consists in a for loop which scans all the particles' data, and applies the formula according to the algorithm list in section {@sec:introduction}.
 
 ## Parallel version of the algorithm
-In this section the report discuss how we have parallelized the algorithm in order to speed up the performance.
+This section of the report presents how we have parallelized the algorithm in order to speed up the computation time.
 
 In practice, we have distributed the workload among $N$ different processes in the cluster using the *MPI* library and we have exploited multiprocessing via OpenMP for a couple of different shared-memory tasks.
 
 ### Architecture
-In order to subdivide the work and to carry out the final computation, the architecture proposed by the report focuses on the *all-to-all* parallel computational pattern (figure {@fig:communication-schema}).
+I
+ to subdivide the work and to carry out the final computation, the architecture proposed by the report focuses on the *all-to-all* parallel computational pattern (figure {@fig:communication-schema}).
 
-*All-to-all* parallel pattern is characterized by the exchange of individual messages from every process to any other processor. In this way, the program effectively uses all the processes in order to carry out the computation, as the coordination operations are handled by MPI.
+*All-to-all* parallel pattern, implemented using `MPI_Allgather` function, is characterized by the exchange of individual messages from every process to any other process. In this way, the program effectively uses all the computational units in order to carry out the computation, as the coordination operations are handled by MPI.
 
 ![Communication schema.](./images/communication_schema.png){#fig:communication-schema}
 
 ### Message
-To send a message between different processes we created a custom MPI data type called broadcastMessage_t.
-Its purpose is to inform the receiver process about the particles' position and fitness of the sender. The structure is composed by a timestamp, which is needed for logging purposes on the sqlite, the current iteration of the algorithm, the identifier of the particle, the sender rank and the current solution.
+To send a message between different processes we created a custom MPI data type called `broadcastMessage_t`.
+Its purpose is to inform the receiver process about the particles' position and fitness of the sender. The structure is composed by:
 
-On the other hand, solution is another structured datatype, which has been defined in order to carry a specific particle information.
-This structured datatype contains the problem dimensionality, the fitness value of the candidate solution and the vector depicting the current particle position within the fitness landscape.
+* a timestamp, which is needed for logging purposes on the sqlite;
+* the current iteration of the algorithm;
+* the identifier of the particle;
+* the sender rank and the current solution.
 
-So as to create a variable of the previously mentioned message data type, we have defined a proper function called define_datatype_broadcast_message. This function, in turn, calls the function required to defined a message carrying the a solution type variable and a timestamp type variable.
+On the other hand, solution is another structured datatype, which has been defined in order to convey a specific particle information.
+This structured datatype contains:
+
+* the problem dimensionality;
+* the fitness value of the candidate solution;
+* the vector depicting the current particle position within the fitness landscape.
+
+So as to create a variable of the previously mentioned message, we have defined a proper function called `define_datatype_broadcast_message`. This function, in turn, calls the procedure required to define a message carrying the solution type variable and a timestamp type variable.
 
 The stratification above has simplified the MPI_Datatype definition process. 
 
@@ -129,7 +137,7 @@ In this way, the $i$-th rank process has `processToNumberOfParticles[i]` particl
 
 The most interesting part in the algorithm parallelization is the program segment related to the message exchange among multiple processes.
 
-To carry out this operation, each process embeds its own particles in an array of `define_datatype_broadcast_message`. Then, the particle information exchange happens with an `MPI_Allgather` communication primitive.
+To accomplish this operation, each process embeds its own particles in an array of `define_datatype_broadcast_message`. Then, the particle information exchange happens with an `MPI_Allgather` communication primitive.
 
 In principle, at the beginning of the algorithm execution, the set of all the particles have been distributed across all processes. However, this operation has been carried out by each process alone without the need for a `MPI_Scatter` call.
 
@@ -141,17 +149,17 @@ Once each process knows everything about the others, the application needs to co
 
 At this point, each process can sort all the particles, whose position is known thanks to the `MPI_Allgather` communication, with respect to all particles proper to the process, according to the euclidean distance. In this way, for each process particle is possible to identify the $k$-th nearest neighbors.
 
-Finally, by applying the position and velocity update formulas listed in the PSO pseudocode it was possible to evolve the algorithm and approach the target function optima.
+Finally, by applying the position and velocity update formulas listed in equations {#eq:pso-update-position} and {#eq:pso-update-velocity}, it is possible to evolve the algorithm and approach the target function optima.
 
 Moreover, with the help of OpenMP we have parallelized the computation of the sorting algorithm as well as the loop needed in order to update the algorithm variables.
 
-We have observed that the workload split implied by the algorithm enhance the PSO performances. A first, and trivial way to observe the advantage offered by *MPI* and optimization is to give a look at some of the expensive computation the serial algorithm has to carry out, in particular, let $n$ be the number of particles and let $m$ be the problem dimensionality. Moreover, during this reasoning process, we consider the average performance case and the single threaded scenario.
+We have observed that the workload split implied by the algorithm enhance the PSO performances. A first, and trivial way to observe the advantage offered by *MPI* and optimization is to give a look at some of the expensive computation the serial algorithm has to carry out, in particular, let $n$ be the number of particles and let $m$ be the problem dimensionality. Moreover, during this reasoning process, we considered the average performance case and the single threaded scenario.
 
-1. the distance computation is quadratic in the number of particles, while the euclidean distance is liner in the vectors' number of dimensions, hence the complexity is $\mathcal{O}(mn^2)$. In the application scenario, the distance needs to be computed a $\mathcal{O}(n^2)$ number of times, as it is required to know the relative position of each particle with respect to all the others. Hence, the complexity grows to $\mathcal{O}(mn^4)$;
+1. the distance computation is quadratic in the number of particles, while the euclidean distance is linear in the vectors' number of dimensions, hence the complexity is $\mathcal{O}(mn^2)$. In the application scenario, the distance needs to be computed a $\mathcal{O}(n^2)$ number of times, as it is required to know the relative position of each particle with respect to all the others. Hence, the complexity grows to $\mathcal{O}(mn^4)$;
 2. the sorting algorithm, in the average performance scenario has a complexity which is given by $\mathcal{O}(n \log n)$, where $n$ is the number of particles. This operation has to be performed with respect to all the particle in the swarm, increasing the complexity to $\mathcal{O}(n^2 \log n)$;
 3. finally, the particle's update is linear in the dimensionality of the problem, hence the complexity is $\mathcal{O}(m)$, which has to be performed for all the particle in the swarm, bringing the complexity to $\mathcal{O}(nm)$.
 
-All those operations, are quite expensive in terms of time-complexity. Thanks to the workload sharing we have set up, the number each process has to manage is drastically reduced, and decreases the more processes MPI has at its disposal. Let $p$ be the number of processes. On average, each process has to manage $n/p$ particles, while the problem dimensionality remains untouched.
+All those operations, are quite expensive in terms of time-complexity. Thanks to the workload sharing we have set up, the number each process has to manage is drastically reduced, and decreases the more processes MPI has at its disposal. Let $p$ be the number of processes; on average, each process has to manage $n/p$ particles, while the problem dimensionality remains untouched.
 
 The complexity then decreases as follows:
 
@@ -163,7 +171,7 @@ Despite this results being positive, we have to consider the time needed for eac
 
 A visual proof of this statement is deeply discussed in section {@sec:benchmarking} of the report.
 
-All the previously described operations are executed for a specific number of times specified by the user.
+All the previously described operations are executed for a each iteration of the algorithm.
 
 ### Logs
 In order to provide a more effective way of visualizing the program behavior, we have employed a thread-safe logging utility library.
@@ -172,13 +180,43 @@ In this way, we were able to always know each process state. The logging library
 
 An excerpt of the logging library output is shown below:
 
-TODO qua vanno i logs
+```
+15:27:58 DEBUG : PSODATA    :: problem dimension :: 2
+15:27:58 DEBUG : PSODATA    :: particles number  :: 10
+15:27:58 DEBUG : PSODATA    :: iterations number :: 10
+15:27:58 DEBUG : PSODATA    :: neighborhood      :: 10
+15:27:58 DEBUG : PSODATA    :: w                 :: 0.800000
+15:27:58 DEBUG : PSODATA    :: phi 1             :: 0.300000
+15:27:58 DEBUG : PSODATA    :: phi 2             :: 0.300000
+15:27:58 DEBUG : PSODATA    :: max position      :: 10.000000
+15:27:58 DEBUG : PSODATA    :: min position      :: -10.000000
+15:27:58 DEBUG : PSODATA    :: max velocity      :: 100.000000
+15:27:58 DEBUG : PSODATA    :: min velocity      :: -100.000000
+15:27:58 DEBUG : PSODATA    :: fitness function  :: sphere
+15:27:58 DEBUG : PSODATA    :: distance function :: euclidean
+15:27:58 DEBUG : PSODATA    :: fitness goal      :: minimum
+15:27:58 INFO  : INIT       :: Using serial version
+15:27:58 DEBUG : INIT       :: Initializing particle 1 in range 0-10
+...
+15:27:58 DEBUG : INIT       :: Initializing particle 10 in range 0-10
+15:27:58 DEBUG : New best global solution found with fitness value 20.918734
+15:27:58 DEBUG : New best global solution found with fitness value 7.385129
+15:27:58 DEBUG : COMPUTING  :: Update social best solution of particle 0
+15:27:58 DEBUG : COMPUTING  :: Iteration 1/10 particle 1/10 velocity updated
+15:27:58 DEBUG : COMPUTING  :: Iteration 1/10 particle 1/10 position updated
+...
+15:27:58 DEBUG : New best global solution found with fitness value 4.690962
+...
+15:27:58 DEBUG : COMPUTING  :: Iteration 10/10 particle 10/10 position updated
+15:27:58 INFO  : COMPUTING  :: iteration 10/10 with best fitness 4.690962
+Best fitness 4.690962
+```
 
 Moreover, all the logs have been formatted in order to comply to a common standard. In this way, during the benchmarking phase, it was possible to extract and manage logs information.
 
 ### Output and SQLite
-The final output of the program are is best particles fitness value found by every process in the system. 
+The final output of the program are best particle fitness values found by every process in the system. 
 
-In a real case scenario, one would be more interested in the candidate solution found by the application rather than in the fitness value. However, the fitness function is a suitable value to analyze in order to have a clear understanding on whether the model is improving its solution or not. Moreover, the particles position at every iteration can be stored within the SQLite database. 
+In a real case scenario, one would be more interested in the candidate solution found by the application rather than in the fitness value. However, the fitness result is a suitable value to analyze in order to have a clear understanding on whether the model is improving its solution or not. Moreover, the particles position at every iteration can be stored within the SQLite database. 
 
 In this way, it is possible to recover the path the program has followed in order to build the final solution, and eventually choosing the most suitable point for the user application.

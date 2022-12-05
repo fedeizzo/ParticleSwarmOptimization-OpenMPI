@@ -1,11 +1,11 @@
 \newpage
 # Benchmarking {#sec:benchmarking}
-After implementing the algorithm, we wanted to understand how our parallelization impacts the performance of the algorithm.
+After implementing the algorithm, we wanted to understand how our parallelization impacts the performance of the proposed solution.
 
-Hence, we devised a full analysis of our algorithm performance changing the number of threads, the number of processes and the pBS process allocation pattern, in order to understand how the running time would have been affected.
+Hence, we devised a full analysis of our algorithm performance changing the number of threads, the number of processes and the PBS process allocation pattern, in order to understand how the running time would have been affected.
 
 ## Problem configuration
-In order to understand how our parallelization improved the running time, we devised a configuration file which is the same for every run, so as to have a common baseline.
+We devised a configuration file which is the same for every run, so as to have a common baseline.
 
 The configuration is listed below:
 
@@ -37,9 +37,9 @@ The amount of particles and the neighboord population are unreasonable for any k
 
 
 ## Cluster jobs
-In order to have high-quality and trustworthy results to examine, as indicated in the repository structure, we created a script that allowed us to send thousands of tasks to the University's HPC cluster over the course of many days. The script keeps a limit on the user current submitted job in order to do not monopolize the cluster and comply with the cluster policies. Precisely, we have set a $15$ process limit and every $10$ seconds the script checks whether the user has $15$ or more running processes in the cluster. If it is the case, then the script waits, otherwise it submits a new job to the scheduler. 
+In order to have high-quality and trustworthy results to examine, as indicated in the repository structure, we created a script that allowed us to send thousands of tasks to the University's HPC cluster over the course of many days. The script keeps a limit on the user current submitted job in order to do not monopolize the cluster and comply with policies. Precisely, we have set a $15$ process limit and every $10$ seconds the script checks whether the user has $15$ or more running jobs in the cluster. If it is the case, then the script waits, otherwise it submits a new job to the scheduler. 
 
-The total number of tests we have ran in total is around around 960, in particular we tried every possible combinations of different parameters:
+The number of tests we have ran in total is around 980 (TODO write correct number), in particular we tried every possible combination of different parameters:
 
 * processes: chosen between `[1 2 4 8 16 32 64]`;
 * threads: chosen between `[1 2 4 8 16 32 64]`;
@@ -62,7 +62,7 @@ The option used to specify the PBS place is the following:
 place=$place
 ``` 
 
-Where $place can take one of the following values:
+Where `$place` can take one of the following values:
 
 - `pack`: all the chunks are allocated within the same nodes;
 - `scatter`: the chunks are located on different nodes; 
@@ -77,7 +77,7 @@ During the execution of the benchmarking phase two problems occurred:
 * one student has saturated the available space in the the cluster home. For this reason, some of our runs were not able to store the results on disk at the end of the execution, hence, some computations got lost;
 * we decided to submit all the jobs to the short job queue of the cluster. However, due to the problem difficulty and to the thread scheduling issues, some jobs failed as a result of *time exceed* or missing resources.
 
-All the problem configurations were tested by both members of the group in order to validate and reduce possible noise of the results. 
+All the job configurations were tested by both members of the group in order to validate and reduce possible noise of the results. 
 
 Table 1 shows the amount of jobs we have run and the associated fail rate (we have decided to show only the amount of processes and not the threads one for presentation purposes).
 
@@ -93,7 +93,7 @@ Table 1 shows the amount of jobs we have run and the associated fail rate (we ha
 
 The table highlights a correlation between the failure rate and the number of processes. 
 
-As a result of a first analysis, most of the failures (if not all of them) were due to the time exceed error. Thus, we have tried to investigate the main reason behind this weird behavior. 
+As a result of a first analysis, none of the failed runs were caused by an errore in the code, most of them were failed duet to the time exceed error. Thus, we have tried to investigate the main reason behind this weird behavior. 
 
 To begin with, we have kept constant the number of processes and we have increased the number of chunks for our jobs. 
 
@@ -104,7 +104,7 @@ This proof of concept highlights how the overhead paid for a continuos context s
 
 ![Thread and time exceed failures correlation](./images/time_threads_correlation.pdf){ height=150px }{#fig:time-thread-correlation}
 
-The previously described phenomena is also observable from figure {@fig:threads-performance}. There, we can see that the execution time increases when the number of threads increases. Specifically, the dots in the plot represent the executed jobs while the size of the dots expresses the number of correctly terminated runs.
+The previously described phenomena is also observable from figure {@fig:threads-performance}. There, it is possible to see that the execution time increases when the number of threads increases. Specifically, the dots in the plot represent the executed jobs while the size of the dots expresses the number of correctly terminated runs used for to compute the average.
 
 ![Thread and time exceed failures correlation](./images/threads_performance.pdf){ width=250px }{#fig:threads-performance}
 
@@ -114,6 +114,6 @@ The plot suggests that the difference in terms of execution time between exclusi
 
 ![Thread and time exceed failures correlation](./images/processes_performance.pdf){ width=250px }{#fig:processes-performance}
 
-Furthermore, we have highlighted an elbow point in figure{@fig:processes-performance}, visible in the right plot. This spot identifies the best visual tradeoff between number of processes and the execution time of the parallel solution. Indeed, with more then 16 processes the gain does not motivate the expenses associated to the PBS request.
+Furthermore, we have highlighted an elbow point in figure {@fig:processes-performance}, visible in the right plot. This spot identifies the best visual tradeoff between number of processes and the execution time of the parallel solution. Indeed, with more then 16 processes the gain does not motivate the expenses associated to the PBS request.
 
 To validate this hypothesis we have created speedup and efficiency plots with respect to SOTA serial solution presented in section {@sec:sota-analysis}.

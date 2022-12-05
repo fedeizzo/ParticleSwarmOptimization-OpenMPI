@@ -5,7 +5,7 @@
 In order to deeply understand the reasons behind the report design choices, it is fundamental to understand comprehensively *Particle Swarm Optimization*.
 
 ### Generalities
-*Particle Swarm Optimization* focuses on main definitions: the notion of *particle* and the one of *particle perception*.
+PSO focuses on two main definitions: the notion of *particle* and the one of *particle perception*.
 
 A particle can be seen as an entity which is characterized by:
 
@@ -15,7 +15,7 @@ A particle can be seen as an entity which is characterized by:
 
 The entire set of particles is referred as *swarm*.
 
-Under the expression *particle perception*, we define how each particle communicate with each other. In practice, a particle needs to perceive the positions along with the associated performance measures of the *neighboring particles*. Thanks to this communication pattern, each particle remembers the position $z$ associated to the best performance of all the particles within the neighborhood, as well as its own position where it obtained the best performance so far $y$.
+Under the expression *particle perception*, we define how each particle communicate with each other. In practice, a particle needs to perceive the positions along with the associated performance measures of the *neighboring particles*. Thanks to this communication pattern, each particle remembers the position $z$ associated to the best performance of all the particles within the neighborhood, as well as its own best performance so far $y$.
 
 There are different structures of neighborhood which can be considered (figure {@fig:pso-topologies}), and they usually depend on the type of optimization problem one has to face.
 
@@ -119,7 +119,7 @@ The pseudocode of the algorithm is shown below:
 ## MPI
 The MPI (Message Passing Interface) library is used to convey information across processes running on different nodes of a cluster.
 
-In the scenario described by the application, the basic information unit is composed as a broadcast message shared over the whole network, in this way all particles of Particle Swarm Optimization (PSO) are able to know all information associated to other members of the swarm.
+In the scenario described by the application, the basic information unit is composed as a broadcast message shared over the whole network, in this way all particles of PSO are able to know all information associated to other members of the swarm.
 
 ## OpenMP
 OpenMP is an API which supports multi-platform shared memory programming.
@@ -132,7 +132,7 @@ The first serial implementation of PSO was published in 1995 by Kennedy and Eber
 Based on what we have found, the approaches can be divided into three main categories:
 
 1. those ones which aim to change the behavior of the algorithm introducing new features;
-2. those ones which aim to solve a real world problem using PSO as main algorithm.
+2. those ones which aim to solve a real world problem using PSO as main algorithm;
 3. those ones which aim to optimize the runtime execution speed.
 
 In our study we have decided to exclude the second category of PSO algorithms since these solutions are strictly problem dependent. Thus, a comparison would produce meaningless results. 
@@ -146,18 +146,18 @@ However, there are several cases in which different PSO version have been implem
 
 In the following table we list some of the implementations we have decided to consider during the benchmarking phase.
 
-| Authors                                                  | Year | Type                      | Source code                                                     | Notes             |
-|----------------------------------------------------------|------|---------------------------|-----------------------------------------------------------------|-------------------|
-| Kennedy, Eberhart [@KennedyEberhart]                     | 1995 | Serial                    | No                                                              |                   |
-| toddguant [@toddguant]                                   | 2019 | Serial                    | [Yes](https://github.com/toddgaunt/cpso)                        | 1                 |
-| sousouho [@sousouho]                                     | 2019 | Serial                    | [Yes](https://github.com/sousouhou/succinctPSO)                 | 1                 |
-| kkentzo [@kkentzo]                                       | 2020 | Serial                    | [Yes](https://github.com/kkentzo/pso)                           | 1                 |
-| fisherling [@fisherling]                                 | 2020 | Serial                    | [Yes](https://github.com/fischerling/pso)                       | 1                 |
-| Moraes, Mitre [@MoraesMitre]                             | 2014 | Parallel OpenMPI          | No                                                              |                   |
-| Nedja, Moraes, Rogerio, Marcedo Mourelle [@NedJahMoraes] | 2017 | Parallel OpenMPI/MP       | No                                                              |                   |
-| abhi4578 [@abhi4578]                                                 | 2019 | Parallel OpenMPI/MP, CUDA | [Yes](https://github.com/abhi4578/Parallelization-of-PSO)       | 1 (da verificare) |
-| LaSEEB [@LaSEEB]                                                  | 2020 | Parallel OpenMP           | [Yes](https://github.com/LaSEEB/openpso)                        | 2                 |
-| pg443 [@pg443]                                                   | 2021 | Serial, Parallel OpenMP   | [Yes](https://github.com/pg443/Particle-Swarm-Optimizer-OpenMP) | 1                 |
+| Authors                                                  | Year | Type                      | Source code                                                     | Notes |
+|----------------------------------------------------------|------|---------------------------|-----------------------------------------------------------------|-------|
+| Kennedy, Eberhart [@KennedyEberhart]                     | 1995 | Serial                    | No                                                              |       |
+| toddguant [@toddguant]                                   | 2019 | Serial                    | [Yes](https://github.com/toddgaunt/cpso)                        | 1     |
+| sousouho [@sousouho]                                     | 2019 | Serial                    | [Yes](https://github.com/sousouhou/succinctPSO)                 | 1     |
+| kkentzo [@kkentzo]                                       | 2020 | Serial                    | [Yes](https://github.com/kkentzo/pso)                           | 1     |
+| fisherling [@fisherling]                                 | 2020 | Serial                    | [Yes](https://github.com/fischerling/pso)                       | 1     |
+| Moraes, Mitre [@MoraesMitre]                             | 2014 | Parallel OpenMPI          | No                                                              |       |
+| Nedja, Moraes, Rogerio, Marcedo Mourelle [@NedJahMoraes] | 2017 | Parallel OpenMPI/MP       | No                                                              |       |
+| abhi4578 [@abhi4578]                                     | 2019 | Parallel OpenMPI/MP, CUDA | [Yes](https://github.com/abhi4578/Parallelization-of-PSO)       | 1     |
+| LaSEEB [@LaSEEB]                                         | 2020 | Parallel OpenMP           | [Yes](https://github.com/LaSEEB/openpso)                        | 2     |
+| pg443 [@pg443]                                           | 2021 | Serial, Parallel OpenMP   | [Yes](https://github.com/pg443/Particle-Swarm-Optimizer-OpenMP) | 1     |
 Table: SOTA works.
 
 The indexes in the notes refer to:
@@ -169,18 +169,18 @@ According to the previous statements, we claim that we have implemented a PSO ve
 
 ## Project generalities
 
-In the following sections, the report address how to setup and run the program.
+In the following sections, the report addresses how to setup and run the program.
 
 ### Libraries
 The project requires few libraries in order to work properly. As it is mandatory for the course, [OpenMP](https://www.openmp.org/) and [MPI](https://www.open-mpi.org/) were employed. 
-Along with the compulsory libraries, the following libraries were exploited:
+Along with the compulsory libraries, the following ones were exploited:
 
 - [sqlite](https://www.sqlite.org/index.html): SQLite is a C-language library that provides a SQL database engine that is tiny, quick, self-contained, high-reliability, and full-featured. The choice of `sqlite` was made in order to save particles' information at each iteration in an simple and fast way, avoiding dealing with race conditions.
 
 - [argp](https://www.gnu.org/software/libc/manual/html_node/Argp.html): `argp` is a parsing interface for unix-style argument vectors.
 The argp features include, as defined in the GNU coding standards, automatically producing output in response to the `--help` and `--version` options and the possibility for programmers to explicitly define the input of the script. This library was employed in order to allow the user to explore the possible configurations made available by the software.
 
-- [check](https://libcheck.github.io/check/): `check` is a unit testing framework written in C. It has a straightforward interface for defining unit tests helping the developer to build robust software. This library was included in the application in order to perform unit-testing on the structure we have created. This choice implication are a more robust software.
+- [check](https://libcheck.github.io/check/): `check` is a unit testing framework written in C. It has a straightforward interface for defining unit tests helping the developer to build robust software. This library was included in the application in order to perform unit-testing on the structure we have created. This choice implies a more robust software.
 
 ### Build
 In order to build the executable file of our project, as well as the binary file needed to run the project unit test, we have employed [GNU Make](https://www.gnu.org/software/make/).
@@ -189,7 +189,7 @@ GNU Make is a tool which manages the creation of executables and other non-sourc
 
 Thanks to the definitions of rules, Make enables the user to build and install packages without knowing the details on how that is done. 
 
-Moreover, thanks to wildcards, it is easy to automatize the application building process. Indeed, it first allow to assemble each `C` source file in order to create the object files. Then, all of the object files are linked together, along with other libraries, in order to produce the final executable file. If the building rule is called multiple times, Make is smart enough to understand whether an object file needs to be recreated or not, making use of the already assembled objects, thus speeding up the building process.
+Moreover, thanks to wildcards, it is easy to automate the application building process. Indeed, it first allotraduttorews to assemble each `C` source file in order to create the object files. Then, all of the object files are linked together, along with other libraries, in order to produce the final executable file. If the building rule is called multiple times, Make is smart enough to understand whether an object file needs to be recreated or not, making use of the already assembled objects, thus speeding up the building process.
 
 Furthermore, Make can do much more than compiling software, for instance, the project contains rules which allow to build and open the code documentation written by the means of [Doxygen](https://doxygen.nl/).
 
@@ -212,11 +212,11 @@ make test
 
 The artifact is located in the `bin` directory and it is called `test`.
 
-Along with the executable files, there are also scripts used in order to run the program within the University cluster. Each job in the cluster is handled by *PBS (Portable Bash Script)* which submits them to the scheduler. By means of a script, it is possible to tell the scheduler what resources the job requires in order to complete (e.g. number of processors, amount of memory, time to complete etc.) and the application the user wants to run.
+Along with the executable files, there are also scripts used to run the program within the University cluster. Each job in the cluster is handled by *PBS (Portable Bash Script)* which submits them to the scheduler. By means of a script, it is possible to tell the scheduler what resources the job requires in order to complete (e.g. number of processors, amount of memory, time to complete etc.) and the application the user wants to run.
 
-The `run.sh` file in the `scripts` folder of the repository allows the user to submit the application to the cluster. The script has three parameters: number of processes, path of the ini file containing the program configuration and the number of threads. Once submitted with the `qsub` command, the script generates a number of docker containers equal to the number of specified processes thanks to the `mpiexec` binary. Each container runs the application in a shared network, therefore each process is able to communicate with each other. The details of the program deployment is discussed in the section dedicated to DevOps.
+The `run.sh` file in the `scripts` folder of the repository allows the user to submit the application to the cluster. The script has three parameters: number of processes, path of the ini file containing the program configuration and the number of threads. Once submitted with the `qsub` command, the script generates a number of docker containers equal to the number of specified processes thanks to the `mpiexec` binary. Each container runs the application in a shared network, therefore each process is able to communicate with each other. The details of the program deployment is discussed in the section {@sec:devops}.
 
-The `generate_cluster_run.sh` file, contained in the `scripts` folder, is employed in order to generate specific runs in order to benchmark the application. In details, the shell file considers several combinations of processes, threads, nodes and places. More details are provided in the section dedicated to the application benchmark.
+The `generate_cluster_run.sh` file, contained in the `scripts` folder, is employed to generate specific runs in order to benchmark the application. In details, the shell file considers several combinations of processes, threads, nodes and places. More details are provided in section {@sec:benchmarking}.
 
 ### Execute
 The executable file can be invoked with or without `OpenMP` and with or without `OpenMPI`. However, to fully exploit `OpenMPI`, it is recommended to execute the program `mpiexec` to spawn multiple processes of the multi-process application.
@@ -236,9 +236,9 @@ exploiting Genetic Algorithms and the computational power offered by the cluster
   -V, --version              Print program version
 ```
 
-In order to run, the application requires three parameters, two which are optional, while one is mandatory.
+In order to run, the application requires three parameters, two of them are optional, while one is mandatory.
 
 The compulsory parameter is the configuration file, which needs to be provided in an `INI file`. This file, takes care of all the parameters which are needed by the Particle Swarm Optimization algorithm to run and which have been fully discussed during the introduction to the problem.
 The repository provides a standard `INI` file, called `pso-data.ini`, which can be modified in order to configure algorithm so as to solve the target problem.
 
-It is possible to specify the number of threads the program is allowed to spawn with the `-m` flag, and whether to employ `MPI` primitives or not with the `-u` flag.
+It is possible to specify the number of threads the program is allowed to spawn for each process with the `-m` flag, and whether to employ `MPI` primitives or not with the `-u` flag.

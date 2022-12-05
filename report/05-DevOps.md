@@ -1,5 +1,5 @@
 \newpage
-# DevOps
+# DevOps {#sec:devops}
 In order to automate the build process of documentation, executable, and report a *Continuous Integration* workflow was designed.
 
 ## Nix
@@ -16,7 +16,7 @@ The build entry points offered by nix are:
 There exists also a development entrypoint that can be called using the command `nix shell`, it provides a new shell containing all dependencies required for build, testing, and report.
 
 ## Docker {#sec:docker}
-The reproducibility during execution of the final binary is provide by *containers*. A container is sand box that contains all runtime dependencies required by the executable placed within it.
+The reproducibility during execution of the final binary is provided by *containers*. A container is a sand box that contains all runtime dependencies required by the executable placed within it.
 
 A manager for the life-cycle of containers is required, we opted for *Docker*, a state-of-the-art software used in many environments. It builds an image from the descriptor file `Dockerfile` placed in the root of the project, then from the image it is possible to create several containers that are independent of each other.
 
@@ -28,7 +28,7 @@ A *GitHub action* is a list of commands executed when a specific event is trigge
 We defined two workflows, one for the container creation and the other for the documentation compilation. They are triggered on each commit.
 
 ### Container creation {#sec:container-creation}
-The container creation workflow uses the `Dockerfile` to build up a docker image (as explained in section {@sec:docker}) that is then pushed to a *container registry* called *DockerHub*, the process is shown in figure {@fig:container-creation}. The process also includes an automation that executes unit tests, if only one them is marked as failed then the whole process is interrupted to avoid runtime errors in production.
+The container creation workflow uses the `Dockerfile` to build up a docker image (as explained in section {@sec:docker}) that is then pushed to a *container registry* called *DockerHub*, the process is shown in figure {@fig:container-creation}. The action also includes an automation that executes unit tests, if only one them is marked as failed then the whole process is interrupted to avoid runtime errors in production.
 
 ![Container creation workflow](./images/container_creation.png){ width=450px }{#fig:container-creation}
 
@@ -36,7 +36,9 @@ The container creation workflow uses the `Dockerfile` to build up a docker image
 The documentation is compiled in two formats:
 
 * **html**: it includes all the content of this report and in addition it also provides code documentation extracted with *Doxygen* following rules defined in the `Doxyfile` file placed in the root of the project;
-* **pdf**: this report.
+* **pdf**: two products have pdf format:
+  * this report;
+  * the sort version of this report.
 
 Both formats are generated using a github action and the html website is hosted on *GitHub Pages* at [this link](https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/).
 
@@ -56,7 +58,7 @@ The pulled image created by GitHub and hosted on DockerHub can be used to create
 ![Container pull worflow](./images/container_pull.png){ width=450px }{#fig:container-pull}
 
 ### OpenMPI communication
-Normally the OpenMPI communication between different processes is not compatible with sandbox systems like udocker, some additional steps are required to do that:
+Normally the OpenMPI communication between different processes is not compatible with sandbox systems like docker and udocker, consequentially some additional steps are required to do that:
 
 * the OpenMPI version installed inside the container must match the version used by the host;
 * the executed container must share environment variables with the host, in particular the one that points to the dynamic library of OpenMPI.
