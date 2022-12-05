@@ -30,7 +30,7 @@ The most relevant types of neighborhood are:
 This project implements a version of PSO considering *distance-based* neighborhood in a nearest neighbor fashion. In details, each particle has a fixed number of neighbors, which depend dynamically on the particle position on the landscape. The program offers the user the possibility to modify the number of particles to consider within a particle neighborhood.
 
 ### Parametrization
-In order to assess a solution for an optimization problem, PSO requires the following parameters ot be set:
+In order to assess a solution for an optimization problem, PSO requires the following parameters to be set:
 
 - *Swarm size*: typically 20 particles for problems with dimensionality 2-200;
 - *Neighborhood size*: typically 3 to 5, otherwise global neighborhood;
@@ -131,18 +131,18 @@ The first serial implementation of PSO was published in 1995 by Kennedy and Eber
 
 Based on what we have found, the approaches can be divided into three main categories:
 
-1. those one which aim to change the behavior of the algorithm introducing new features;
+1. those ones which aim to change the behavior of the algorithm introducing new features;
 2. those ones which aim to solve a real world problem using PSO as main algorithm.
 3. those ones which aim to optimize the runtime execution speed.
 
-In our study we have decided to exclude the second category since these solutions are strictly problem dependent, thus a comparison would produce meaningless results. 
+In our study we have decided to exclude the second category of PSO algorithms since these solutions are strictly problem dependent. Thus, a comparison would produce meaningless results. 
 
-On the other hand, all those approaches which belong to first category can be employed as case of studies for our benchmarking phase. However, it is strictly required to change some implementation aspects by modifying directly the code. In some cases, this requires a deep understanding of others' code, most of the time a though job due to the absence of documentation. 
+On the other hand, all those approaches which belong to first category of problems can be employed as case studies for our benchmarking analysis. However, it is strictly required to change some implementation aspects by modifying directly the code. In some cases, this requires a deep understanding of others' code, most of the time a though job due to the absence of documentation. 
 
-For instance, the topology used within the neighborhood selection highly influences the final performance of the algorithm; as an effective representation we can think about the global neighborhood in comparison with the distance based one. In the first scenario, the global best solution is shared among each swarm unit, and it is given by the best value reached by each particle, hence a simple reduce without further computation will suffice. Instead, a distance based neighborhood requires to consider the best solutions within a certain range, which implies that all the swarm units needs to know all the others' positions, which inevitably imply a considerable increase in time complexity. 
+For instance, the topology used within the neighborhood selection highly influences the final performance of the algorithm. As an effective representation, we can think about the global neighborhood in comparison with the distance based one. In the first scenario, the global best solution is shared among each swarm unit, and it is given by the best value reached by each particle. Hence, a simple reduce without further computation will suffice. Instead, a distance based neighborhood requires to consider the best solutions within a certain range of particles, which implies that all the swarm units need to know all the others' positions. This inevitably imply a considerable increase in time complexity. 
 
-The third category is our perfect competitor, since we share the same objective.
-However, there may be cases where different PSO version have been implemented, which inevitably require some hands on.
+The third category is our perfect competitor, since they share our same objective.
+However, there are several cases in which different PSO version have been implemented. Hence, some hands on is still required.
 
 In the following table we list some of the implementations we have decided to consider during the benchmarking phase.
 
@@ -160,12 +160,12 @@ In the following table we list some of the implementations we have decided to co
 | pg443 [@pg443]                                                   | 2021 | Serial, Parallel OpenMP   | [Yes](https://github.com/pg443/Particle-Swarm-Optimizer-OpenMP) | 1                 |
 Table: SOTA works.
 
-The meaning of the indexes in the notes refer to:
+The indexes in the notes refer to:
 
-1. provides only global neighborhood implementation available: the comparison would be untruthful as those implementations have a clear advantage in the execution time due to the favorable topology;
-2. provides PSO with different neighborhood versions but without a distance based approach: the implication are the same as for the point 1.
+1. provides only global neighborhood implementation. Thus, the comparison would be untruthful as those implementations have a clear advantage in the execution time due to a favorable topology;
+2. provides PSO with different neighborhood versions but without a distance based approach. Hence, the implication are the same as for the point 1.
 
-According to the previous statements, we claim that we have implemented a PSO version which differ from the ones provided in the literature (as fas as we know) since it has a different notion of neighborhood, which makes it harder to parallelize.
+According to the previous statements, we claim that we have implemented a PSO version which differ from the ones we have decided to consider since it has a different notion of neighborhood which makes it harder to parallelize.
 
 ## Project generalities
 

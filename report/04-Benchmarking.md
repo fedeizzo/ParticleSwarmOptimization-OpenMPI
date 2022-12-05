@@ -69,19 +69,17 @@ Where $place can take one of the following values:
 - `pack:excl`: the scenario is the same as `pack`, but the chunks are reserved entirely for the user application;
 - `scatter:excl`: the scenario is the same as `scatter`, but the chunks are reserved entirely fo the user application.
 
-We decided to increase the processes and threads number by power of 2 because the most complex algorithm (following the asymptotic notation) should be $\mathcal{O}(nlogn)$ (TODO verificare questa complessita', non so se ha senso metterle)
-
 Since it takes 50 minutes on average for each run, we had to stretch out the submission of jobs across many days (three weeks).
 
 ## Results
 During the execution of the benchmarking phase two problems occurred:
 
 * one student has saturated the available space in the the cluster home. For this reason, some of our runs were not able to store the results on disk at the end of the execution, hence, some computations got lost;
-* we decided to submit all jobs to the short job queue of the cluster. However, due to the problem difficulty and thread scheduling issues, some jobs failed due to *time exceed* or missing resources.
+* we decided to submit all the jobs to the short job queue of the cluster. However, due to the problem difficulty and to the thread scheduling issues, some jobs failed as a result of *time exceed* or missing resources.
 
 All the problem configurations were tested by both members of the group in order to validate and reduce possible noise of the results. 
 
-Table 1 shows the amount of jobs we have run and the associated fail rate (we have decided to show only the amount of processes and not the thread one for presentation purposes).
+Table 1 shows the amount of jobs we have run and the associated fail rate (we have decided to show only the amount of processes and not the threads one for presentation purposes).
 
 | Processes number | Total | Failed | Fail rate |
 |------------------|-------|--------|-----------|
@@ -93,25 +91,29 @@ Table 1 shows the amount of jobs we have run and the associated fail rate (we ha
 | 32               | 91    | 63     | 69.23     |
 | 64               | 56    | 43     | 76.79     |
 
-From the table, there seems to be a correlation between the failure rate and the number of processes. 
+The table highlights a correlation between the failure rate and the number of processes. 
 
-Indeed, given the fact that most of the failures (if not all of them) are due to time exceed problem, we tried to investigate the main reason behind this weird behavior. 
+As a result of a first analysis, most of the failures (if not all of them) were due to the time exceed error. Thus, we have tried to investigate the main reason behind this weird behavior. 
 
-To begin with, we have kept constant number of processes and we have increased the number of chunks for our jobs. Figure {@fig:time-thread-correlation} shows the number of failed runs associated with the corresponding number of threads. As a matter of fact, the more the requested chunks, the more the cores for the job are. Thus, since the number of MPI processes is always the same, unused cores can host threads. 
+To begin with, we have kept constant the number of processes and we have increased the number of chunks for our jobs. 
 
-This proof of concept highlights how the overhead paid for continuos thread context switch introduced by OpenMP is dramatically higher than the parallelization performance gain. Therefore, we came to the conclusion that, since several optimizations are already included within modern compilers such as [GCC](https://gcc.gnu.org/), OpenMP introduces only an unwanted overhead for the problem that we are facing. Hence, the optimal scenario is represented by the single threaded multi-process case.
+Figure {@fig:time-thread-correlation} shows the number of failed runs associated with the corresponding number of threads. As a matter of fact, the more the requested chunks, the more the cores for the job are. Hence, since the number of MPI processes is always the same, unused cores can host threads, which could be a reasonable explanation for the low amount of failed jobs in higher chunks requests.
+
+This proof of concept highlights how the overhead paid for a continuos context switch introduced by OpenMP is dramatically higher than the performance gain due to the parallelization. Therefore, we came to the conclusion that since several optimizations are already included within modern compilers such as [GCC](https://gcc.gnu.org/), OpenMP introduces only an unwanted overhead for the problem that we are facing. Hence, the optimal scenario is represented by the single threaded multi-process case.
 
 
 ![Thread and time exceed failures correlation](./images/time_threads_correlation.pdf){ height=150px }{#fig:time-thread-correlation}
 
-The previously described phenomena is also observable from figure {@fig:threads-performance}. There, we can see that the execution time increases when the number of threads increase. Specifically, the dots in the plot represent the executed jobs while the size of the dots expresses the number of correctly terminated runs.
+The previously described phenomena is also observable from figure {@fig:threads-performance}. There, we can see that the execution time increases when the number of threads increases. Specifically, the dots in the plot represent the executed jobs while the size of the dots expresses the number of correctly terminated runs.
 
 ![Thread and time exceed failures correlation](./images/threads_performance.pdf){ width=250px }{#fig:threads-performance}
 
-A part from the efficiency issues in the case of the multi-threaded scenario, we have deepen our benchmark analysis by considering single threaded jobs. Figure {@fig:processes-performance} shows the execution time difference between the various configuration places, where excl means exclusive. The plot suggests that the difference in terms of execution time between exclusive chunks and shared ones is marginal with respect to the entire time needed for the job execution. This inevitably implies that the computation time of the job is markedly higher then the (job scheduling time? Non saprei come buttarla giù) time spent to wait the core (questa e' da verificare se e' vera). For the same reason, the overall computation time is not influenced by the network overhead. This can be appreciated from the small differences in term of execution time between pack and scatter jobs.
+A part from the efficiency issues in the the multi-threaded scenario, we have deepen our benchmark analysis by considering single threaded jobs. Figure {@fig:processes-performance} shows the execution time difference between various configuration places, where *excl* means exclusive. 
+
+The plot suggests that the difference in terms of execution time between exclusive chunks and shared ones is marginal with respect to the entire time needed for the job execution. This inevitably implies that the computation time of the job is markedly higher then the scheduling time between other users' processes. For the same reason, we can claim that the overall computation time does not suffer from the network overhead. The last statement can be appreciated from the small differences in term of execution time between pack and scatter jobs executions.
 
 ![Thread and time exceed failures correlation](./images/processes_performance.pdf){ width=250px }{#fig:processes-performance}
 
-Furthermore, we have highlighted an elbow point in figure{@fig:processes-performance}, visible in the right part of the plot. This spot identifies the best visual tradeoff between number of processes and execution time of the parallel solution. Indeed, with more then 16 processes the gain does not motivate the expenses associated to the PBS request.
+Furthermore, we have highlighted an elbow point in figure{@fig:processes-performance}, visible in the right plot. This spot identifies the best visual tradeoff between number of processes and the execution time of the parallel solution. Indeed, with more then 16 processes the gain does not motivate the expenses associated to the PBS request.
 
 To validate this hypothesis we have created speedup and efficiency plots with respect to SOTA serial solution presented in section {@sec:sota-analysis}.
