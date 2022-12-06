@@ -11,7 +11,7 @@ The entire set of particles is referred as *swarm*.
 
 Each particle needs to perceive the positions along with the associated performance measures of the *neighboring particles*. In this way, each agent remembers the position $z$ associated to the best performance of all the particles within the neighborhood, as well as its own best performance so far $y$.
 
-This project implements a version of PSO considering *distance-based* neighborhood in a nearest neighbor fashion. In details, each particle has a fixed number of neighbors, which depend dynamically on the particle position on the landscape. Moreover, the program offers the user the possibility to modify the number of particles to consider within a particle neighborhood.
+This project implements a version of PSO considering *distance-based* neighborhood in a nearest neighbor fashion. In details, each particle has a fixed number of neighbors, which depend dynamically on the particle position on the landscape.
 
 ## Parametrization
 PSO requires the following parameters to be set:
@@ -55,7 +55,7 @@ In our study we have decided to exclude the second category of PSO algorithms si
 On the other hand, all those approaches which belong to first category of problems can be employed as case studies for our benchmarking analysis. However, it is strictly required to change some implementation aspects by modifying directly the code. In some cases, this requires a deep understanding of others' code, most of the time a though job due to the absence of documentation. 
 
 The third category is our perfect competitor, since they share our same objective.
-However, there are several cases in which different PSO version have been implemented. Hence, some hands on is still required.
+However, there are several cases in which different PSO version have been implemented. Hence, some hands on is still mandatory.
 
 In the following table we list some of the implementations we have decided to consider during the benchmarking phase.
 
@@ -92,11 +92,11 @@ The main steps of the algorithm are:
 
 As a first approach, we have tried to use OpenMP directives in order to generate a thread for each loop iteration whenever it was possible.
 
-However, OpenMP *fork-join* model requires a non negligible overhead so as to spawn multiple threads which are eventually joined into the master at the end of the OpenMP block. For relatively small problems, this operation was a time-consuming procedure which leads to a significant rise in execution time with respect to the single thread model. Moreover, during the experiments we have not been able to observe the threads advantage we were hoping for. We assume that the main reason behind this non-tangible advantage are the optimization provided by \texttt{gcc} during at compile time and the non-optimal thread allocation patterns performed on the cluster. 
+However, OpenMP *fork-join* model requires a non negligible overhead so as to spawn multiple threads which are eventually joined into the master at the end of the OpenMP block. For relatively small problems this operation was a time-consuming procedure which leads to a significant rise in execution time with respect to the single thread model. Moreover, during the experiments we have not been able to observe the threads advantage we were hoping for. We assume that the main reason behind this non-tangible advantage are the optimization provided by \texttt{gcc} during at compile time and the non-optimal thread allocation patterns performed on the cluster. 
 
 In the final version of the application, we have included the OpenMP directives only in the portion of the code where we thought it was needed, even if the advantage in terms of time were not satisfactory compared to the single threaded application.
 
-For the neighborhood sort, the program relies on *quicksort* (figure \ref{fig:quicksort-algorithm}). The main reason behind this choice is the amount of parallelization this algorithm can provide.
+For the neighborhood sort, the program relies on *quicksort* (figure \ref{fig:quicksort}). The main reason behind this choice is the amount of parallelization this algorithm can provide.
 
 \begin{figure}
     \centering
@@ -126,7 +126,7 @@ In details, let $N$ be the number of particles the user has requested to program
 
 To carry out this operation, each process embeds its own particles in an array of \texttt{define\_datatype\_broadcast\_message}. Then, the particle information exchange happens with an \texttt{MPI\_Allgather} communication primitive.
 
-As presented in figure {@fig:communication-schema}, \texttt{MPI\_Allgather} is suitable for the problem since it is an *all-to-all* communication channel and since it allows to reunite all the particles of each process into a single vector, which, at the end of the communication, will be equal for each process.
+As presented in figure {@fig:communication-schema}, \texttt{MPI\_Allgather} is suitable for the problem since it is an *all-to-all* communication channel and it allows to reunite all the particles of each process into a single vector, which, at the end of the communication, will be equal for each process.
 
 Once each process knows everything about the others, the application needs to consider the neighbor contributions in order to update the process particles' position and velocity.
 
@@ -142,33 +142,25 @@ We devised a configuration file which is the same for every run, so as to have a
 
 The configuration is listed below:
 
-* problemDimension = 50
-* particlesNumber = 5000
-* iterationsNumber = 500
-* neighborhoodPopulation = 5000
-* weights: w = 0.8, phi_1 = 0.3, phi_2 = 0.3
-* functions: fitness = sphere, distance = euclidean, fitnessGoal = minimum
+* `problemDimension` = 50
+* `particlesNumber` = 5000
+* `iterationsNumber` = 500
+* `neighborhoodPopulation` = 5000
+* `weights`: w = 0.8, phi_1 = 0.3, phi_2 = 0.3
+* `functions`: fitness = sphere, distance = euclidean, fitnessGoal = minimum
 
-The amount of particles and the neighboord population are unreasonable for any known problem but they were chosen to show clearly the advantages brought by a multi process solution.
+The amount of particles and the neighborhood population are unreasonable for any known problem but they were chosen to show the clear advantage brought by a multi process solution.
 
 
 ## Cluster jobs
-In order to have high-quality and trustworthy results to examine, as indicated in the repository structure, we created a script that allowed us to send thousands of tasks to the University's HPC cluster over the course of many days.
+In order to have high-quality and trustworthy results to examine, as indicated in the repository structure, we created a script that allowed us to send thousands of tasks to the University's HPC cluster over several days.
 
 The number of tests we have ran in total is around 980(TODO write correct number), in particular we tried every possible combination of different parameters:
 
-* processes: chosen between \texttt{[1 2 4 8 16 32 64]};
-* threads: chosen between \texttt{[1 2 4 8 16 32 64]};
-* select: chosen between \texttt{[1 2 3 4 5]};
-* places: chosen between \texttt{[pack scatter pack:excl scatter:excl]};
-
-*Select* refer to the number of chunks requested to the PBS. A *chunk* can be seen as group of sockets, which are not necessarily on the same machine. 
-*Place* can take one of the following values:
-
-- \texttt{pack}: all the chunks are allocated within the same nodes;
-- \texttt{scatter}: the chunks are located on different nodes; 
-- \texttt{pack:excl}: the scenario is the same as \texttt{pack}, but the chunks are reserved entirely for the user application;
-- \texttt{scatter:excl}: the scenario is the same as \texttt{scatter}, but the chunks are reserved entirely fo the user application.
+* `processes`: chosen between \texttt{[1 2 4 8 16 32 64]};
+* `threads`: chosen between \texttt{[1 2 4 8 16 32 64]};
+* `select`: chosen between \texttt{[1 2 3 4 5]};
+* `places`: chosen between \texttt{[pack scatter pack:excl scatter:excl]};
 
 ## Results
 All the job configurations were tested by both members of the group in order to validate and reduce possible noise of the results. 
@@ -197,13 +189,13 @@ Table \ref{tbl:job-results} shows the amount of jobs we have run and the associa
 
 The table highlights a correlation between the failure rate and the number of processes. 
 
-As a result of a first analysis, none of the failed runs were caused by an errore in the code, most of them were failed duet to the time exceed error. Thus, we have tried to investigate the main reason behind this weird behavior. 
+As a result of a first analysis, none of the failed runs were caused by an error in the code, while most of them failed due to a time exceed error. Thus, we have tried to investigate the main reason behind this weird behavior. 
 
 To begin with, we have kept constant the number of processes and we have increased the number of chunks for our jobs. 
 
 Figure \ref{fig:time-thread-correlation} shows the number of failed runs associated with the corresponding number of threads. As a matter of fact, the more the requested chunks, the more the cores for the job are. Hence, since the number of MPI processes is always the same, unused cores can host threads, which could be a reasonable explanation for the low amount of failed jobs in higher chunks requests.
 
-This proof of concept highlights how the overhead paid for a continuos context switch introduced by OpenMP is dramatically higher than the performance gain due to the parallelization. Therefore, we came to the conclusion that since several optimizations are already included within modern compilers such as [GCC](https://gcc.gnu.org/), OpenMP introduces only an unwanted overhead for the problem that we are facing. Hence, the optimal scenario is represented by the single threaded multi-process case.
+This proof of concept highlights how the overhead paid for a continuos context switch introduced by OpenMP is dramatically higher than the performance gain due to the parallelization. Therefore, we came to the conclusion that since several optimizations are already included within modern compilers such as [`gcc`](https://gcc.gnu.org/), OpenMP introduces only an unwanted overhead for the problem that we are facing. Hence, the optimal scenario is represented by the single threaded multi-process case.
 
 \begin{figure}
     \centering
@@ -212,7 +204,7 @@ This proof of concept highlights how the overhead paid for a continuos context s
     \label{fig:time-thread-correlation}
 \end{figure}
 
-The previously described phenomena is also observable from figure \ref{fig:threads-performance}. There, it is possible to see that the execution time increases when the number of threads increases. Specifically, the dots in the plot represent the executed jobs while the size of the dots expresses the number of correctly terminated runs used for to compute the average.
+The previously described phenomena is also observable from figure \ref{fig:threads-performance}. From there, it is possible to see that the execution time increases when the number of threads increases. Specifically, the dots in the plot represent the executed jobs while the size of the dots expresses the number of correctly terminated runs used to compute the average.
 
 \begin{figure}
     \centering
@@ -232,7 +224,7 @@ A part from the efficiency issues in the the multi-threaded scenario, we have de
 
 The plot suggests that the difference in terms of execution time between exclusive chunks and shared ones is marginal with respect to the entire time needed for the job execution. This inevitably implies that the computation time of the job is markedly higher then the scheduling time between other users' processes. For the same reason, we can claim that the overall computation time does not suffer from the network overhead. The last statement can be appreciated from the small differences in term of execution time between pack and scatter jobs executions.
 
-Furthermore, we have highlighted an elbow point in figure \ref{fig:processes-performance-elbow}, visible in the right plot. This spot identifies the best visual tradeoff between number of processes and the execution time of the parallel solution. Indeed, with more then 16 processes the gain does not motivate the expenses associated to the PBS request.
+Furthermore, we have highlighted an elbow point in figure \ref{fig:processes-performance-elbow}. This spot identifies the best visual tradeoff between number of processes and the execution time of the parallel solution. Indeed, with more then 16 processes the gain does not motivate the expenses associated to the PBS request.
 
 \begin{figure}
     \centering
