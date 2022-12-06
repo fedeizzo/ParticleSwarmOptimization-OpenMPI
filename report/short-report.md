@@ -142,12 +142,12 @@ We devised a configuration file which is the same for every run, so as to have a
 
 The configuration is listed below:
 
-* `problemDimension` = 50
-* `particlesNumber` = 5000
-* `iterationsNumber` = 500
-* `neighborhoodPopulation` = 5000
-* `weights`: w = 0.8, phi_1 = 0.3, phi_2 = 0.3
-* `functions`: fitness = sphere, distance = euclidean, fitnessGoal = minimum
+* \texttt{problemDimension} = 50
+* \texttt{particlesNumber} = 5000
+* \texttt{iterationsNumber} = 500
+* \texttt{neighborhoodPopulation} = 5000
+* \texttt{weights}: w = 0.8, phi_1 = 0.3, phi_2 = 0.3
+* \texttt{functions}: fitness = sphere, distance = euclidean, fitnessGoal = minimum
 
 The amount of particles and the neighborhood population are unreasonable for any known problem but they were chosen to show the clear advantage brought by a multi process solution.
 
@@ -157,10 +157,10 @@ In order to have high-quality and trustworthy results to examine, as indicated i
 
 The number of tests we have ran in total is around 980(TODO write correct number), in particular we tried every possible combination of different parameters:
 
-* `processes`: chosen between \texttt{[1 2 4 8 16 32 64]};
-* `threads`: chosen between \texttt{[1 2 4 8 16 32 64]};
-* `select`: chosen between \texttt{[1 2 3 4 5]};
-* `places`: chosen between \texttt{[pack scatter pack:excl scatter:excl]};
+* \texttt{processes}: chosen between \texttt{[1 2 4 8 16 32 64]};
+* \texttt{threads}: chosen between \texttt{[1 2 4 8 16 32 64]};
+* \texttt{select}: chosen between \texttt{[1 2 3 4 5]};
+* \texttt{places}: chosen between \texttt{[pack scatter pack:excl scatter:excl]};
 
 ## Results
 All the job configurations were tested by both members of the group in order to validate and reduce possible noise of the results. 
@@ -195,7 +195,7 @@ To begin with, we have kept constant the number of processes and we have increas
 
 Figure \ref{fig:time-thread-correlation} shows the number of failed runs associated with the corresponding number of threads. As a matter of fact, the more the requested chunks, the more the cores for the job are. Hence, since the number of MPI processes is always the same, unused cores can host threads, which could be a reasonable explanation for the low amount of failed jobs in higher chunks requests.
 
-This proof of concept highlights how the overhead paid for a continuos context switch introduced by OpenMP is dramatically higher than the performance gain due to the parallelization. Therefore, we came to the conclusion that since several optimizations are already included within modern compilers such as [`gcc`](https://gcc.gnu.org/), OpenMP introduces only an unwanted overhead for the problem that we are facing. Hence, the optimal scenario is represented by the single threaded multi-process case.
+This proof of concept highlights how the overhead paid for a continuos context switch introduced by OpenMP is dramatically higher than the performance gain due to the parallelization. Therefore, we came to the conclusion that since several optimizations are already included within modern compilers such as [gcc](https://gcc.gnu.org/), OpenMP introduces only an unwanted overhead for the problem that we are facing. Hence, the optimal scenario is represented by the single threaded multi-process case.
 
 \begin{figure}
     \centering
