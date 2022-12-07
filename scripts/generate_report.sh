@@ -11,6 +11,9 @@ if [[ $1 == "--long" ]]; then
 	--metadata-file ./pandoc-template/eisvogel-metadata.yaml \
 	--bibliography=./pandoc-template/bibliography.bib \
 	--csl=./pandoc-template/bibliography.csl \
+	--filter pandoc-fignos \
+	--filter pandoc-eqnos \
+	--filter pandoc-secnos \
 	--citeproc \
 	--listings \
 	--number-sections \
@@ -24,6 +27,9 @@ elif [[ $1 == "--short" ]]; then
 	--metadata-file ./pandoc-template/ieee-metadata.yaml \
 	--bibliography=./pandoc-template/bibliography.bib \
 	--csl=./pandoc-template/bibliography.csl \
+	--filter pandoc-fignos \
+	--filter pandoc-eqnos \
+	--filter pandoc-secnos \
 	--citeproc \
 	--listings \
 	--number-sections \
@@ -31,4 +37,3 @@ elif [[ $1 == "--short" ]]; then
 else
     echo "usage $0: only allowed options are --long and --shrt"
 fi
-    
