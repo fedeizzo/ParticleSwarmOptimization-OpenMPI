@@ -103,6 +103,9 @@ doc:
 report:
 	@./scripts/generate_report.sh --$(REPORT_TYPE)
 
+slides:
+	@./scripts/generate_slides.sh
+
 cluster-run:
 	@./scripts/generate_cluster_runs.sh
 
