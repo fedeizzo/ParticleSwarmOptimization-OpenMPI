@@ -21,7 +21,7 @@ update_cluster_container() {
     colorPrint "Deleting old containers"
     udocker ps | tail -n+2 | awk -F' ' '{print $1}' | xargs udocker rm
     colorPrint "Pulling latest image"
-    udocker pull --registry=https://registry-1.docker.io fedeizzo/pso:latest
+    udocker pull --registry=registry.hub.docker.com fedeizzo/pso:latest
     colorPrint "Creating container from latest image, this operation may take a while"
     udocker create --name=pso --force fedeizzo/pso:latest
     colorPrint "Done"
