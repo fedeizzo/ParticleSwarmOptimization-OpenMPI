@@ -77,7 +77,6 @@ static struct argp argp = {options, parse_opt, args_doc, doc};
 bool isValidFile(const char *path) {
   FILE *fp = fopen(path, "r");
   if (!fp) {
-    fclose(fp);
     return false;
   } else {
     fclose(fp);
@@ -112,8 +111,6 @@ int main(int argc, char **argv) {
                                      : "Using serial version");
   if (!arguments.useOpenMPI) {
     srand(0);
-    omp_set_num_threads(0);
-    omp_set_max_active_levels(0);
     // #################################################
     // # NO OPENMPI or openMP solution                 #
     // #################################################

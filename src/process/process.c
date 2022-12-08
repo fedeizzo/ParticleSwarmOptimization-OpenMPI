@@ -166,7 +166,7 @@ void processRoutine(const int processesNumber, const int threadsNumber,
     computeNeighbors(psoData, particles, neighborhoodIndex, distances,
                      inputBuffer, processParticlesNumber);
 
-#pragma omp for
+/* #pragma omp for */
     for (int i = 0; i < processParticlesNumber; i++)
       computeNewPosition(particles[i], iteration, pid, psoData, particles, i,
                          processesNumber, neighborhoodIndex, inputBuffer,

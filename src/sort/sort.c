@@ -29,9 +29,9 @@ void quicksort(int *neighborhoodIndex, double *distances, int p, int r) {
 
   if (p < r) {
     div = partition(neighborhoodIndex, distances, p, r);
-#pragma omp task shared(neighborhoodIndex, distances)
+/* #pragma omp task shared(neighborhoodIndex, distances) */
     quicksort(neighborhoodIndex, distances, p, div - 1);
-#pragma omp task shared(neighborhoodIndex, distances)
+/* #pragma omp task shared(neighborhoodIndex, distances) */
     quicksort(neighborhoodIndex, distances, div + 1, r);
   }
 }

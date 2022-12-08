@@ -143,7 +143,7 @@ void destroyPSOData(PSOData psoData) { free(psoData); }
 
 void computeDistancesSerial(Particle particle, int *indexes, double *distances,
                       PSOData psoData, Particle *particles) {
-#pragma omp for
+/* #pragma omp for */
   for (int i = 0; i < psoData->particlesNumber; i++) {
     indexes[i] = i;
     distances[i] = psoData->distanceFunction(particle->current->pos,
@@ -154,9 +154,9 @@ void computeDistancesSerial(Particle particle, int *indexes, double *distances,
 
 void sortDistancesSerial(int *neighborhoodIndex, double *distances,
                    const int dimension) {
-#pragma omp parallel
+/* #pragma omp parallel */
   {
-#pragma omp single
+/* #pragma omp single */
     quicksort(neighborhoodIndex, distances, 0, dimension - 1);
   }
 }
@@ -165,13 +165,13 @@ void computeNeighborsSerial(PSOData psoData, Particle *particles,
                       int **neighborhoodIndex, double **distances,
                       const int processParticlesNumber) {
 // Compute the distances for each of my particle using parallelism
-#pragma omp parallel for
+/* #pragma omp parallel for */
   for (int i = 0; i < processParticlesNumber; i++)
     computeDistancesSerial(particles[i], neighborhoodIndex[i], distances[i], psoData,
                      particles);
 
 // Sort the distances for each of my particle
-#pragma omp for
+/* #pragma omp for */
   for (int i = 0; i < processParticlesNumber; i++)
     sortDistancesSerial(neighborhoodIndex[i], distances[i], psoData->particlesNumber);
 }
@@ -223,7 +223,7 @@ void updateSocialSerial(Particle particle, int *indexes, PSOData psoData, Partic
 
 void initParticles(Particle *particles, const int particlesNumber,
                    PSOData psoData, const int startingId) {
-#pragma omp parallel for
+/* #pragma omp parallel for */
   for (int i = 0; i < particlesNumber; i++) {
     Particle particle = newParticle(
         i + startingId, psoData->problemDimension, psoData->initMaxPosition,
@@ -258,7 +258,7 @@ void particleSwarmOptimization(Particle *particles, PSOData psoData,
       (int **)malloc(sizeof(int *) * psoData->particlesNumber);
   double **distances =
       (double **)malloc(sizeof(double *) * psoData->particlesNumber);
-#pragma omp parallel for
+/* #pragma omp parallel for */
   for (int i = 0; i < psoData->particlesNumber; i++) {
     neighborhoodIndex[i] =
         (int *)malloc(sizeof(int) * psoData->particlesNumber);

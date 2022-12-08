@@ -43,7 +43,7 @@ Particle newParticle(int id, int problemDimension, double max, double min,
 }
 
 void updateVelocity(Particle particle, double w, double phi_1, double phi_2) {
-#pragma omp parallel for
+/* #pragma omp parallel for */
   for (int i = 0; i < particle->dimension; i++) {
     double v = particle->velocity[i];
     double pbp = particle->personalBest->pos[i];
@@ -60,7 +60,7 @@ void updateVelocity(Particle particle, double w, double phi_1, double phi_2) {
 void updatePosition(Particle particle, double (*fitnessFunction)(double *, int),
                     bool (*fitnessChecker)(double, double)) {
   double oldFitness;
-#pragma omp parallel for
+/* #pragma omp parallel for */
   for (int i = 0; i < particle->dimension; i++)
     particle->current->pos[i] += particle->velocity[i];
 
