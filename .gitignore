@@ -152,6 +152,8 @@ benchmark/gif
 *.pdf
 log
 log_samu
+log_second_try
+log_second_try_samu
 !report/pandoc-template/logo.pdf
 *bkp
 *dtmp

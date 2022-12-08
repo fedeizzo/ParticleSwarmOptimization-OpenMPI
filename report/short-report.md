@@ -165,37 +165,20 @@ The number of tests we have ran in total is around 980(TODO write correct number
 ## Results
 All the job configurations were tested by both members of the group in order to validate and reduce possible noise of the results. 
 
-Table \ref{tbl:job-results} shows the amount of jobs we have run and the associated fail rate (we have decided to show only the amount of processes and not the threads one for presentation purposes).
+Figure \ref{fig:number_failed_per_procces} shows the amount of jobs we have run and the associated time exceeded rate.
 
-\begin{table}[h]
-\centering
-\begin{tabular}{llll}
-\toprule
-\textbf{Processes number} & \textbf{Total} & \textbf{Failed} & \textbf{Fail rate} \\
-\midrule
-1                & 110   & 18     & 16.36     \\
-2                & 109   & 51     & 46.79     \\
-4                & 104   & 52     & 50.00     \\
-8                & 105   & 59     & 56.19     \\
-16               & 105   & 64     & 60.95     \\
-32               & 91    & 63     & 69.23     \\
-64               & 56    & 43     & 76.79     \\
-\bottomrule
-\end{tabular}
-\vspace{0.33cm}
-\caption{Job results.}
-\label{tbl:job-results}
-\end{table}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{./images/number_of_failed_runs_per_process.pdf}
+    \caption{Number of time exceeded runs per process.}
+    \label{fig:number_failed_per_procces}
+\end{figure}
 
-The table highlights a correlation between the failure rate and the number of processes. 
-
-As a result of a first analysis, none of the failed runs were caused by an error in the code, while most of them failed due to a time exceed error. Thus, we have tried to investigate the main reason behind this weird behavior. 
+The presented figure highlights a correlation between the failure rate and the number of processes. Thus, we have tried to investigate the main reason behind this weird behavior. 
 
 To begin with, we have kept constant the number of processes and we have increased the number of chunks for our jobs. 
 
 Figure \ref{fig:time-thread-correlation} shows the number of failed runs associated with the corresponding number of threads. As a matter of fact, the more the requested chunks, the more the cores for the job are. Hence, since the number of MPI processes is always the same, unused cores can host threads, which could be a reasonable explanation for the low amount of failed jobs in higher chunks requests.
-
-This proof of concept highlights how the overhead paid for a continuos context switch introduced by OpenMP is dramatically higher than the performance gain due to the parallelization. Therefore, we came to the conclusion that since several optimizations are already included within modern compilers such as [gcc](https://gcc.gnu.org/), OpenMP introduces only an unwanted overhead for the problem that we are facing. Hence, the optimal scenario is represented by the single threaded multi-process case.
 
 \begin{figure}
     \centering
@@ -203,6 +186,8 @@ This proof of concept highlights how the overhead paid for a continuos context s
     \caption{Threads and time exceed runs.}
     \label{fig:time-thread-correlation}
 \end{figure}
+
+This proof of concept highlights how the overhead paid for a continuos context switch introduced by OpenMP is dramatically higher than the performance gain due to the parallelization. Therefore, we came to the conclusion that since several optimizations are already included within modern compilers such as [gcc](https://gcc.gnu.org/), OpenMP introduces only an unwanted overhead for the problem that we are facing. Hence, the optimal scenario is represented by the single threaded multi-process case.
 
 The previously described phenomena is also observable from figure \ref{fig:threads-performance}. From there, it is possible to see that the execution time increases when the number of threads increases. Specifically, the dots in the plot represent the executed jobs while the size of the dots expresses the number of correctly terminated runs used to compute the average.
 

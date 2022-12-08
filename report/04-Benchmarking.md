@@ -79,21 +79,11 @@ During the execution of the benchmarking phase two problems occurred:
 
 All the job configurations were tested by both members of the group in order to validate and reduce possible noise of the results. 
 
-Table 1 shows the amount of jobs we have run and the associated fail rate (we have decided to show only the amount of processes and not the threads one for presentation purposes).
+Figure {@fig:number_failed_per_procces} shows the amount of jobs we have run and the associated time exceeded rate.
 
-| Processes number | Total | Failed | Fail rate |
-|------------------|-------|--------|-----------|
-| 1                | 110   | 18     | 16.36     |
-| 2                | 109   | 51     | 46.79     |
-| 4                | 104   | 52     | 50.00     |
-| 8                | 105   | 59     | 56.19     |
-| 16               | 105   | 64     | 60.95     |
-| 32               | 91    | 63     | 69.23     |
-| 64               | 56    | 43     | 76.79     |
+![Number of time exceeded runs per process.](./images/number_of_failed_runs_per_process.pdf){#fig:number_failed_per_procces}
 
-The table highlights a correlation between the failure rate and the number of processes. 
-
-As a result of a first analysis, none of the failed runs were caused by an errore in the code, most of them were failed duet to the time exceed error. Thus, we have tried to investigate the main reason behind this weird behavior. 
+The presented figure highlights a correlation between the failure rate and the number of processes. Thus, we have tried to investigate the main reason behind this weird behavior. 
 
 To begin with, we have kept constant the number of processes and we have increased the number of chunks for our jobs. 
 
