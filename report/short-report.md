@@ -218,7 +218,14 @@ Furthermore, we have highlighted an elbow point in figure \ref{fig:processes-per
     \label{fig:processes-performance-elbow}
 \end{figure}
 
-To validate this hypothesis we have created speedup and efficiency plots with respect to SOTA serial solution presented in section {@sec:sota-analysis}.
+As mentioned in section {@sec:sota-analysis}, the analysis of the available similar works has required to directly manage others' code.
+Unfortunately, since the intricate problem was resolved in a matter of seconds, we claim that the findings are deceptive. We believe that the main reasons are the way some PSO instances perform the iterations since some of them stop whenever the solution is below an error threshold, hence performing fewer iterations than those required; as well as our difficulty in comprehending the actual behavior of other people's code, which has resulted in the development of an inconsistent algorithm. 
+
+Based on the prior results, we have chosen to take into account only the multi-process solution, and we have deepened our investigation by examining the parallel performance improvement using speedup and efficiency graphs.
+To begin with, the notion of scalability cannot be directly analyzed considering the problem we are optimizing. The reason for that regards the notion of *problem size*, which cannot be trivially defined.
+Naively, one would say conclude that the problem size is doubled when the problem dimension is doubled, however, the parallelization influence is limited only in the time for the position and velocity update.
+On the other hand, we cannot argue that the problem size is doubled when the number of particles is doubled, since the problem persists, but holds in the opposite direction, namely only some portions of the code benefit from the parallelization.
+Therefore, we claim that the concept of problem size is represented by a tight coupling between the problem dimension and the number of particles. Due to this non-trivial correlation, we have decided to focus only on one hard problem configuration and support our results with hundreds of runs.
 
 \begin{figure}
     \centering
@@ -227,12 +234,21 @@ To validate this hypothesis we have created speedup and efficiency plots with re
     \label{fig:speedup}
 \end{figure}
 
+From figure \ref{fig:speedup} we can see that the speedup is very limited. This can be seen as a consequence of the time needed for communication between multiple processors, as at the end of each iteration all the processes must be synchronized and the number of exchanged messages is considerably high. Therefore, we claim that the overhead time we pay for the parallelization plays a relevant role, however, parallelization is still capable of providing a massive improvement in terms of time. This inevitably implies that the perfect parallelization and the ideal speedup cannot be achieved, as highlighted in the plot.
+
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{./images/efficiency.pdf}
     \caption{Efficiency}
     \label{fig:efficiency}
 \end{figure}
+
+Likewise figure \ref{fig:speedup}, figure \ref{fig:efficiency} shows the efficiency curve considering only the jobs run with MPI, which is the reason why the efficiency does not start with $1$.
+As a first consideration, the single process MPI job requires additional time compared to the serial version of the program to complete the execution, showing that the MPI, if not used properly introduces a non-negligible overhead.
+The efficiency plot, on the other hand, shows that the best trade-off between the number of processes employed and the speedup gained has two peaks, respectively around $3$ and $12$ processes. Furthermore, we can see that the more the number of processes the less the efficiency is, which means that despite taking less time to execute, it is not convenient to employ a huge number of processes.
+Moreover, figure \ref{fig:efficiency} highlights an irregular curve, we believe that this is a consequence of an inhomogeneous cluster, hence, there are nodes which are slower compared to others.
+
+To conclude, table \ref{tbl:speedup-and-efficiency} provides a complete overview of the program analysis.
 
 \begin{table}[h]
 \centering
@@ -264,8 +280,19 @@ To validate this hypothesis we have created speedup and efficiency plots with re
 \label{tbl:speedup-and-efficiency}
 \end{table}
 
-
 # Final discussion
+Up until this point, we produced a hybrid OpenMP-MPI algorithm to solve complex continuous optimization problems, equipped with an efficient and reproducible DevOps pipeline.
+
+To our astonishment, we have realized that thread parallelization does not fit well all the problems.
+Indeed, due to the high overhead implied by the thread generation, we have observed that using OpenMP worsen the result, not providing the much-wanted speed benefit.
+
+Benchmarking in the case of thread parallelization is a task which is far from trivial. Every system may perform differently in the presence or absence of threads.  Moreover, it is hard to decide whether to parallelize or not some piece of code based on general assumptions. As an effective parallelization, we started our project by parallelizing each for loop in the code. This has resulted in a waste of resources and a worsening of performances for small-size problems. Unfortunately, the same has happened even in the case when the threads acted on the most time-consuming region of the code.
+
+To conclude, the program we provided is suitable for single-threaded process parallelization and, as shown in the efficiency and speedup plots, it provides the best result when the number of processes is limited, namely in the range of $3$ to $16$, as even if the computational time decreases, the more the processes the more the overhead required for the MPI communication to take place.
+
+## Future Work
+As a further work, it would be interesting to complement the already present architecture with different type of neighborhood and analyze which configuration brought the best results in presence of parallelization, and analyze which configuration brought the best results in terms of quality of the provided solutions, in presence of parallelization.
+However, the scope of our project was to implement the above described parallel algorithm, which already posed significant challenges, especially because we could not base our implementation on pre-existing works.
 
 \newpage
 # References
