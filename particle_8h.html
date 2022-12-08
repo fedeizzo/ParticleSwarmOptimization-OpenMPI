@@ -325,7 +325,7 @@ Functions</h2></td></tr>
 </dl>
 <div class="fragment"><div class="line"><span class="lineno">   61</span>                                                            {</div>
 <div class="line"><span class="lineno">   62</span>  <span class="keywordtype">double</span> oldFitness;</div>
-<div class="line"><span class="lineno">   63</span><span class="preprocessor">#pragma omp parallel for</span></div>
+<div class="line"><span class="lineno">   63</span><span class="comment">/* #pragma omp parallel for */</span></div>
 <div class="line"><span class="lineno">   64</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; particle-&gt;<a class="code hl_variable" href="structparticle__t.html#a1aecbafd3f6b86dd61a02ece347ce0ce">dimension</a>; i++)</div>
 <div class="line"><span class="lineno">   65</span>    particle-&gt;<a class="code hl_variable" href="structparticle__t.html#ac924db1870a702ac02bb4899b0b43eb1">current</a>-&gt;<a class="code hl_variable" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i] += particle-&gt;<a class="code hl_variable" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a>[i];</div>
 <div class="line"><span class="lineno">   66</span> </div>
@@ -389,7 +389,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <div class="fragment"><div class="line"><span class="lineno">   45</span>                                                                             {</div>
-<div class="line"><span class="lineno">   46</span><span class="preprocessor">#pragma omp parallel for</span></div>
+<div class="line"><span class="lineno">   46</span><span class="comment">/* #pragma omp parallel for */</span></div>
 <div class="line"><span class="lineno">   47</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; particle-&gt;<a class="code hl_variable" href="structparticle__t.html#a1aecbafd3f6b86dd61a02ece347ce0ce">dimension</a>; i++) {</div>
 <div class="line"><span class="lineno">   48</span>    <span class="keywordtype">double</span> v = particle-&gt;<a class="code hl_variable" href="structparticle__t.html#aa8ec9478c53bc98bf06c252140e659f7">velocity</a>[i];</div>
 <div class="line"><span class="lineno">   49</span>    <span class="keywordtype">double</span> pbp = particle-&gt;<a class="code hl_variable" href="structparticle__t.html#ad68f1e0845a0cd45497cd4c715949370">personalBest</a>-&gt;<a class="code hl_variable" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i];</div>

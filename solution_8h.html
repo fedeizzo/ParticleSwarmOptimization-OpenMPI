@@ -172,7 +172,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>returns the new crated solution </dd></dl>
 <div class="fragment"><div class="line"><span class="lineno">   14</span>                                          {</div>
 <div class="line"><span class="lineno">   15</span>  <a class="code hl_struct" href="structsolution__t.html">Solution</a> <span class="keyword">new</span> = (<a class="code hl_struct" href="structsolution__t.html">Solution</a>)malloc(<span class="keyword">sizeof</span>(<span class="keyword">struct</span> <a class="code hl_struct" href="structsolution__t.html">solution_t</a>));</div>
-<div class="line"><span class="lineno">   16</span><span class="preprocessor">#pragma omp parallel for</span></div>
+<div class="line"><span class="lineno">   16</span><span class="comment">/* #pragma omp parallel for */</span></div>
 <div class="line"><span class="lineno">   17</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; solution-&gt;<a class="code hl_variable" href="structsolution__t.html#ae5d00140a640db91da86729f8eb59a6e">dimension</a>; i++)</div>
 <div class="line"><span class="lineno">   18</span>    new-&gt;<a class="code hl_variable" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i] = solution-&gt;<a class="code hl_variable" href="structsolution__t.html#a339901c9f46b5c02db2feb76e2e37e3a">pos</a>[i];</div>
 <div class="line"><span class="lineno">   19</span> </div>

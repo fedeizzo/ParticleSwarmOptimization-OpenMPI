@@ -254,9 +254,9 @@ Functions</h2></td></tr>
 <div class="line"><span class="lineno">   29</span> </div>
 <div class="line"><span class="lineno">   30</span>  <span class="keywordflow">if</span> (p &lt; r) {</div>
 <div class="line"><span class="lineno">   31</span>    div = <a class="code hl_function" href="sort_8h.html#af8171a4664a9910716bfbe25fdaeb4c6">partition</a>(neighborhoodIndex, distances, p, r);</div>
-<div class="line"><span class="lineno">   32</span><span class="preprocessor">#pragma omp task shared(neighborhoodIndex, distances)</span></div>
+<div class="line"><span class="lineno">   32</span><span class="comment">/* #pragma omp task shared(neighborhoodIndex, distances) */</span></div>
 <div class="line"><span class="lineno">   33</span>    <a class="code hl_function" href="sort_8h.html#ad088cd81d9fad86a5688cdd515612a67">quicksort</a>(neighborhoodIndex, distances, p, div - 1);</div>
-<div class="line"><span class="lineno">   34</span><span class="preprocessor">#pragma omp task shared(neighborhoodIndex, distances)</span></div>
+<div class="line"><span class="lineno">   34</span><span class="comment">/* #pragma omp task shared(neighborhoodIndex, distances) */</span></div>
 <div class="line"><span class="lineno">   35</span>    <a class="code hl_function" href="sort_8h.html#ad088cd81d9fad86a5688cdd515612a67">quicksort</a>(neighborhoodIndex, distances, div + 1, r);</div>
 <div class="line"><span class="lineno">   36</span>  }</div>
 <div class="line"><span class="lineno">   37</span>}</div>
