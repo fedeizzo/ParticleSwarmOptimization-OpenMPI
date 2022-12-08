@@ -43,6 +43,7 @@
         python39Packages.pandas
         python39Packages.matplotlib
         python39Packages.scipy
+        python39Packages.tabulate
         sqlite-web
         doxygen
         check

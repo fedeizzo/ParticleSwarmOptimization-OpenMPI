@@ -220,6 +220,51 @@ Furthermore, we have highlighted an elbow point in figure \ref{fig:processes-per
 
 To validate this hypothesis we have created speedup and efficiency plots with respect to SOTA serial solution presented in section {@sec:sota-analysis}.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{./images/speedup.pdf}
+    \caption{Speedup}
+    \label{fig:speedup}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{./images/efficiency.pdf}
+    \caption{Efficiency}
+    \label{fig:efficiency}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{crrrrc}
+\toprule
+\textbf{\# Pr.} & \textbf{Time} & \textbf{Diff} & \textbf{Speedup} & \textbf{Efficiency} & \textbf{Type} \\
+\midrule
+1     & 2099 & 0     & 1       & 1          & Serial  \\
+1     & 4997 & -2898 & 0.41    & 0.41       & OpenMPI \\
+2     & 2392 & -293  & 0.87    & 0.43       & OpenMPI \\
+3     & 1564 & 535   & 1.34    & 0.44       & OpenMPI \\
+4     & 1227 & 872   & 1.70    & 0.42       & OpenMPI \\
+5     & 1128 & 971   & 1.86    & 0.37       & OpenMPI \\
+8     & 629  & 1470  & 3.33    & 0.41       & OpenMPI \\
+12    & 396  & 1703  & 5.29    & 0.44       & OpenMPI \\
+16    & 307  & 1792  & 6.82    & 0.42       & OpenMPI \\
+20    & 284  & 1815  & 7.38    & 0.36       & OpenMPI \\
+24    & 218  & 1881  & 9.62    & 0.40       & OpenMPI \\
+32    & 159  & 1940  & 13.18   & 0.41       & OpenMPI \\
+40    & 155  & 1944  & 13.50   & 0.33       & OpenMPI \\
+48    & 114  & 1985  & 18.32   & 0.38       & OpenMPI \\
+64    & 93   & 2006  & 22.37   & 0.34       & OpenMPI \\
+80    & 75   & 2024  & 27.95   & 0.34       & OpenMPI \\
+96    & 77   & 2022  & 27.20   & 0.28       & OpenMPI \\
+\bottomrule
+\end{tabular}
+\vspace{0.33cm}
+\caption{Speedup and efficiency table.}
+\label{tbl:speedup-and-efficiency}
+\end{table}
+
+
 # Final discussion
 
 \newpage
