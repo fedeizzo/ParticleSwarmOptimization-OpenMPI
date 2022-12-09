@@ -16,7 +16,7 @@ This project implements a version of PSO considering *distance-based* neighborho
 ## Parametrization
 PSO requires the following parameters to be set:
 
-- *Swarm size*: typically 20 particles for problems with dimensionality 2-200;
+- *Swarm size*: typically 20 particles for problems with dimensionality between 2 and 200;
 - *Neighborhood size*: typically 3 to 5, otherwise global neighborhood;
 - *Velocity update factors*.
 
@@ -33,7 +33,7 @@ where:
 - $y$ and $z$ are the personal and social/global best position, respectively;
 - $w$ is the inertia (weighs the current velocity);
 - $\phi_1$, $\phi_2$ are acceleration coefficients/learning rates (cognitive and social, respectively);
-- $U_1$ and $U_2$ are uniform random numbers in $[0,1]$.
+- $U_1$ and $U_2$ are uniform random numbers in range $[0,1]$.
 
 Finally, each particle updates its position (equation {@eq:pso-update-position}): 
 
@@ -55,9 +55,9 @@ In our study we have decided to exclude the second category of PSO algorithms si
 On the other hand, all those approaches which belong to first category of problems can be employed as case studies for our benchmarking analysis. However, it is strictly required to change some implementation aspects by modifying directly the code. In some cases, this requires a deep understanding of others' code, most of the time a though job due to the absence of documentation. 
 
 The third category is our perfect competitor, since they share our same objective.
-However, there are several cases in which different PSO version have been implemented. Hence, some hands on is still mandatory.
+However, there are several cases in which different PSO versions have been implemented. Hence, some hands on is still mandatory.
 
-In the following table we list some of the implementations we have decided to consider during the benchmarking phase.
+In the following table we list some of the implementations we have found online.
 
 | **Ref.**           | **Year** | **Type**      | **Code** | **Note** |
 |--------------------|----------|---------------|----------|----------|
@@ -92,37 +92,30 @@ The main steps of the algorithm are:
 
 As a first approach, we have tried to use OpenMP directives in order to generate a thread for each loop iteration whenever it was possible.
 
-However, OpenMP *fork-join* model requires a non negligible overhead so as to spawn multiple threads which are eventually joined into the master at the end of the OpenMP block. For relatively small problems this operation was a time-consuming procedure which leads to a significant rise in execution time with respect to the single thread model. Moreover, during the experiments we have not been able to observe the threads advantage we were hoping for. We assume that the main reason behind this non-tangible advantage are the optimization provided by \texttt{gcc} during at compile time and the non-optimal thread allocation patterns performed on the cluster. 
+However, OpenMP *fork-join* model requires a non negligible overhead so as to spawn multiple threads which are eventually joined into the master at the end of the OpenMP block. For relatively small problems this operation was a time-consuming procedure which leads to a significant rise in execution time with respect to the single thread model. Moreover, during the experiments we have not been able to observe the threads advantage we were hoping for. We assume that the main reason behind this non-tangible advantage are the optimization provided by \texttt{gcc} at compile time and the non-optimal thread allocation patterns performed on the cluster. 
 
 In the final version of the application, we have included the OpenMP directives only in the portion of the code where we thought it was needed, even if the advantage in terms of time were not satisfactory compared to the single threaded application.
 
-For the neighborhood sort, the program relies on *quicksort* (figure \ref{fig:quicksort}). The main reason behind this choice is the amount of parallelization this algorithm can provide.
+For the neighborhood sort, the program relies on *quicksort*. The main reason behind this choice is the amount of parallelization this algorithm can provide.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.75\linewidth]{./images/quicksort.jpeg}
-    \caption{Quicksort}
-    \label{fig:quicksort}
-\end{figure}
- 
 ## Parallel version of the algorithm
 We have distributed the workload among $N$ different processes in the cluster using the *MPI* library and we have exploited multiprocessing via OpenMP for a couple of different shared-memory tasks.
 
 ### Architecture
-In order to subdivide the work and to carry out the final computation, the architecture proposed by the report focuses on the *all-to-all* parallel computational pattern (figure {@fig:communication-schema}).
+In order to subdivide the work and to carry out the final computation, the architecture proposed by the report focuses on the *all-to-all* parallel computational pattern presented in figure {@fig:communication-schema}.
 
-*All-to-all* parallel pattern implemented using \texttt{MPI\_Allgather} is characterized by the exchange of individual messages from every process to any other process. 
+The *all-to-all* parallel pattern is implemented using \texttt{MPI\_Allgather} and it is characterized by the exchange of individual messages from every process to any other process. 
 
 ![Communication schema.](./images/communication_schema.png){#fig:communication-schema}
 
 ### Message
-To send a message between different processes we created a custom MPI data type called \texttt{broadcastMessage\_t}. Its purpose is to inform the receiver process about the particles' position and fitness of the sender. The structure is composed by a timestamp, which is needed for logging purposes on the sqlite, the current iteration of the algorithm, the identifier of the particle, the sender rank, and the current solution.
+To send a message between different processes we created a custom MPI data type called \texttt{broadcastMessage\_t}. Its purpose is to inform the receiver process about the particles' position and fitness of the sender. The structure is composed by a timestamp, which is needed for logging purposes on the sqlite database, the current iteration of the algorithm, the identifier of the particle, the sender rank, and the current solution.
 
 ### Communication pattern
 The communication between the different processes is synchronous.
 
 Firstly, each process takes charge of a given number of particles.
-In details, let $N$ be the number of particles the user has requested to program to manage and let $p$ be the number of processes available to *MPI*. Without the need of synchronization nor of message exchange, each process creates $N / p$ particles and the remaining $N \% p$ ones are split among the remaining processes. 
+In details, let $N$ be the number of particles the user has requested to the program to manage and let $p$ be the number of processes available to *MPI*. Without the need of synchronization nor of message exchange, each process creates $N / p$ particles and the remaining $N \% p$ ones are splitted among the remaining processes. 
 
 To carry out this operation, each process embeds its own particles in an array of \texttt{define\_datatype\_broadcast\_message}. Then, the particle information exchange happens with an \texttt{MPI\_Allgather} communication primitive.
 
@@ -130,7 +123,7 @@ As presented in figure {@fig:communication-schema}, \texttt{MPI\_Allgather} is s
 
 Once each process knows everything about the others, the application needs to consider the neighbor contributions in order to update the process particles' position and velocity.
 
-At this point, each process can sort all the particles, whose position is known thanks to the \texttt{MPI\_Allgather} communication, with respect to all particles proper to the process, according to the euclidean distance. In this way, for each process particle is possible to identify the $k$-th nearest neighbors.
+At this point, each process can sort all the particles, whose position is known thanks to the \texttt{MPI\_Allgather} communication, with respect to all particles proper to the process, according to the euclidean distance. In this way, for each process particle it is possible to identify the $k$-th nearest neighbors.
 
 Finally, by applying the position and velocity update equations {@eq:pso-update-velocity} and {@eq:pso-update-position} it is possible to evolve the algorithm and approach the target function optima.
 
@@ -155,7 +148,7 @@ The amount of particles and the neighborhood population are unreasonable for any
 ## Cluster jobs
 In order to have high-quality and trustworthy results to examine, as indicated in the repository structure, we created a script that allowed us to send thousands of tasks to the University's HPC cluster over several days.
 
-The number of tests we have ran in total is around 980(TODO write correct number), in particular we tried every possible combination of different parameters:
+The number of tests we have ran in total is around 1280, in particular we tried every possible combination of different parameters:
 
 * \texttt{processes}: chosen between \texttt{[1 2 4 8 16 32 64]};
 * \texttt{threads}: chosen between \texttt{[1 2 4 8 16 32 64]};
@@ -187,7 +180,7 @@ Figure \ref{fig:time-thread-correlation} shows the number of failed runs associa
     \label{fig:time-thread-correlation}
 \end{figure}
 
-This proof of concept highlights how the overhead paid for a continuos context switch introduced by OpenMP is dramatically higher than the performance gain due to the parallelization. Therefore, we came to the conclusion that since several optimizations are already included within modern compilers such as [gcc](https://gcc.gnu.org/), OpenMP introduces only an unwanted overhead for the problem that we are facing. Hence, the optimal scenario is represented by the single threaded multi-process case.
+This proof of concept highlights how the overhead paid for a continuos context switch introduced by OpenMP is higher than the performance gain due to the parallelization. Therefore, we came to the conclusion that since several optimizations are already included within modern compilers such as [gcc](https://gcc.gnu.org/), OpenMP introduces only an unwanted overhead for the problem that we are facing. Hence, the optimal scenario is represented by the single threaded multi-process case.
 
 The previously described phenomena is also observable from figure \ref{fig:threads-performance}. From there, it is possible to see that the execution time increases when the number of threads increases. Specifically, the dots in the plot represent the executed jobs while the size of the dots expresses the number of correctly terminated runs used to compute the average.
 
@@ -207,9 +200,9 @@ A part from the efficiency issues in the the multi-threaded scenario, we have de
     \label{fig:processes-performance}
 \end{figure}
 
-The plot suggests that the difference in terms of execution time between exclusive chunks and shared ones is marginal with respect to the entire time needed for the job execution. This inevitably implies that the computation time of the job is markedly higher then the scheduling time between other users' processes. For the same reason, we can claim that the overall computation time does not suffer from the network overhead. The last statement can be appreciated from the small differences in term of execution time between pack and scatter jobs executions.
+The plot suggests that the difference in terms of execution time between exclusive chunks and shared ones is marginal with respect to the entire time needed for the job execution. This implies that the computation time of the job is markedly higher then the scheduling time between other users' processes. For the same reason, we can claim that the overall computation time does not suffer from the network overhead. The last statement can be appreciated from the small differences in term of execution time between pack and scatter jobs executions.
 
-Furthermore, we have highlighted an elbow point in figure \ref{fig:processes-performance-elbow}. This spot identifies the best visual tradeoff between number of processes and the execution time of the parallel solution. Indeed, with more then 16 processes the gain does not motivate the expenses associated to the PBS request.
+Furthermore, we have highlighted an elbow point in figure \ref{fig:processes-performance-elbow}. This spot identifies the best visual tradeoff between number of processes and the execution time of the parallel solution. Indeed, for the problem configuration used for our tests, more than 16 processes do not bring an enough gain in order to motivate the expenses associated to the PBS request.
 
 \begin{figure}
     \centering
@@ -254,7 +247,7 @@ To conclude, table \ref{tbl:speedup-and-efficiency} provides a complete overview
 \centering
 \begin{tabular}{crrrrc}
 \toprule
-\textbf{\# Pr.} & \textbf{Time} & \textbf{Diff} & \textbf{Speedup} & \textbf{Efficiency} & \textbf{Type} \\
+\textbf{\# Pr.} & \textbf{Seconds} & \textbf{Diff} & \textbf{Speedup} & \textbf{Efficiency} & \textbf{Type} \\
 \midrule
 1     & 2099 & 0     & 1       & 1          & Serial  \\
 1     & 4997 & -2898 & 0.41    & 0.41       & OpenMPI \\
@@ -283,15 +276,15 @@ To conclude, table \ref{tbl:speedup-and-efficiency} provides a complete overview
 # Final discussion
 Up until this point, we produced a hybrid OpenMP-MPI algorithm to solve complex continuous optimization problems, equipped with an efficient and reproducible DevOps pipeline.
 
-To our astonishment, we have realized that thread parallelization does not fit well all the problems.
+We have realized that thread parallelization does not fit well all the problems.
 Indeed, due to the high overhead implied by the thread generation, we have observed that using OpenMP worsen the result, not providing the much-wanted speed benefit.
 
 Benchmarking in the case of thread parallelization is a task which is far from trivial. Every system may perform differently in the presence or absence of threads.  Moreover, it is hard to decide whether to parallelize or not some piece of code based on general assumptions. As an effective parallelization, we started our project by parallelizing each for loop in the code. This has resulted in a waste of resources and a worsening of performances for small-size problems. Unfortunately, the same has happened even in the case when the threads acted on the most time-consuming region of the code.
 
-To conclude, the program we provided is suitable for single-threaded process parallelization and, as shown in the efficiency and speedup plots, it provides the best result when the number of processes is limited, namely in the range of $3$ to $16$, as even if the computational time decreases, the more the processes the more the overhead required for the MPI communication to take place.
+To conclude, the program we provided is suitable for single-threaded process parallelization and, as shown in the efficiency and speedup plots, it provides the best result when the number of processes is limited, as even if the computational time decreases, the more the processes the more the overhead required for the MPI communication to take place is.
 
 ## Future Work
-As a further work, it would be interesting to complement the already present architecture with different type of neighborhood and analyze which configuration brought the best results in presence of parallelization, and analyze which configuration brought the best results in terms of quality of the provided solutions, in presence of parallelization.
+As a further work, it would be interesting to complement the already present architecture with different type of neighborhood and analyze which configuration brought the best results in presence of parallelization, and in terms of quality of the provided solutions.
 However, the scope of our project was to implement the above described parallel algorithm, which already posed significant challenges, especially because we could not base our implementation on pre-existing works.
 
 \newpage
