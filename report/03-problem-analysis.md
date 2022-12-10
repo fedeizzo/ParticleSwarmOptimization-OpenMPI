@@ -89,8 +89,7 @@ This section of the report presents how we have parallelized the algorithm in or
 In practice, we have distributed the workload among $N$ different processes in the cluster using the *MPI* library and we have exploited multiprocessing via OpenMP for a couple of different shared-memory tasks.
 
 ### Architecture
-I
- to subdivide the work and to carry out the final computation, the architecture proposed by the report focuses on the *all-to-all* parallel computational pattern (figure {@fig:communication-schema}).
+To subdivide the work and to carry out the final computation, the architecture proposed by the report focuses on the *all-to-all* parallel computational pattern (figure {@fig:communication-schema}).
 
 *All-to-all* parallel pattern, implemented using `MPI_Allgather` function, is characterized by the exchange of individual messages from every process to any other process. In this way, the program effectively uses all the computational units in order to carry out the computation, as the coordination operations are handled by MPI.
 
@@ -100,7 +99,7 @@ I
 To send a message between different processes we created a custom MPI data type called `broadcastMessage_t`.
 Its purpose is to inform the receiver process about the particles' position and fitness of the sender. The structure is composed by:
 
-* a timestamp, which is needed for logging purposes on the sqlite;
+* a timestamp, which is needed for logging purposes on the sqlite database;
 * the current iteration of the algorithm;
 * the identifier of the particle;
 * the sender rank and the current solution.
@@ -149,7 +148,7 @@ Once each process knows everything about the others, the application needs to co
 
 At this point, each process can sort all the particles, whose position is known thanks to the `MPI_Allgather` communication, with respect to all particles proper to the process, according to the euclidean distance. In this way, for each process particle is possible to identify the $k$-th nearest neighbors.
 
-Finally, by applying the position and velocity update formulas listed in equations {#eq:pso-update-position} and {#eq:pso-update-velocity}, it is possible to evolve the algorithm and approach the target function optima.
+Finally, by applying the position and velocity update formulas listed in equations {@eq:pso-update-position} and {@eq:pso-update-velocity}, it is possible to evolve the algorithm and approach the target function optima.
 
 Moreover, with the help of OpenMP we have parallelized the computation of the sorting algorithm as well as the loop needed in order to update the algorithm variables.
 

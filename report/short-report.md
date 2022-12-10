@@ -216,7 +216,7 @@ Unfortunately, since the intricate problem was resolved in a matter of seconds, 
 
 Based on the prior results, we have chosen to take into account only the multi-process solution, and we have deepened our investigation by examining the parallel performance improvement using speedup and efficiency graphs.
 To begin with, the notion of scalability cannot be directly analyzed considering the problem we are optimizing. The reason for that regards the notion of *problem size*, which cannot be trivially defined.
-Naively, one would say conclude that the problem size is doubled when the problem dimension is doubled, however, the parallelization influence is limited only in the time for the position and velocity update.
+Naively, one would conclude that the problem size is doubled when the problem dimension is doubled, however, the parallelization influence is limited only in the time for the position and velocity update.
 On the other hand, we cannot argue that the problem size is doubled when the number of particles is doubled, since the problem persists, but holds in the opposite direction, namely only some portions of the code benefit from the parallelization.
 Therefore, we claim that the concept of problem size is represented by a tight coupling between the problem dimension and the number of particles. Due to this non-trivial correlation, we have decided to focus only on one hard problem configuration and support our results with hundreds of runs.
 

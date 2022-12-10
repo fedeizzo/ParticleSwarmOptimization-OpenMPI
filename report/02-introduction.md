@@ -39,7 +39,7 @@ In order to assess a solution for an optimization problem, PSO requires the foll
 ### Continuous Optimization
 Once the algorithm has been parametrized, a swarm of particles is initialized with random positions and velocity.
 
-At each step, each particle updates first its velocity (equation {@eq:pso-update-velocity}):
+At each step, each particle updates firstly its velocity (equation {@eq:pso-update-velocity}):
 
 $$v' = w \cdot v + \phi_1 U_1 \cdot (y-x) + \phi_2 U_2 \cdot (z-x)$$ {#eq:pso-update-velocity}
 
