@@ -1,18 +1,18 @@
 \newpage
 # Conclusion
 
-## Is parallelization always a good choice?
-During our benchmarking analysis we have surprisingly realized that the thread parallelization is not always a good choice.
+Up until this point, we produced a hybrid OpenMP-MPI algorithm to solve complex continuous optimization problems, equipped with an efficient and reproducible DevOps pipeline.
 
-Due to the high overhead implied by the thread generation, we have observed that using OpenMP does not always result in a guaranteed speed benefit.
+We have realized that thread parallelization does not fit well all the problems.
+Indeed, due to the high overhead implied by the thread generation, we have observed that using OpenMP worsen the result, not providing the much-wanted speed benefit.
 
-In cases in which the parallel region took little time to execute, it would be preferable to avoid parallelization and proceed with the straightforward execution of the code in a serial manner. 
+Benchmarking in the case of thread parallelization is a task which is far from trivial. Every system may perform differently in the presence or absence of threads.  Moreover, it is hard to decide whether to parallelize or not some piece of code based on general assumptions. As an effective parallelization, we started our project by parallelizing each for loop in the code. This has resulted in a waste of resources and a worsening of performances for small-size problems. Unfortunately, the same has happened even in the case when the threads acted on the most time-consuming region of the code.
 
-Benchmarking in the case of thread parallelization is a task which if far from being trivial. In fact, every system may perform differently in presence or in absence of threads. Moreover, it is hard to decide whether to parallelize or not sime piece of code based on general assumptions.
+To conclude, the program we provided is suitable for single-threaded process parallelization and, as shown in the efficiency and speedup plots, it provides the best result when the number of processes is limited, as even if the computational time decreases, the more the processes the more the overhead required for the MPI communication to take place is.
 
-As an effective parallelization, we have started our project by parallelizing each for loop in the code. This has resulted in a waste of resource and a worsening of performances for small size problems. On the other hand, employing parallelization implies a significant performance boost for big dimensionality problems. 
-
-## Thread allocation pattern
+## Future Work
+As a further work, it would be interesting to complement the already present architecture with different type of neighborhood and analyze which configuration brought the best results in presence of parallelization, and in terms of quality of the provided solutions.
+However, the scope of our project was to implement the above described parallel algorithm, which already posed significant challenges, especially because we could not base our implementation on pre-existing works.
 
 \newpage
 # References

@@ -33,7 +33,7 @@
             needspace pagecolor sourcecodepro sourcesanspro titling ucharcat ulem
             unicode-math upquote xecjk xurl zref algorithms algorithm2e ifoddpage
             algpseudocodex algorithmicx hyperref ieeetran supertabular standalone preview
-            relsize;
+            relsize babel;
         })
       ];
       shellDeps = with pkgs; [
@@ -87,6 +87,18 @@
           cp short-report.pdf $out
         '';
       };
+      presentation = pkgs.stdenv.mkDerivation rec {
+        name = "presentation";
+        src = ./.;
+        buildInputs = reportDeps;
+        buildPhase = ''
+          make slides
+        '';
+        installPhase = ''
+          mkdir -p $out
+          cp presentation.pdf $out
+        '';
+      };
       doxygen-awesome = pkgs.fetchFromGitHub {
         owner = "jothepro";
         repo = "doxygen-awesome-css";
@@ -100,19 +112,17 @@
         buildPhase = ''
           mkdir -p doxygen-awesome-css
           cp -r ${doxygen-awesome}/* doxygen-awesome-css/
-          cd report
-          find . -name '*.md' | xargs sed -i 's/{ width=.*px }//g'
-          find . -name '*.md' | xargs sed -i 's/\\newpage//g'
-          cd ..
           make doc
           touch docs/html/.nojekyll
           make report
           make REPORT_TYPE=short report
+          make slides
         '';
         installPhase = ''
           mkdir -p $out
           cp report.pdf $out/
           cp short-report.pdf $out/
+          cp presentation.pdf $out/
           cp -a docs/html/* $out/
         '';
       };
@@ -123,6 +133,7 @@
         shortReport = shortReport;
         particle-swarm-optimization = CPackage;
         documentation = documentation;
+        presentation = presentation;
         default = CPackage;
       };
       devShell."${system}" = pkgs.mkShell {

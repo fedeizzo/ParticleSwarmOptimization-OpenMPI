@@ -128,6 +128,7 @@ help:
 	* clean         : removes all the object and binary files\n \
 	* doc           : generates the code documentation in HTML\n \
 	* report        : generates pdf report\n \
+	* slides        : generates pdf presentation\n \
 	* cluster-run   : launches multiple qsub runs\n \
 	* cluster-pull  : pulls latest udocker container\n \
 	* cluster-clear : deletes all submitted jobs\n \

@@ -21,7 +21,11 @@
 
 *ParticleSwarmOptimization-openMPI* provides an basic implementation of [PSO](https://en.wikipedia.org/wiki/Particle_swarm_optimization) with support for cluster computation through [OpenMPI](https://www.open-mpi.org/), moreover it uses [OpenMP](https://www.openmp.org/) for thread parallelization.
 
-<a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/report.pdf" target="_blank"><b>PDF report can be found here</b></a>
+| <a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/report.pdf" target="_blank"><b>Long report</b></a> | <a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/short-report.pdf" target="_blank"><b>Short report</b></a> | <a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/presentation.pdf" target="_blank"><b>Presentaion</b></a> |
+|--------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| ![](assets/report-thumbnail.png)                                                                                         | ![](assets/short-report-thumbnail.png)                                                                                          | ![](assets/presentation-thumbnail.png)                                                                                         |
+
+
 <a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/short-report.pdf" target="_blank"><b>PDF report can be found here (short version)</b></a>
 
 ## Build

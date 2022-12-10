@@ -12,6 +12,8 @@ author:
 - \href{https://github.com/fedeizzo}{Federico Izzo}
 date:
 - \today
+babel-lang:
+- english
 lang:
 - en-US
 section-titles:
@@ -22,8 +24,8 @@ colortheme:
 - default
 navigation:
 - horizontal
-logo:
-- images/logo.pdf
+#logo: ../report/pandoc-template/logo.pdf
+#logo-width: 10mm
 fontsize:
 - 10mm
 link-citations: true
