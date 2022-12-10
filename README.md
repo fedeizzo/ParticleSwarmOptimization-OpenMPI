@@ -23,10 +23,13 @@
 
 | <a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/report.pdf" target="_blank"><b>Long report</b></a> | <a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/short-report.pdf" target="_blank"><b>Short report</b></a> | <a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/presentation.pdf" target="_blank"><b>Presentaion</b></a> |
 |--------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
-| ![](assets/report-thumbnail.png)                                                                                         | ![](assets/short-report-thumbnail.png)                                                                                          | ![](assets/presentation-thumbnail.png)                                                                                         |
+| [![](assets/report-thumbnail.png)](https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/report.pdf)              | [![](assets/short-report-thumbnail.png)](https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/short-report.pdf)         | [![](assets/presentation-thumbnail.png)](https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/presentation.pdf)        |
 
+## Results
 
-<a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/short-report.pdf" target="_blank"><b>PDF report can be found here (short version)</b></a>
+| **Sphere**             | **Easom**             | **Ackley**             |
+|------------------------|-----------------------|------------------------|
+| ![](assets/sphere.gif) | ![](assets/easom.gif) | ![](assets/ackley.gif) |
 
 ## Build
 ### Binary
