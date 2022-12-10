@@ -129,42 +129,49 @@ Particle Swarm Optimization OpenMPI</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone"><a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/report.pdf" target="_blank"><b>Long report</b></a>   </th><th class="markdownTableHeadNone"><a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/short-report.pdf" target="_blank"><b>Short report</b></a>   </th><th class="markdownTableHeadNone"><a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/presentation.pdf" target="_blank"><b>Presentaion</b></a>    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><img src="assets/report-thumbnail.png" alt="" class="inline"/>   </td><td class="markdownTableBodyNone"><img src="assets/short-report-thumbnail.png" alt="" class="inline"/>   </td><td class="markdownTableBodyNone"><img src="assets/presentation-thumbnail.png" alt="" class="inline"/>   </td></tr>
+<td class="markdownTableBodyNone"><a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/report.pdf"><img src="assets/report-thumbnail.png" alt="" class="inline"/></a>   </td><td class="markdownTableBodyNone"><a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/short-report.pdf"><img src="assets/short-report-thumbnail.png" alt="" class="inline"/></a>   </td><td class="markdownTableBodyNone"><a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/presentation.pdf"><img src="assets/presentation-thumbnail.png" alt="" class="inline"/></a>   </td></tr>
 </table>
-<p ><a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/short-report.pdf" target="_blank"><b>PDF report can be found here (short version)</b></a></p>
 <h2><a class="anchor" id="autotoc_md7"></a>
+Results</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><b>Sphere</b>   </th><th class="markdownTableHeadNone"><b>Easom</b>   </th><th class="markdownTableHeadNone"><b>Ackley</b>    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><img src="assets/sphere.gif" alt="" class="inline"/>   </td><td class="markdownTableBodyNone"><img src="assets/easom.gif" alt="" class="inline"/>   </td><td class="markdownTableBodyNone"><img src="assets/ackley.gif" alt="" class="inline"/>   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md8"></a>
 Build</h2>
-<h3><a class="anchor" id="autotoc_md8"></a>
+<h3><a class="anchor" id="autotoc_md9"></a>
 Binary</h3>
 <div class="fragment"><div class="line">make</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md9"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md10"></a>
 Docker</h3>
 <div class="fragment"><div class="line">make docker-build</div>
 </div><!-- fragment --><p >with optional argument <code>DOCKER_TAG</code></p>
 <div class="fragment"><div class="line">make DOCKER_TAG=mytag docker-build</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md10"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md11"></a>
 Nix</h3>
 <div class="fragment"><div class="line">nix build .</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md11"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md12"></a>
 Udocker</h3>
 <div class="fragment"><div class="line">make cluster-pull</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md12"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md13"></a>
 Run</h2>
-<h3><a class="anchor" id="autotoc_md13"></a>
+<h3><a class="anchor" id="autotoc_md14"></a>
 Local</h3>
 <div class="fragment"><div class="line">./bin/particle-swarm-optimization pso-data.ini</div>
 </div><!-- fragment --><p >or</p>
 <div class="fragment"><div class="line">mpirun -n &lt;processesNumber ./bin/particle-swarm-optimization -u pso-data.ini</div>
 </div><!-- fragment --><p >for optional arguments please execute <code>./bin/particle-swarm-optimization --help</code>.</p>
-<h3><a class="anchor" id="autotoc_md14"></a>
+<h3><a class="anchor" id="autotoc_md15"></a>
 Cluster (through PBS)</h3>
 <p >Number of runs should be specified directly inside <a href="./scripts/generate_cluster_runs.sh">this script</a> </p><div class="fragment"><div class="line">make cluster-run</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md15"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md16"></a>
 Report</h2>
 <div class="fragment"><div class="line">make report</div>
 </div><!-- fragment --><p >or</p>
 <div class="fragment"><div class="line">nix build .#report</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md16"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md17"></a>
 Dependencies</h2>
 <p >If you have installed <a href="https://nixos.org">nix package manager</a> </p><div class="fragment"><div class="line">nix shell</div>
 </div><!-- fragment --><p >otherwise dependencies are described below.</p>
