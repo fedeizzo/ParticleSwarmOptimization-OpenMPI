@@ -15,3 +15,6 @@
   \end{beamercolorbox}}%
   \vskip0pt%
 }
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\renewcommand{\algorithmicforall}{\textbf{for each}}
