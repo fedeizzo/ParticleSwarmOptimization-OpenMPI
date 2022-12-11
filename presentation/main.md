@@ -63,19 +63,19 @@ $$f(x) = -\cos(x_1)\cos(x_2)\exp(-(x_1 - \pi)^2 - (x_2 - \pi)^2)$$
 
 :::: {.column width=30%}
 
-![PSO start](./images/easom_before.png)
+![PSO start](./images/easom_before.png){#fig:easom-before}
 
 ::::
 
 :::: {.column width=30%}
 
-![PSO mid](./images/easom_mid.png)
+![PSO mid](./images/easom_mid.png){#fig:easom-mid}
 
 ::::
 
 :::: {.column width=30%}
 
-![PSO end](./images/easom_after.png)
+![PSO end](./images/easom_after.png){#fig:easom-after}
 
 ::::
 
@@ -151,7 +151,7 @@ Work in progress...
 
 We propose an all-to-all parallel computational pattern using `MPI_Allgather`.
 
-![Parallel Architecture](../report/images/communication_schema.png)
+![Parallel Architecture](../report/images/communication_schema.png){#fig:parallel-architecture}
 
 # Hybrid parallelization (cont'd)
 
@@ -159,7 +159,7 @@ Once each process knows everything about the others, PSO considers the neighbor 
 
 To compute the particle's neighboring positions we have employed the quicksort algorithm.
 
-![Parallel Quicksort](../report/images/quicksort.jpeg){width=50%}
+![Parallel Quicksort](../report/images/quicksort.jpeg){width=50%}{#fig:quicksort-algorithm}
 
 Finally, the algorithm evolves by updating velocity and position.
 
@@ -184,13 +184,13 @@ We have run around 1280 tests considering every possible combination of differen
 
 :::: {.column width=45%}
 
-![Number of failed run per process](../report/images/number_of_failed_runs_per_process.pdf)
+![Number of failed run per process](../report/images/number_of_failed_runs_per_process.pdf){#fig:time-exceeded-jobs-per-process}
 
 ::::
 
 :::: {.column width=45%}
 
-![Thread and time exceeded correlation](../report/images/threads_performance.pdf)
+![Thread and time exceeded correlation](../report/images/threads_performance.pdf){#fig:thread-time-correlation}
 
 ::::
 
@@ -198,7 +198,7 @@ We have run around 1280 tests considering every possible combination of differen
 
 # Benchmarking, first conclusions (cont'd)
 
-![Processes performance](../report/images/processes_performance.pdf)
+![Processes performance](../report/images/processes_performance.pdf){#fig:process-performances}
 
 # Benchmarking, final remarks
 
@@ -206,13 +206,13 @@ We have run around 1280 tests considering every possible combination of differen
 
 :::: {.column width=45%}
 
-![Speedup](../report/images/speedup.pdf)
+![Speedup](../report/images/speedup.pdf){#fig:parallel-speedup}
 
 ::::
 
 :::: {.column width=45%}
 
-![Efficiency](../report/images/efficiency.pdf)
+![Efficiency](../report/images/efficiency.pdf){#fig:parallel-efficiency}
 
 ::::
 
