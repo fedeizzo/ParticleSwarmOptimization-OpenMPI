@@ -60,19 +60,19 @@ $$f(x) = -\cos(x_1)\cos(x_2)\exp(-(x_1 - \pi)^2 - (x_2 - \pi)^2)$$
 
 ::: {.columns align=center}
 
-:::: {.column width=30%}
+:::: {.column width=27%}
 
 ![PSO start](./images/easom_before.png){#fig:easom-before}
 
 ::::
 
-:::: {.column width=30%}
+:::: {.column width=27%}
 
 ![PSO mid](./images/easom_mid.png){#fig:easom-mid}
 
 ::::
 
-:::: {.column width=30%}
+:::: {.column width=27%}
 
 ![PSO end](./images/easom_after.png){#fig:easom-after}
 
@@ -82,11 +82,29 @@ $$f(x) = -\cos(x_1)\cos(x_2)\exp(-(x_1 - \pi)^2 - (x_2 - \pi)^2)$$
 
 # DevOps
 
-Work in progress...
+## Pipeline
+The proposed solution is provided with a pipeline for containers creation and usage suitable for a cluster environment.
 
+$$ $$
+
+::: {.columns align=center}
+
+:::: {.column width=47%}
+
+![Container creation](../report/images/container_creation.png){#fig:container-creation}
+
+::::
+
+:::: {.column width=47%}
+
+![Container pull](../report/images/container_pull.png){#fig:container-pull}
+
+::::
+
+:::
 # Analyzing the program behavior
 
-In order to know each process and thread state and visualize we have employed a thread-safe logging library:
+In order to know each process and thread state and visualize a thread-safe logging library has been employed:
 The logs follows a common pattern so as to be easily processed.
 
 ```
@@ -146,17 +164,17 @@ To recover the particles' positions during the entire program execution, we have
 
 # Hybrid parallelization
 
-We propose an all-to-all parallel computational pattern using `MPI_Allgather`.
+We propose an all-to-all parallel computational solution using `MPI_Allgather`.
 
 ![Parallel Architecture](../report/images/communication_schema.png){#fig:parallel-architecture}
 
 # Hybrid parallelization (cont'd)
 
-Once each process knows everything about the others, PSO considers the neighbor contributions in order to update the process particles' position and velocity.
+Once each process knows everything about the others, PSO considers the neighbor contributions.
 
 To compute the particle's neighboring positions we have employed the quicksort algorithm.
 
-![Parallel Quicksort](../report/images/quicksort.jpeg){width=35%}{#fig:quicksort-algorithm}
+![Parallel Quicksort](../report/images/quicksort.jpeg){#fig:quicksort-algorithm width=40%}
 
 Finally, the algorithm evolves by updating velocity and position.
 
@@ -175,43 +193,37 @@ We have run around 1280 tests considering every possible combination of differen
 - chunks: `[1 2 3 4 5]`;
 - places: `[pack scatter pack:excl scatter:excl]`.
 
-# Benchmarking, first conclusions (cont'd)
+# Benchmarking, time exceed
+Many of sent experiments failed for time exceed time. At a first sight it would seem that the failure rate is correlated with the increasing number of processes used for the computation.
 
-::: {.columns align=center}
+![Number of failed run per process](../report/images/number_of_failed_runs_per_process.pdf){#fig:time-exceeded-jobs-per-process width=80%}
 
-:::: {.column width=50%}
+# Benchmarking, threads fault
+A more depth analysis highlights that the problem is related to threads' overhead.
 
-![Number of failed run per process](../report/images/number_of_failed_runs_per_process.pdf){#fig:time-exceeded-jobs-per-process}
+![Thread and time exceeded correlation](../report/images/threads_performance.pdf){#fig:thread-time-correlation}
 
-::::
+# Benchmarking, single thread solution
+* The time required for the execution decreases if the number of processes is increased;
+* The proposed solution is not influced neither by the network overhead or exlusive nodes.
 
-:::: {.column width=50%}
-
-![Thread and time exceeded correlation](../report/images/threads_performance.pdf){wdith=110%}{#fig:thread-time-correlation}
-
-::::
-
-:::
-
-# Benchmarking, first conclusions (cont'd)
-
-![Processes performance](../report/images/processes_performance.pdf){#fig:process-performances}
+![Processes performance](../report/images/processes_performance.pdf){#fig:process-performances width=90%}
 
 
 # State of the Art Analysis
 
-| **Ref.**           | **Year** | **Type**      | **Code** | **Note** |
-|--------------------|----------|---------------|----------|----------|
-| Kennedy et al. (1995)     | 1995     | Serial        | No       | -        |
-| @toddguant         | 2019     | Serial        | Yes      | 1        |
-| @sousouho          | 2019     | Serial        | Yes      | 1        |
-| @kkentzo           | 2020     | Serial        | Yes      | 1        |
-| @fisherling        | 2020     | Serial        | Yes      | 1        |
-| @MoraesMitre      | 2014     | MPI           | No       | -        |
-| Nedja et al. (2017)       | 2017     | MPI/MP        | No       | -        |
-| @abhi4578           | 2019     | MPI/MP,CUDA   | Yes      | 1        |
-| @LaSEEB            | 2020     | OpenMP        | Yes      | 2        |
-| @pg443             | 2021     | Serial,OpenMP | Yes      | 1        |
+| **Ref.**              | **Year** | **Type**      | **Code** | **Note** |
+|-----------------------|----------|---------------|----------|----------|
+| Kennedy et al. (1995) | 1995     | Serial        | No       | -        |
+| @toddguant            | 2019     | Serial        | Yes      | 1        |
+| @sousouho             | 2019     | Serial        | Yes      | 1        |
+| @kkentzo              | 2020     | Serial        | Yes      | 1        |
+| @fisherling           | 2020     | Serial        | Yes      | 1        |
+| @MoraesMitre          | 2014     | MPI           | No       | -        |
+| Nedja et al. (2017)   | 2017     | MPI/MP        | No       | -        |
+| @abhi4578             | 2019     | MPI/MP,CUDA   | Yes      | 1        |
+| @LaSEEB               | 2020     | OpenMP        | Yes      | 2        |
+| @pg443                | 2021     | Serial,OpenMP | Yes      | 1        |
 
 Note: (1) only global neighborhood (2) several option but not distance based neighborhood.
 
