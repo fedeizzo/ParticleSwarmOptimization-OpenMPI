@@ -29,7 +29,6 @@ navigation:
 fontsize:
 - 10mm
 link-citations: true
-biblio-style: IEEEtran
 nocite: |
   @*
 ---
@@ -40,18 +39,18 @@ nocite: |
 
 Particle Swarm Optimization is an optimization algorithm for nonlinear functions based on bird swarms.
 
-A particle is characterized by:
+In PSO, a particle is characterized by:
 
 - position $x$;
 - velocity $v$;
 - performance measure $f(x)$;
 - personal best $y$;
-- global best positions $z$.
+- global best position $z$.
 
-The solution is achieved by perturbing each particle:
+The solution is achieved by perturbing each particle according to the neighbors:
 
-- $v' = w \cdot v + \phi_1 U_1 \cdot (y-x) + \phi_2 U_2 \cdot (z-x)$
-- $x' = x+v'$
+1. $v' = w \cdot v + \phi_1 U_1 \cdot (y-x) + \phi_2 U_2 \cdot (z-x)$
+2. $x' = x+v'$
 
 # Particle Swarm Optimization
 
@@ -81,27 +80,25 @@ $$f(x) = -\cos(x_1)\cos(x_2)\exp(-(x_1 - \pi)^2 - (x_2 - \pi)^2)$$
 
 :::
 
-# State of the Art Analysis
-
-| **Ref.**           | **Year** | **Type**      | **Code** | **Note** |
-|--------------------|----------|---------------|----------|----------|
-| [@KennedyEberhart] | 1995     | Serial        | No       | -        |
-| [@toddguant]       | 2019     | Serial        | Yes      | 1        |
-| [@sousouho]        | 2019     | Serial        | Yes      | 1        |
-| [@kkentzo]         | 2020     | Serial        | Yes      | 1        |
-| [@fisherling]      | 2020     | Serial        | Yes      | 1        |
-| [@MoraesMitre]     | 2014     | MPI           | No       | -        |
-| [@NedJahMoraes]    | 2017     | MPI/MP        | No       | -        |
-| [@abhi4578]        | 2019     | MPI/MP,CUDA   | Yes      | 1        |
-| [@LaSEEB]          | 2020     | OpenMP        | Yes      | 2        |
-| [@pg443]           | 2021     | Serial,OpenMP | Yes      | 1        |
-
-> 1. provides only global neighborhood implementation.
-> 2. provides PSO with different neighborhood versions but without a distance based approach.
-
 # DevOps
 
 Work in progress...
+
+# Analyzing the program behavior
+
+In order to know each process and thread state and visualize we have employed a thread-safe logging library:
+The logs follows a common pattern so as to be easily processed.
+
+```
+15:27:58 DEBUG : PSODATA    :: problem dimension :: 2
+...
+15:27:58 DEBUG : New best global solution found
+...
+15:27:58 INFO  : COMPUTING  :: iteration 10/10
+Best fitness 4.690962
+```
+
+To recover the particles' positions during the entire program execution, we have stored each particle position at each iteration within a SQLite database.
 
 # Serial version of the algorithm
 
@@ -159,38 +156,38 @@ Once each process knows everything about the others, PSO considers the neighbor 
 
 To compute the particle's neighboring positions we have employed the quicksort algorithm.
 
-![Parallel Quicksort](../report/images/quicksort.jpeg){width=50%}{#fig:quicksort-algorithm}
+![Parallel Quicksort](../report/images/quicksort.jpeg){width=35%}{#fig:quicksort-algorithm}
 
 Finally, the algorithm evolves by updating velocity and position.
 
 # Benchmarking, first conclusions
 
-The problem we have decided to solve consists in solving the sphere function ($f(x_1, x_2, \dots, x_n) = \displaystyle\sum_{i = 1}^{n} x_{i}^2$) with:
+The problem we have decided to address consists in solving the sphere function $\left( f(x_1, x_2, \dots, x_n) = \displaystyle\sum_{i = 1}^{n} x_{i}^2 \right)$ with:
 
-- 50 particle dimensions
-- 500 iterations
-- 5000 particles 
+- 50 particle dimensions;
+- 500 iterations;
+- 5000 particles.
 
 We have run around 1280 tests considering every possible combination of different parameters:
 
-- processes: chosen between `[1 2 4 8 16 32 64]`;
-- threads: chosen between `[1 2 4 8 16 32 64]`;
-- select: chosen between `[1 2 3 4 5]`;
-- places: chosen between `[pack scatter pack:excl scatter:excl]`.
+- processes: `[1 2 4 8 16 32 64]`;
+- threads: `[1 2 4 8 16 32 64]`;
+- chunks: `[1 2 3 4 5]`;
+- places: `[pack scatter pack:excl scatter:excl]`.
 
 # Benchmarking, first conclusions (cont'd)
 
 ::: {.columns align=center}
 
-:::: {.column width=45%}
+:::: {.column width=50%}
 
 ![Number of failed run per process](../report/images/number_of_failed_runs_per_process.pdf){#fig:time-exceeded-jobs-per-process}
 
 ::::
 
-:::: {.column width=45%}
+:::: {.column width=50%}
 
-![Thread and time exceeded correlation](../report/images/threads_performance.pdf){#fig:thread-time-correlation}
+![Thread and time exceeded correlation](../report/images/threads_performance.pdf){wdith=110%}{#fig:thread-time-correlation}
 
 ::::
 
@@ -200,17 +197,35 @@ We have run around 1280 tests considering every possible combination of differen
 
 ![Processes performance](../report/images/processes_performance.pdf){#fig:process-performances}
 
+
+# State of the Art Analysis
+
+| **Ref.**           | **Year** | **Type**      | **Code** | **Note** |
+|--------------------|----------|---------------|----------|----------|
+| Kennedy et al. (1995)     | 1995     | Serial        | No       | -        |
+| @toddguant         | 2019     | Serial        | Yes      | 1        |
+| @sousouho          | 2019     | Serial        | Yes      | 1        |
+| @kkentzo           | 2020     | Serial        | Yes      | 1        |
+| @fisherling        | 2020     | Serial        | Yes      | 1        |
+| @MoraesMitre      | 2014     | MPI           | No       | -        |
+| Nedja et al. (2017)       | 2017     | MPI/MP        | No       | -        |
+| @abhi4578           | 2019     | MPI/MP,CUDA   | Yes      | 1        |
+| @LaSEEB            | 2020     | OpenMP        | Yes      | 2        |
+| @pg443             | 2021     | Serial,OpenMP | Yes      | 1        |
+
+Note: (1) only global neighborhood (2) several option but not distance based neighborhood.
+
 # Benchmarking, final remarks
 
 ::: {.columns align=center}
 
-:::: {.column width=45%}
+:::: {.column width=50%}
 
 ![Speedup](../report/images/speedup.pdf){#fig:parallel-speedup}
 
 ::::
 
-:::: {.column width=45%}
+:::: {.column width=50%}
 
 ![Efficiency](../report/images/efficiency.pdf){#fig:parallel-efficiency}
 
@@ -218,11 +233,19 @@ We have run around 1280 tests considering every possible combination of differen
 
 :::
 
-# Conclusion
+# Conclusion and future work
 
-From our experiments we claim:
+Up until this point, we produced a hybrid OpenMP-MPI algorithm to solve complex continuous optimization problems.
 
-- thread parallelization does not fit well our problem;
+From the benchmarking analysis we claim:
+
+- thread parallelization does not fit well our solution;
+- benchmarking the algorithm is far from being trivial;
 - the program provides its best result when the number of processes is limited.
+
+As a future work, it would be interesting to:
+
+- complement the already present architecture with different type of neighborhood;
+- analyze which configuration brought the best results.
 
 # References {.allowframebreaks}
