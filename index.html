@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p ><a class="anchor" id="md_README"></a> <img src="https://github.com/fedeizzo/ParticleSwarmOptimization-OpenMPI/actions/workflows/docs.yaml/badge.svg" alt="Documentation" style="pointer-events: none;" class="inline"/> <img src="https://github.com/fedeizzo/ParticleSwarmOptimization-OpenMPI/actions/workflows/docker-image.yaml/badge.svg" alt="Docker build" style="pointer-events: none;" class="inline"/></p>
-<h1><a class="anchor" id="autotoc_md18"></a>
+<h1><a class="anchor" id="autotoc_md20"></a>
 Particle Swarm Optimization OpenMPI</h1>
 <p ><b>Table of Contents</b></p>
 <ul>
@@ -131,7 +131,7 @@ Particle Swarm Optimization OpenMPI</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/report.pdf"><img src="assets/report-thumbnail.png" alt="" class="inline"/></a>   </td><td class="markdownTableBodyNone"><a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/short-report.pdf"><img src="assets/short-report-thumbnail.png" alt="" class="inline"/></a>   </td><td class="markdownTableBodyNone"><a href="https://fedeizzo.github.io/ParticleSwarmOptimization-OpenMPI/presentation.pdf"><img src="assets/presentation-thumbnail.png" alt="" class="inline"/></a>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md21"></a>
 Results</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -139,39 +139,39 @@ Results</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><img src="assets/sphere.gif" alt="" class="inline"/>   </td><td class="markdownTableBodyNone"><img src="assets/easom.gif" alt="" class="inline"/>   </td><td class="markdownTableBodyNone"><img src="assets/ackley.gif" alt="" class="inline"/>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md20"></a>
+<h2><a class="anchor" id="autotoc_md22"></a>
 Build</h2>
-<h3><a class="anchor" id="autotoc_md21"></a>
+<h3><a class="anchor" id="autotoc_md23"></a>
 Binary</h3>
 <div class="fragment"><div class="line">make</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md22"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md24"></a>
 Docker</h3>
 <div class="fragment"><div class="line">make docker-build</div>
 </div><!-- fragment --><p >with optional argument <code>DOCKER_TAG</code></p>
 <div class="fragment"><div class="line">make DOCKER_TAG=mytag docker-build</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md23"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md25"></a>
 Nix</h3>
 <div class="fragment"><div class="line">nix build .</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md24"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md26"></a>
 Udocker</h3>
 <div class="fragment"><div class="line">make cluster-pull</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md25"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md27"></a>
 Run</h2>
-<h3><a class="anchor" id="autotoc_md26"></a>
+<h3><a class="anchor" id="autotoc_md28"></a>
 Local</h3>
 <div class="fragment"><div class="line">./bin/particle-swarm-optimization pso-data.ini</div>
 </div><!-- fragment --><p >or</p>
 <div class="fragment"><div class="line">mpirun -n &lt;processesNumber ./bin/particle-swarm-optimization -u pso-data.ini</div>
 </div><!-- fragment --><p >for optional arguments please execute <code>./bin/particle-swarm-optimization --help</code>.</p>
-<h3><a class="anchor" id="autotoc_md27"></a>
+<h3><a class="anchor" id="autotoc_md29"></a>
 Cluster (through PBS)</h3>
 <p >Number of runs should be specified directly inside <a href="./scripts/generate_cluster_runs.sh">this script</a> </p><div class="fragment"><div class="line">make cluster-run</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md28"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md30"></a>
 Report</h2>
 <div class="fragment"><div class="line">make report</div>
 </div><!-- fragment --><p >or</p>
 <div class="fragment"><div class="line">nix build .#report</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md29"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md31"></a>
 Dependencies</h2>
 <p >If you have installed <a href="https://nixos.org">nix package manager</a> </p><div class="fragment"><div class="line">nix shell</div>
 </div><!-- fragment --><p >otherwise dependencies are described below.</p>
