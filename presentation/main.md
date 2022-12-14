@@ -36,7 +36,6 @@ nocite: |
 # Introduction
 
 ## Particle Swarm Optimization
-
 Particle Swarm Optimization is an optimization algorithm for nonlinear functions based on bird swarms.
 
 In PSO, a particle is characterized by:
@@ -56,7 +55,7 @@ The solution is achieved by perturbing each particle according to the neighbors:
 
 ## Easom function
 
-$$f(x) = -\cos(x_1)\cos(x_2)\exp(-(x_1 - \pi)^2 - (x_2 - \pi)^2)$$
+$$f(x) = - \cos(x_1) \cos(x_2) \exp(-(x_1 - \pi)^2 - (x_2 - \pi)^2)$$
 
 ::: {.columns align=center}
 
@@ -103,7 +102,6 @@ $$ $$
 
 :::
 # Analyzing the program behavior
-
 In order to know each process and thread state and visualize a thread-safe logging library has been employed:
 The logs follows a common pattern so as to be easily processed.
 
@@ -163,7 +161,6 @@ To recover the particles' positions during the entire program execution, we have
 \end{center}
 
 # Hybrid parallelization
-
 We propose an all-to-all parallel computational solution using `MPI_Allgather`.
 
 ![Parallel Architecture](../report/images/communication_schema.png){#fig:parallel-architecture}
@@ -179,7 +176,6 @@ To compute the particle's neighboring positions we have employed the quicksort a
 Finally, the algorithm evolves by updating velocity and position.
 
 # Benchmarking, first conclusions
-
 The problem we have decided to address consists in solving the sphere function $\left( f(x_1, x_2, \dots, x_n) = \displaystyle\sum_{i = 1}^{n} x_{i}^2 \right)$ with:
 
 - 50 particle dimensions;
@@ -194,7 +190,7 @@ We have run around 1280 tests considering every possible combination of differen
 - places: `[pack scatter pack:excl scatter:excl]`.
 
 # Benchmarking, time exceed
-Many of sent experiments failed for time exceed time. At a first sight it would seem that the failure rate is correlated with the increasing number of processes used for the computation.
+Many of the submitted experiments failed due to time exceeded errors. At a first sight, it seems that the failure rate is correlated with the increasing number of processes used for the computation.
 
 ![Number of failed run per process](../report/images/number_of_failed_runs_per_process.pdf){#fig:time-exceeded-jobs-per-process width=80%}
 
@@ -205,27 +201,27 @@ A more depth analysis highlights that the problem is related to threads' overhea
 
 # Benchmarking, single thread solution
 * The time required for the execution decreases if the number of processes is increased;
-* The proposed solution is not influced neither by the network overhead or exlusive nodes.
+* The proposed solution is influenced neither by the network overhead nor exclusive nodes.
 
 ![Processes performance](../report/images/processes_performance.pdf){#fig:process-performances width=90%}
 
 
 # State of the Art Analysis
 
-| **Ref.**              | **Year** | **Type**      | **Code** | **Note** |
-|-----------------------|----------|---------------|----------|----------|
-| Kennedy et al. (1995) | 1995     | Serial        | No       | -        |
-| @toddguant            | 2019     | Serial        | Yes      | 1        |
-| @sousouho             | 2019     | Serial        | Yes      | 1        |
-| @kkentzo              | 2020     | Serial        | Yes      | 1        |
-| @fisherling           | 2020     | Serial        | Yes      | 1        |
-| @MoraesMitre          | 2014     | MPI           | No       | -        |
-| Nedja et al. (2017)   | 2017     | MPI/MP        | No       | -        |
-| @abhi4578             | 2019     | MPI/MP,CUDA   | Yes      | 1        |
-| @LaSEEB               | 2020     | OpenMP        | Yes      | 2        |
-| @pg443                | 2021     | Serial,OpenMP | Yes      | 1        |
+| **Ref.**              | **Year** | **Type** &nbsp; | **Code** | **Note** |
+|-----------------------|----------|-----------------|----------|----------|
+| Kennedy et al. (1995) | 1995     | Serial          | No       | -        |
+| @toddguant            | 2019     | Serial          | Yes      | 1        |
+| @sousouho             | 2019     | Serial          | Yes      | 1        |
+| @kkentzo              | 2020     | Serial          | Yes      | 1        |
+| @fisherling           | 2020     | Serial          | Yes      | 1        |
+| @MoraesMitre          | 2014     | MPI             | No       | -        |
+| Nedja et al. (2017)   | 2017     | MPI/MP          | No       | -        |
+| @abhi4578             | 2019     | MPI/MP,CUDA     | Yes      | 1        |
+| @LaSEEB               | 2020     | OpenMP          | Yes      | 2        |
+| @pg443                | 2021     | Serial,OpenMP   | Yes      | 1        |
 
-Note: (1) only global neighborhood (2) several option but not distance based neighborhood.
+only global neighborhood (1) no distance-based implementation (2) 
 
 # Benchmarking, final remarks
 
@@ -246,7 +242,6 @@ Note: (1) only global neighborhood (2) several option but not distance based nei
 :::
 
 # Conclusion and future work
-
 Up until this point, we produced a hybrid OpenMP-MPI algorithm to solve complex continuous optimization problems.
 
 From the benchmarking analysis we claim:
@@ -257,7 +252,7 @@ From the benchmarking analysis we claim:
 
 As a future work, it would be interesting to:
 
-- complement the already present architecture with different type of neighborhood;
+- complement the already present architecture with different types of neighborhoods;
 - analyze which configuration brought the best results.
 
 # References {.allowframebreaks}
